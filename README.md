@@ -1,4 +1,9 @@
 
+
+<p align="center">
+<img src="https://i.imgur.com/PYsbwqj.png" width="450" height="164" align="center">
+</p>
+
 # Garmin Grafana
 
 A docker container to fetch data from Garmin servers and store the data in a local influxdb database for appealing visualization with garfana.
@@ -39,7 +44,7 @@ A docker container to fetch data from Garmin servers and store the data in a loc
 
 5. Finally run : `docker compose up -d` ( to launch the full stack in detached mode ). Thereafter you should check the logs with `docker compose logs --follow` to see any potential error from the containers. This will help you debug the issue, if there is any (specially read/write permission issues)
 
-7. Now you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`, add influxdb as the datasource (the influxdb hostname should be `influxdb` with port `8086`. Test the connection to make sure the influxdb is up and rechable (you are good to go if it finds the measurements when you test the connection)
+7. Now you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`, add influxdb as the datasource the influxdb hostname should be `influxdb` with port `8086`. Test the connection to make sure the influxdb is up and rechable (you are good to go if it finds the measurements when you test the connection)
 
 8. To use the Grafana dashboard, please use the [JSON file](https://github.com/arpanghosh8453/garmin-grafana/blob/main/Grafana_Dashboard/Garmin-Grafana-Dashboard.json) downloaded directly from Github or use the import code **23245** to pull them directly from the Grafana dashboard cloud.
 
