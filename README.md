@@ -8,6 +8,8 @@
 
 A docker container to fetch data from Garmin servers and store the data in a local influxdb database for appealing visualization with garfana.
 
+If you are a **Fitbit user**, please check out the [sister project](https://github.com/arpanghosh8453/fitbit-grafana) made for Fitbit
+
 ## Dashboard Example
 
 ![Dashboard](https://github.com/arpanghosh8453/garmin-grafana/blob/main/Grafana_Dashboard/Garmin-Grafana-Dashboard-Preview.png?raw=true)
