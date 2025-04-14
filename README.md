@@ -110,7 +110,7 @@ volumes:
 
 ```
 
-## Hiatorical data fetching (bulk update)
+## Historical data fetching (bulk update)
 
 Please note that this process is intentionally rate limited with a 5 second wait period between each day update to ensure the Garmin servers are not overloaded with requests when using bulk update. You can update the value with `RATE_LIMIT_CALLS_SECONDS` ENV variable in the `garmin-fetch-data` container, but lowering it is not recommended, 
 
