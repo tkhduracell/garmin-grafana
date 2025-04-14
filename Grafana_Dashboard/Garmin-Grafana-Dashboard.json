@@ -1055,8 +1055,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds",
-            "seriesBy": "last"
+            "mode": "thresholds"
           },
           "custom": {
             "axisBorderShow": false,
@@ -1066,15 +1065,15 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "barWidthFactor": 0.6,
-            "drawStyle": "bars",
-            "fillOpacity": 18,
+            "drawStyle": "line",
+            "fillOpacity": 0,
             "gradientMode": "scheme",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": 60000,
+            "insertNulls": 3600000,
             "lineInterpolation": "smooth",
             "lineStyle": {
               "fill": "solid"
@@ -1084,7 +1083,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -1100,20 +1099,20 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-blue",
+                "color": "super-light-red",
                 "value": null
               },
               {
-                "color": "semi-dark-green",
-                "value": 5
+                "color": "super-light-yellow",
+                "value": 2000
               },
               {
-                "color": "dark-yellow",
-                "value": 25
+                "color": "light-green",
+                "value": 6000
               },
               {
-                "color": "semi-dark-red",
-                "value": 65
+                "color": "light-blue",
+                "value": 8000
               }
             ]
           },
@@ -1156,9 +1155,15 @@
           "groupBy": [
             {
               "params": [
-                "1m"
+                "15m"
               ],
               "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
             }
           ],
           "hide": false,
@@ -1181,6 +1186,10 @@
               {
                 "params": [],
                 "type": "mean"
+              },
+              {
+                "params": [],
+                "type": "cumulative_sum"
               }
             ]
           ],
@@ -1188,7 +1197,7 @@
         }
       ],
       "timeFrom": "24h",
-      "title": "Intraday Steps",
+      "title": "Intraday Steps Cumulative",
       "transformations": [
         {
           "id": "calculateField",
@@ -9424,6 +9433,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 87,
+  "version": 88,
   "weekStart": ""
 }
