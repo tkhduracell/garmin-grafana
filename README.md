@@ -36,17 +36,17 @@ A docker container to fetch data from Garmin servers and store the data in a loc
 
 1. Create a folder named `garmin-fetch-data`, cd into the folder, create a `compose.yml` file with the content of the given [compose-example.yml](./compose-example.yml) ( Change the enviornment variables accordingly )
 
-2. if you modify the docker volumes to bind mounts in the compose file for persiatant storage, please check the troubleshooting section below if you get read/write permission denied or file not found errors.
+2. if you modify the docker volumes to bind mounts in the compose file for persistent storage, please check the troubleshooting section below if you get read/write permission denied or file not found errors.
 
 3. You can use two additional environment variables `GARMINCONNECT_EMAIL` and `GARMINCONNECT_BASE64_PASSWORD` to add the login information directly. otherwise you will need to enter them in the initial setup phase when prompted. Please note that the password must be encoded with [Base64](http://base64encode.org/) when using the `GARMINCONNECT_BASE64_PASSWORD` ENV variable. This is to ensure your Garmin Connect password is not in plaintext in the compose file. The script will decode it and use it when required. If you set these two ENV variables and do not have two factor authentication (via SMS or email), you can directly jump to `step 5`
 
-4. If you did not set up the email and password ENV variables or have 2FA enabled, you must run the following command first to get the Email, password and 2FA code prompt interactively: `docker pull thisisarpanghosh/garmin-fetch-data:latest && docker compose run --rm garmin-fetch-data`. Enter the Email, Password (the characters will be visible when you type to avoid confusion, so find some privacy. If you paste the pasword, make sure there is no trailing space or unwanted characters), and 2FA code (if you have that enabled). Once ou see the successful authtication message follwed by successful data fetching in the stdout log, exit out with `ctrl + c`. This will automatically remove this orphan container as this was started with the `--rm` flag
+4. If you did not set up the email and password ENV variables or have 2FA enabled, you must run the following command first to get the Email, password and 2FA code prompt interactively: `docker pull thisisarpanghosh/garmin-fetch-data:latest && docker compose run --rm garmin-fetch-data`. Enter the Email, Password (the characters will be visible when you type to avoid confusion, so find some privacy. If you paste the password, make sure there is no trailing space or unwanted characters), and 2FA code (if you have that enabled). Once you see the successful authentication message followed by successful data fetching in the stdout log, exit out with `ctrl + c`. This will automatically remove this orphan container as this was started with the `--rm` flag.
 
 5. Finally run : `docker compose up -d` ( to launch the full stack in detached mode ). Thereafter you should check the logs with `docker compose logs --follow` to see any potential error from the containers. This will help you debug the issue, if there is any (specially read/write permission issues)
 
-7. Now you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`, add influxdb as the datasource the influxdb hostname should be `influxdb` with port `8086`. Test the connection to make sure the influxdb is up and rechable (you are good to go if it finds the measurements when you test the connection)
+7. Now you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`, add influxdb as the data source, the influxdb hostname should be `influxdb` with port `8086`. Test the connection to make sure the influxdb is up and reachable (you are good to go if it finds the measurements when you test the connection)
 
-8. To use the Grafana dashboard, please use the [JSON file](https://github.com/arpanghosh8453/garmin-grafana/blob/main/Grafana_Dashboard/Garmin-Grafana-Dashboard.json) downloaded directly from Github or use the import code **23245** to pull them directly from the Grafana dashboard cloud.
+8. To use the Grafana dashboard, please use the [JSON file](https://github.com/arpanghosh8453/garmin-grafana/blob/main/Grafana_Dashboard/Garmin-Grafana-Dashboard.json) downloaded directly from GitHub or use the import code **23245** to pull them directly from the Grafana dashboard cloud.
 
 ---
 
@@ -129,7 +129,7 @@ Please note that this process is intentionally rate limited with a 5 second wait
 
 ## Troubleshooting
 
-- The issued session token is apparently valid only for 1 year or less. So the automatic fetch will fail after the period with the old expired token. If you are using it more than one year, you may need to stop, remove and redeploy the container (follow the same instructions for initial setup, you will be asked for the username and password + 2FA code again). if you are not using MFA/2FA (SMS or email one time code), you can use the `GARMINCONNECT_EMAIL` and `GARMINCONNECT_BASE64_PASSWORD` (remember, this is [base64 encoded](http://base64encode.org/) password, not plaintext) ENV variables in the compose file to give this info directly, so the script will be able to re-generate the tokens once they expire. Unfortunately, if you are using MFA/2FA, you need to enter the one time code manually after rebuilding the container every year when the tokens expire to keep the script running (Once the session token is valid again, the script will automatically back-fill the data you missed)
+- The issued session token is apparently valid only for 1 year or less. Therefore, the automatic fetch will fail after the token expires. If you are using it more than one year, you may need to stop, remove and redeploy the container (follow the same instructions for initial setup, you will be asked for the username and password + 2FA code again). if you are not using MFA/2FA (SMS or email one time code), you can use the `GARMINCONNECT_EMAIL` and `GARMINCONNECT_BASE64_PASSWORD` (remember, this is [base64 encoded](http://base64encode.org/) password, not plaintext) ENV variables in the compose file to give this info directly, so the script will be able to re-generate the tokens once they expire. Unfortunately, if you are using MFA/2FA, you need to enter the one time code manually after rebuilding the container every year when the tokens expire to keep the script running (Once the session token is valid again, the script will automatically back-fill the data you missed)
 
 - If you want to bind mount the docker volumes for the `garmin-fetch-data` container, please keep in mind that the script runs with the internal user `appuser` with uid and gid set as 1000. So please chown the bind mount folder accordingly. Also, `grafana` container requires the bind mount folders to be owned by `472:472`
 
@@ -145,7 +145,7 @@ This project is made possible by **generous community contribution** towards the
 
 ## Support me
 
-If you enjoy the project and love how it works with simple setup, please consider supporting me with a coffee ❤ for making this open souce and accesssible to everyone. You can view and analyze more detailed health statistics with this setup than paying a connect+ subscription fee to Garmin.
+If you enjoy the project and love how it works with simple setup, please consider supporting me with a coffee ❤ for making this open source and accessible to everyone. You can view and analyze more detailed health statistics with this setup than paying a connect+ subscription fee to Garmin.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A84F3DP)
 
