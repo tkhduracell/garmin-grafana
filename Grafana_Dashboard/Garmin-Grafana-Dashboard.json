@@ -1894,7 +1894,7 @@
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": false,
+            "insertNulls": 300000,
             "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 5,
@@ -2706,7 +2706,7 @@
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": false,
+            "insertNulls": 14400000,
             "lineInterpolation": "stepAfter",
             "lineWidth": 1,
             "pointSize": 5,
@@ -5357,7 +5357,7 @@
       "id": 1,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.98,
+        "barWidth": 0.61,
         "colorByField": "Value",
         "fullHighlight": false,
         "groupWidth": 0.7,
@@ -5372,7 +5372,7 @@
           "showLegend": true
         },
         "orientation": "auto",
-        "showValue": "auto",
+        "showValue": "never",
         "stacking": "none",
         "tooltip": {
           "hideZeros": false,
@@ -5394,7 +5394,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -5502,7 +5502,7 @@
       "id": 3,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.99,
+        "barWidth": 0.61,
         "colorByField": "Value",
         "fullHighlight": false,
         "groupWidth": 0.7,
@@ -5539,7 +5539,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -5677,7 +5677,7 @@
       "id": 10,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.97,
+        "barWidth": 0.55,
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
@@ -5713,7 +5713,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -5755,7 +5755,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -7093,7 +7093,7 @@
       "id": 12,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.97,
+        "barWidth": 0.6,
         "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
@@ -7107,7 +7107,7 @@
           "showLegend": true
         },
         "orientation": "auto",
-        "showValue": "auto",
+        "showValue": "never",
         "stacking": "normal",
         "tooltip": {
           "hideZeros": false,
@@ -7129,7 +7129,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -7631,7 +7631,7 @@
       "id": 19,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.99,
+        "barWidth": 0.62,
         "colorByField": "Value",
         "fullHighlight": false,
         "groupWidth": 0.7,
@@ -7668,7 +7668,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -7710,7 +7710,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -8207,7 +8207,7 @@
       "id": 18,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.99,
+        "barWidth": 0.56,
         "colorByField": "Value",
         "fullHighlight": false,
         "groupWidth": 0.7,
@@ -8222,7 +8222,7 @@
           "showLegend": true
         },
         "orientation": "auto",
-        "showValue": "auto",
+        "showValue": "never",
         "stacking": "normal",
         "tooltip": {
           "hideZeros": false,
@@ -8244,7 +8244,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -8286,7 +8286,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -8328,7 +8328,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -8370,7 +8370,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -8412,7 +8412,7 @@
           "groupBy": [
             {
               "params": [
-                "12h"
+                "1d"
               ],
               "type": "time"
             },
@@ -9424,6 +9424,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 85,
+  "version": 87,
   "weekStart": ""
 }
