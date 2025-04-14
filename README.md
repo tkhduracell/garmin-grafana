@@ -41,7 +41,7 @@ A docker container to fetch data from Garmin servers and store the data in a loc
 
 7. Now you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`, add influxdb as the datasource (the influxdb hostname should be `influxdb` with port `8086`. Test the connection to make sure the influxdb is up and rechable (you are good to go if it finds the measurements when you test the connection)
 
-8. To use the Grafana dashboard, please use the [JSON file](https://github.com/arpanghosh8453/garmin-grafana/blob/main/Grafana_Dashboard/Garmin-Grafana-Dashboard.json) downloaded directly from Github or use the import code **23088** to pull them directly from the Grafana dashboard cloud.
+8. To use the Grafana dashboard, please use the [JSON file](https://github.com/arpanghosh8453/garmin-grafana/blob/main/Grafana_Dashboard/Garmin-Grafana-Dashboard.json) downloaded directly from Github or use the import code **23245** to pull them directly from the Grafana dashboard cloud.
 
 ---
 
