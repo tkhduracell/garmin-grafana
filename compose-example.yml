@@ -6,6 +6,7 @@ services:
     depends_on:
       - influxdb
     volumes:
+      - garmin_tokens_data:/home/appuser/.garminconnect # (persistant tokens storage) You can change this to a bind mount to a local path (must be owned by 1000:1000)
       - /etc/timezone:/etc/timezone:ro
     environment:
       - INFLUXDB_HOST=influxdb
@@ -46,3 +47,4 @@ services:
 volumes:
   influxdb_data:
   grafana_data:
+  garmin_tokens_data:
