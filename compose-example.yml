@@ -28,7 +28,7 @@ services:
       - '8086:8086'
     volumes:
       - influxdb_data:/var/lib/influxdb
-    image: 'influxdb:1.8'
+    image: 'influxdb:1.11'
 
   grafana:
     restart: unless-stopped
