@@ -665,7 +665,7 @@ def fetch_write_bulk(start_date_str, end_date_str):
         while not success:
             try:
                 daily_fetch_write(current_date)
-                logging.info(f"Success : Fatched all available health matries for date {current_date} (skipped any if unavailable)")
+                logging.info(f"Success : Fetched all available health matries for date {current_date} (skipped any if unavailable)")
                 logging.info(f"Waiting : for {RATE_LIMIT_CALLS_SECONDS} seconds")
                 time.sleep(RATE_LIMIT_CALLS_SECONDS)
                 success = True
