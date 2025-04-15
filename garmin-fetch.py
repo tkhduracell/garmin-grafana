@@ -539,49 +539,52 @@ def get_activity_summary(date_str):
     for activity in activity_list:
         if activity.get('hasPolyline'):
             activity_with_gps_id_dict[activity.get('activityId')] = activity.get('activityType',{}).get('typeKey', "Unknown")
-        points_list.append({
-            "measurement":  "ActivitySummary",
-            "time": datetime.fromtimestamp(activity['beginTimestamp']/1000, tz=pytz.timezone("UTC")).isoformat(),
-            "tags": {
-                "Device": GARMIN_DEVICENAME
-            },
-            "fields": {
-                'activityId': activity.get('activityId'),
-                'deviceId': activity.get('deviceId'),
-                'activityName': activity.get('activityName'),
-                'activityType': activity.get('activityType',{}).get('typeKey',None),
-                'distance': activity.get('distance'),
-                'elapsedDuration': activity.get('elapsedDuration'),
-                'movingDuration': activity.get('movingDuration'),
-                'averageSpeed': activity.get('averageSpeed'),
-                'maxSpeed': activity.get('maxSpeed'),
-                'calories': activity.get('calories'),
-                'bmrCalories': activity.get('bmrCalories'),
-                'averageHR': activity.get('averageHR'),
-                'maxHR': activity.get('maxHR'),
-                'locationName': activity.get('locationName'),
-                'lapCount': activity.get('lapCount'),
-                'hrTimeInZone_1': activity.get('hrTimeInZone_1'),
-                'hrTimeInZone_2': activity.get('hrTimeInZone_2'),
-                'hrTimeInZone_3': activity.get('hrTimeInZone_3'),
-                'hrTimeInZone_4': activity.get('hrTimeInZone_4'),
-                'hrTimeInZone_5': activity.get('hrTimeInZone_5'),
-            }
-        })
-        points_list.append({
-            "measurement":  "ActivitySummary",
-            "time": datetime.fromtimestamp((activity['beginTimestamp']/1000) + int(activity.get('elapsedDuration')), tz=pytz.timezone("UTC")).isoformat(),
-            "tags": {
-                "Device": GARMIN_DEVICENAME
-            },
-            "fields": {
-                'activityId': activity.get('activityId'),
-                'deviceId': activity.get('deviceId'),
-                'activityName': "END",
-                'activityType': "No Activity",
-            }
-        })
-        logging.info(f"Success : Fetching Activity summary with id {activity.get('activityId')} for date {date_str}")
+        if 'beginTimestamp' in activity: # 'beginTimestamp' is not available for all multisport sub-activities (temp fix for #13)
+            points_list.append({
+                "measurement":  "ActivitySummary",
+                "time": datetime.fromtimestamp(activity['beginTimestamp']/1000, tz=pytz.timezone("UTC")).isoformat(),
+                "tags": {
+                    "Device": GARMIN_DEVICENAME
+                },
+                "fields": {
+                    'activityId': activity.get('activityId'),
+                    'deviceId': activity.get('deviceId'),
+                    'activityName': activity.get('activityName'),
+                    'activityType': activity.get('activityType',{}).get('typeKey',None),
+                    'distance': activity.get('distance'),
+                    'elapsedDuration': activity.get('elapsedDuration'),
+                    'movingDuration': activity.get('movingDuration'),
+                    'averageSpeed': activity.get('averageSpeed'),
+                    'maxSpeed': activity.get('maxSpeed'),
+                    'calories': activity.get('calories'),
+                    'bmrCalories': activity.get('bmrCalories'),
+                    'averageHR': activity.get('averageHR'),
+                    'maxHR': activity.get('maxHR'),
+                    'locationName': activity.get('locationName'),
+                    'lapCount': activity.get('lapCount'),
+                    'hrTimeInZone_1': activity.get('hrTimeInZone_1'),
+                    'hrTimeInZone_2': activity.get('hrTimeInZone_2'),
+                    'hrTimeInZone_3': activity.get('hrTimeInZone_3'),
+                    'hrTimeInZone_4': activity.get('hrTimeInZone_4'),
+                    'hrTimeInZone_5': activity.get('hrTimeInZone_5'),
+                }
+            })
+            points_list.append({
+                "measurement":  "ActivitySummary",
+                "time": datetime.fromtimestamp((activity['beginTimestamp']/1000) + int(activity.get('elapsedDuration')), tz=pytz.timezone("UTC")).isoformat(),
+                "tags": {
+                    "Device": GARMIN_DEVICENAME
+                },
+                "fields": {
+                    'activityId': activity.get('activityId'),
+                    'deviceId': activity.get('deviceId'),
+                    'activityName': "END",
+                    'activityType': "No Activity",
+                }
+            })
+            logging.info(f"Success : Fetching Activity summary with id {activity.get('activityId')} for date {date_str}")
+        else:
+            logging.warning(f"Skipped : Timestamp missing for some partial activity in id {activity.get('activityId')} for date {date_str}")
     return points_list, activity_with_gps_id_dict
 
 # %%
