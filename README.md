@@ -85,6 +85,7 @@ services:
       - INFLUXDB_DB=GarminStats
       - INFLUXDB_USER=influxdb_user
       - INFLUXDB_USER_PASSWORD=influxdb_secret_password
+      - INFLUXDB_DATA_INDEX_VERSION=tsi1
     ports:
       - '8086:8086'
     volumes:
@@ -136,7 +137,7 @@ Please note that this process is intentionally rate limited with a 5 second wait
 
 - If you are getting `429 Client Error` after a few login tries during the initial setup, this is an indication that you are being rate limited based on your public IP. Garmin has a set limit for repeated login attempts from the same IP address to protect your account. You can wait for a few hours or a day, or switch to a different wifi network outside your home (will give you a new public IP) or just simply use mobile hotspot (will give you a new public IP as well) for the initial login attempt. This should work in theory as [discussed here](https://github.com/matin/garth/discussions/60).
 
-- If you want to bind mount the docker volumes for the `garmin-fetch-data` container, please keep in mind that the script runs with the internal user `appuser` with uid and gid set as 1000. So please chown the bind mount folder accordingly. Also, `grafana` container requires the bind mount folders to be owned by `472:472` and `influxdb:1.11` container required the folder to be owned by `1500:1500`
+- If you want to bind mount the docker volumes for the `garmin-fetch-data` container, please keep in mind that the script runs with the internal user `appuser` with uid and gid set as 1000. So please chown the bind mount folder accordingly. Also, `grafana` container requires the bind mount folders to be owned by `472:472` and `influxdb:1.11` container requires the bind mount folders to be owned by `1500:1500`
 
 - If the Activities details (GPS, Pace, HR, Altitude) are not appearing on the dashboard, make sure to select an Activity listed on the top left conner of the Dashboard (In the `Activity with GPS` variable dropdown). If you see no values are available there, but in the log you see the activities are being pulled successfully, then it's due to a Grafana Bug. Go to the dashboard variable settings, and please ensure the correct datasource is selected for the variable and the query is set to `SHOW TAG VALUES FROM "ActivityGPS" WITH KEY = "ActivitySelector" WHERE $timeFilter`. Once you set this properly after the dashboard import, the values should show up correctly in the dropdown and you will be able to select specific Activity and view it's stats on the dashboard. 
 
