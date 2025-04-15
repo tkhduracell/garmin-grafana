@@ -507,24 +507,28 @@ def get_intraday_hrv(date_str):
 # %%
 def get_body_composition(date_str):
     points_list = []
-    body_composition_json = garmin_obj.get_body_composition(date_str).get('totalAverage')
-    if body_composition_json:
-        data_fields = {
-                    "weight": body_composition_json["weight"],
-                    "bmi": body_composition_json["bmi"],
-                    "bodyFat": body_composition_json["bodyFat"],
-                    "bodyWater": body_composition_json["bodyWater"],
+    weight_list_all = garmin_obj.get_weigh_ins(date_str, date_str).get('dailyWeightSummaries', [])
+    if weight_list_all:
+        weight_list = weight_list_all[0].get('allWeightMetrics', [])
+        for weight_dict in weight_list:
+            data_fields = {
+                    "weight": weight_dict.get("weight"),
+                    "bmi": weight_dict.get("bmi"),
+                    "bodyFat": weight_dict.get("bodyFat"),
+                    "bodyWater": weight_dict.get("bodyWater"),
                 }
-        if not all(value is None for value in data_fields.values()):
-            points_list.append({
+            if not all(value is None for value in data_fields.values()):
+                points_list.append({
                     "measurement":  "BodyComposition",
-                    "time": datetime.fromtimestamp(body_composition_json['from']/1000, tz=pytz.timezone("UTC")).isoformat(),
+                    "time": datetime.fromtimestamp((weight_dict['timestampGMT']/1000) , tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Frequency" : "Intraday",
+                        "SourceType" : weight_dict.get('sourceType', "Unknown")
                     },
                     "fields": data_fields
                 })
-            logging.info(f"Success : Fetching intraday Body Composition for date {date_str}")
+        logging.info(f"Success : Fetching intraday Body Composition (Weight, BMI etc) for date {date_str}")
     return points_list
 
 # %%
