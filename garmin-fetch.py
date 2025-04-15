@@ -584,7 +584,11 @@ def get_activity_summary(date_str):
 def fetch_activity_GPS(activityIDdict):
     points_list = []
     for activityID in activityIDdict.keys():
-        root = ET.fromstring(garmin_obj.download_activity(activityID, dl_fmt=garmin_obj.ActivityDownloadFormat.TCX).decode("UTF-8"))
+        try:
+            root = ET.fromstring(garmin_obj.download_activity(activityID, dl_fmt=garmin_obj.ActivityDownloadFormat.TCX).decode("UTF-8"))
+        except requests.exceptions.Timeout as err:
+            logging.warning(f"Request timeout for fetching large activity record {activityID} - skipping record")
+            return []
         ns = {"tcx": "http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2", "ns3": "http://www.garmin.com/xmlschemas/ActivityExtension/v2"}
         for activity in root.findall("tcx:Activities/tcx:Activity", ns):
             activity_type = activityIDdict[activityID]
@@ -657,30 +661,43 @@ def daily_fetch_write(date_str):
 
 # %%
 def fetch_write_bulk(start_date_str, end_date_str):
+    global garmin_obj
     logging.info("Fetching data for the given period in reverse chronological order")
     time.sleep(3)
     write_points_to_influxdb(get_last_sync())
     for current_date in iter_days(start_date_str, end_date_str):
-        success = False
-        while not success:
+        repeat_loop = True
+        while repeat_loop:
             try:
                 daily_fetch_write(current_date)
                 logging.info(f"Success : Fetched all available health matries for date {current_date} (skipped any if unavailable)")
                 logging.info(f"Waiting : for {RATE_LIMIT_CALLS_SECONDS} seconds")
                 time.sleep(RATE_LIMIT_CALLS_SECONDS)
-                success = True
+                repeat_loop = False
+            except GarminConnectTooManyRequestsError as err:
+                logging.error(err)
+                logging.info(f"Too many requests (429) : Failed to fetch one or more matrices - will retry for date {current_date}")
+                logging.info(f"Waiting : for {FETCH_FAILED_WAIT_SECONDS} seconds")
+                time.sleep(FETCH_FAILED_WAIT_SECONDS)
+                repeat_loop = True
             except (
                     GarminConnectConnectionError,
-                    GarminConnectAuthenticationError,
-                    GarminConnectTooManyRequestsError,
                     requests.exceptions.HTTPError,
                     requests.exceptions.ConnectionError,
                     requests.exceptions.Timeout,
-                    GarthHTTPError) as err:
-                logging.info(f"Failed : Failed to fetch one or more matrices for date {current_date}")
+                    GarthHTTPError
+                    ) as err:
                 logging.error(err)
-                logging.info(f"Waiting : for {FETCH_FAILED_WAIT_SECONDS} seconds")
-                time.sleep(FETCH_FAILED_WAIT_SECONDS)
+                logging.info(f"Connection Error : Failed to fetch one or more matrices - skipping date {current_date}")
+                logging.info(f"Waiting : for {RATE_LIMIT_CALLS_SECONDS} seconds")
+                time.sleep(RATE_LIMIT_CALLS_SECONDS)
+                repeat_loop = False
+            except GarminConnectAuthenticationError as err:
+                logging.error(err)
+                logging.info(f"Authentication Failed : Retrying login with given credentials (won't work automatically for MFA/2FA enabled accounts)")
+                garmin_obj = garmin_login()
+                time.sleep(5)
+                repeat_loop = True
 
 
 # %%
