@@ -6,7 +6,7 @@
 
 # Garmin Grafana
 
-A docker container to fetch data from Garmin servers and store the data in a local influxdb database for appealing visualization with garfana.
+A docker container to fetch data from Garmin servers and store the data in a local influxdb database for appealing visualization with Garfana.
 
 If you are a **Fitbit user**, please check out the [sister project](https://github.com/arpanghosh8453/fitbit-grafana) made for Fitbit
 
@@ -36,7 +36,7 @@ If you are a **Fitbit user**, please check out the [sister project](https://gith
 
 ## Install with Docker (Recommended)
 
-1. Create a folder named `garmin-fetch-data`, cd into the folder, create a `compose.yml` file with the content of the given [compose-example.yml](./compose-example.yml) ( Change the enviornment variables accordingly )
+1. Create a folder named `garmin-fetch-data`, cd into the folder, create a `compose.yml` file with the content of the given [compose-example.yml](./compose-example.yml) ( Change the environment variables accordingly )
 
 2. if you modify the docker volumes to bind mounts in the compose file for persistent storage, please check the troubleshooting section below if you get read/write permission denied or file not found errors.
 
@@ -52,7 +52,7 @@ If you are a **Fitbit user**, please check out the [sister project](https://gith
 
 ---
 
-This project is made for InfluxDB 1.8, as Flux queries on influxDB 2.x can be problematic to use with Grafana at times. In fact, InfluxQL is being reintroduced in InfluxDB 3.0, reflecting user feedback. Grafana also has better compatibility/stability with InfluxQL from InfluxDB 1.8. Moreover, there are statistical evidence that Influxdb 1.8 quaries run faster compared to influxdb 2.x. Since InfluxDB 2.x offers no clear benefits for this project, there are no plans for a migration.
+This project is made for InfluxDB 1.8, as Flux queries on influxDB 2.x can be problematic to use with Grafana at times. In fact, InfluxQL is being reintroduced in InfluxDB 3.0, reflecting user feedback. Grafana also has better compatibility/stability with InfluxQL from InfluxDB 1.8. Moreover, there are statistical evidence that Influxdb 1.8 queries run faster compared to influxdb 2.x. Since InfluxDB 2.x offers no clear benefits for this project, there are no plans for a migration.
 
 Example `compose.yml` file contents is given here for a quick start.
 
@@ -69,7 +69,7 @@ services:
     environment:
       - INFLUXDB_HOST=influxdb
       - INFLUXDB_PORT=8086
-      - INFLUXDB_USERNAME=influxdb_user # user should have read/write access to NFLUXDB_DATABASE
+      - INFLUXDB_USERNAME=influxdb_user # user should have read/write access to INFLUXDB_DATABASE
       - INFLUXDB_PASSWORD=influxdb_secret_password
       - INFLUXDB_DATABASE=GarminStats
       - GARMINCONNECT_EMAIL=your_garminconnect_email # optional, read the setup docs
@@ -134,7 +134,7 @@ Please note that this process is intentionally rate limited with a 5 second wait
 
 - The issued session token is apparently [valid only for 1 year](https://github.com/cyberjunky/python-garminconnect/issues/213) or less. Therefore, the automatic fetch will fail after the token expires. If you are using it more than one year, you may need to stop, remove and redeploy the container (follow the same instructions for initial setup, you will be asked for the username and password + 2FA code again). if you are not using MFA/2FA (SMS or email one time code), you can use the `GARMINCONNECT_EMAIL` and `GARMINCONNECT_BASE64_PASSWORD` (remember, this is [base64 encoded](http://base64encode.org/) password, not plaintext) ENV variables in the compose file to give this info directly, so the script will be able to re-generate the tokens once they expire. Unfortunately, if you are using MFA/2FA, you need to enter the one time code manually after rebuilding the container every year when the tokens expire to keep the script running (Once the session token is valid again, the script will automatically back-fill the data you missed)
 
-- If you are getting `429 Client Error` after a few login tries during the initial setup, this is an indication that you are being rate limited based on your public IP. Garmin has a set limit for repeated login attempts from the same IP address to protect your account. You can wait for a few hours or a day, or switch to a differnt wifi network outside your home (will give you a new public IP) or just simply use mobile hotspot (will give you a new public IP as well) for the initial login attempt. This should work in theory as [discussed here](https://github.com/matin/garth/discussions/60).
+- If you are getting `429 Client Error` after a few login tries during the initial setup, this is an indication that you are being rate limited based on your public IP. Garmin has a set limit for repeated login attempts from the same IP address to protect your account. You can wait for a few hours or a day, or switch to a different wifi network outside your home (will give you a new public IP) or just simply use mobile hotspot (will give you a new public IP as well) for the initial login attempt. This should work in theory as [discussed here](https://github.com/matin/garth/discussions/60).
 
 - If you want to bind mount the docker volumes for the `garmin-fetch-data` container, please keep in mind that the script runs with the internal user `appuser` with uid and gid set as 1000. So please chown the bind mount folder accordingly. Also, `grafana` container requires the bind mount folders to be owned by `472:472`
 
