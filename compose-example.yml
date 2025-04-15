@@ -6,7 +6,7 @@ services:
     depends_on:
       - influxdb
     volumes:
-      - garmin_tokens_data:/home/appuser/.garminconnect # (persistant tokens storage) You can change this to a bind mount to a local path (must be owned by 1000:1000)
+      - ./garminconnect-tokens:/home/appuser/.garminconnect # (persistant tokens storage - garminconnect-tokens folder must be owned by 1000:1000)
     environment:
       - INFLUXDB_HOST=influxdb
       - INFLUXDB_PORT=8086
@@ -47,4 +47,3 @@ services:
 volumes:
   influxdb_data:
   grafana_data:
-  garmin_tokens_data:
