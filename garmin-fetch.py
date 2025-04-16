@@ -520,7 +520,7 @@ def get_body_composition(date_str):
             if not all(value is None for value in data_fields.values()):
                 points_list.append({
                     "measurement":  "BodyComposition",
-                    "time": datetime.fromtimestamp((weight_dict['timestampGMT']/1000) , tz=pytz.timezone("UTC")).isoformat(),
+                    "time": datetime.fromtimestamp((weight_dict['timestampGMT']/1000) , tz=pytz.timezone("UTC")).isoformat() if weight_dict['timestampGMT'] else datetime.strptime(date_str, "%Y-%m-%d").replace(hour=12, tzinfo=pytz.UTC).isoformat(), # Use GMT 12:00 is timestamp is not available (issue #15)
                     "tags": {
                         "Device": GARMIN_DEVICENAME,
                         "Frequency" : "Intraday",
