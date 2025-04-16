@@ -33,7 +33,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "11.5.2"
+      "version": "11.6.0"
     },
     {
       "type": "panel",
@@ -142,7 +142,7 @@
         "content": "<center><a href='https://ko-fi.com/A0A84F3DP' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a></center>  ",
         "mode": "html"
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "title": "Support Me!",
       "transparent": true,
       "type": "text"
@@ -195,8 +195,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-blue",
-                "value": null
+                "color": "semi-dark-blue"
               },
               {
                 "color": "semi-dark-green",
@@ -235,7 +234,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Heart Rate",
@@ -320,8 +319,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "light-blue",
@@ -366,7 +364,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -432,8 +430,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "light-blue",
-                "value": null
+                "color": "light-blue"
               },
               {
                 "color": "semi-dark-green",
@@ -493,7 +490,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Heart rate histogram",
@@ -674,12 +671,12 @@
             }
           },
           "mappings": [],
+          "min": 1,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-blue",
-                "value": null
+                "color": "semi-dark-blue"
               },
               {
                 "color": "semi-dark-yellow",
@@ -734,7 +731,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Stress",
@@ -790,6 +787,24 @@
       "title": "Stress",
       "transformations": [
         {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "equal",
+                  "options": {
+                    "value": "-1"
+                  }
+                },
+                "fieldName": "Stress"
+              }
+            ],
+            "match": "any",
+            "type": "exclude"
+          }
+        },
+        {
           "id": "calculateField",
           "options": {
             "alias": "Stress Level",
@@ -802,27 +817,9 @@
               "field": "Stress",
               "reducer": "mean",
               "windowAlignment": "centered",
-              "windowSize": 0.01,
+              "windowSize": 0.005,
               "windowSizeMode": "percentage"
             }
-          }
-        },
-        {
-          "id": "filterByValue",
-          "options": {
-            "filters": [
-              {
-                "config": {
-                  "id": "lower",
-                  "options": {
-                    "value": "0"
-                  }
-                },
-                "fieldName": "Stress Level"
-              }
-            ],
-            "match": "any",
-            "type": "exclude"
           }
         },
         {
@@ -860,8 +857,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "light-blue",
-                "value": null
+                "color": "light-blue"
               },
               {
                 "color": "semi-dark-green",
@@ -904,7 +900,7 @@
         "sizing": "auto",
         "text": {}
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -963,8 +959,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-red",
-                "value": null
+                "color": "semi-dark-red"
               },
               {
                 "color": "light-orange",
@@ -1007,7 +1002,7 @@
         "sizing": "auto",
         "text": {}
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -1099,8 +1094,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               },
               {
                 "color": "super-light-yellow",
@@ -1144,7 +1138,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Intraday Steps",
@@ -1197,7 +1191,7 @@
         }
       ],
       "timeFrom": "24h",
-      "title": "Intraday Steps Cumulative",
+      "title": "Steps Cumulative (24h)",
       "transformations": [
         {
           "id": "calculateField",
@@ -1258,8 +1252,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-red",
-                "value": null
+                "color": "semi-dark-red"
               },
               {
                 "color": "semi-dark-orange",
@@ -1302,7 +1295,7 @@
         "sizing": "auto",
         "text": {}
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -1390,8 +1383,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1438,7 +1430,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Sleeping Movement Activity",
@@ -1565,8 +1557,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
-                "value": null
+                "color": "blue"
               },
               {
                 "color": "semi-dark-red",
@@ -1612,7 +1603,7 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Total Asleep",
@@ -1695,8 +1686,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1743,7 +1733,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Sleeping Movement Activity",
@@ -1795,8 +1785,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
-                "value": null
+                "color": "blue"
               },
               {
                 "color": "semi-dark-red",
@@ -1842,7 +1831,7 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Stress",
@@ -1925,8 +1914,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2048,7 +2036,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Sleeping Heart Rate",
@@ -2315,7 +2303,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Deep",
@@ -2565,7 +2553,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Sedentary",
@@ -2777,8 +2765,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-blue",
-                "value": null
+                "color": "dark-blue"
               },
               {
                 "color": "super-light-blue",
@@ -2821,7 +2808,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Sleep Stages",
@@ -2855,19 +2842,6 @@
       "type": "timeseries"
     },
     {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 55
-      },
-      "id": 42,
-      "panels": [],
-      "title": "Recent Activities",
-      "type": "row"
-    },
-    {
       "datasource": {
         "type": "influxdb",
         "uid": "${DS_GARMIN_STATS}"
@@ -2890,9 +2864,9 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 7,
+        "w": 6,
         "x": 0,
-        "y": 56
+        "y": 55
       },
       "id": 43,
       "options": {
@@ -2916,7 +2890,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Zone 1",
@@ -3070,9 +3044,9 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 9,
-        "x": 7,
-        "y": 56
+        "w": 6,
+        "x": 6,
+        "y": 55
       },
       "id": 44,
       "options": {
@@ -3095,7 +3069,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "calories",
@@ -3187,8 +3161,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3217,9 +3190,9 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 8,
-        "x": 16,
-        "y": 56
+        "w": 4,
+        "x": 12,
+        "y": 55
       },
       "id": 48,
       "options": {
@@ -3244,7 +3217,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 0
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "avgHR",
@@ -3388,6 +3361,297 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "lengthm"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "HR difference"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 4,
+        "x": 16,
+        "y": 55
+      },
+      "id": 53,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "alias": "Distance",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "measurement": "ActivitySummary",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "distance"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Activity Distance",
+      "transparent": true,
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_GARMIN_STATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "HR difference"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "avgHR"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duration"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 4,
+        "x": 20,
+        "y": 55
+      },
+      "id": 54,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "alias": "Duration",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "measurement": "ActivitySummary",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "elapsedDuration"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Activity Duration",
+      "transparent": true,
+      "type": "barchart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 64
+      },
+      "id": 42,
+      "panels": [],
+      "title": "Recent Activities",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_GARMIN_STATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "continuous-purples"
           },
           "custom": {
@@ -3404,8 +3668,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3524,7 +3787,7 @@
           "zoom": 16
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "lat",
@@ -3696,8 +3959,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3863,7 +4125,7 @@
           "zoom": 16
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "lat",
@@ -4050,8 +4312,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4110,7 +4371,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "HR",
@@ -4240,8 +4501,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4327,7 +4587,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Speed",
@@ -4426,8 +4686,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4513,7 +4772,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Altitude",
@@ -4583,6 +4842,7 @@
             "mode": "fixed"
           },
           "custom": {
+            "axisPlacement": "auto",
             "fillOpacity": 70,
             "hideFrom": {
               "legend": false,
@@ -4619,8 +4879,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4654,7 +4913,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Activity Timeline",
@@ -4697,6 +4956,7 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisPlacement": "auto",
             "fillOpacity": 100,
             "hideFrom": {
               "legend": false,
@@ -4728,8 +4988,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4764,7 +5023,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Heart rate",
@@ -4869,8 +5128,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               },
               {
                 "color": "semi-dark-red",
@@ -5068,7 +5326,7 @@
           }
         ]
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Activity Type",
@@ -5331,8 +5589,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               },
               {
                 "color": "green",
@@ -5392,7 +5649,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Steps",
@@ -5476,8 +5733,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               },
               {
                 "color": "green",
@@ -5537,7 +5793,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Distance Covered",
@@ -5621,8 +5877,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               },
               {
                 "color": "dark-green",
@@ -5711,7 +5966,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "BMR Calories",
@@ -5869,8 +6124,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               }
             ]
           },
@@ -5978,7 +6232,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Avg SpO2",
@@ -6162,8 +6416,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               }
             ]
           },
@@ -6286,7 +6539,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Avg Breathing Rate",
@@ -6455,8 +6708,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               }
             ]
           },
@@ -6557,7 +6809,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Deep Sleep",
@@ -6869,7 +7121,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Sedentary",
@@ -7080,8 +7332,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               },
               {
                 "color": "dark-green",
@@ -7127,7 +7378,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Sleep Score",
@@ -7230,8 +7481,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               },
               {
                 "color": "green",
@@ -7381,7 +7631,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Sleeping",
@@ -7591,8 +7841,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               }
             ]
           },
@@ -7666,7 +7915,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Charged",
@@ -7799,8 +8048,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               },
               {
                 "color": "green",
@@ -7890,7 +8138,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Moderate Intensity",
@@ -8016,8 +8264,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "super-light-red",
-                "value": null
+                "color": "super-light-red"
               },
               {
                 "color": "green",
@@ -8242,7 +8489,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Low Stress duration",
@@ -8572,7 +8819,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Deep",
@@ -8802,8 +9049,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -8851,7 +9097,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Weight in KG",
@@ -8934,8 +9180,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -9006,7 +9251,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "11.5.2",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "bb_low",
@@ -9159,8 +9404,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-red",
-                "value": null
+                "color": "dark-red"
               },
               {
                 "color": "light-yellow",
@@ -9286,8 +9530,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -9398,7 +9641,7 @@
     }
   ],
   "refresh": "5m",
-  "schemaVersion": 40,
+  "schemaVersion": 41,
   "tags": [],
   "templating": {
     "list": [
@@ -9433,6 +9676,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 88,
+  "version": 93,
   "weekStart": ""
 }
