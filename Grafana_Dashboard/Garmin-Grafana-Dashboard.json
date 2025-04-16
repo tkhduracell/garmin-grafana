@@ -1361,7 +1361,7 @@
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": 300000,
+            "insertNulls": 600000,
             "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1433,31 +1433,6 @@
       "pluginVersion": "11.6.0",
       "targets": [
         {
-          "alias": "Sleeping Movement Activity",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${DS_GARMIN_STATS}"
-          },
-          "groupBy": [],
-          "hide": true,
-          "measurement": "SleepIntraday",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "E",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "SleepMovementActivityLevel"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": []
-        },
-        {
           "alias": "BR",
           "datasource": {
             "type": "influxdb",
@@ -1487,6 +1462,24 @@
       "title": "Breathing Rates",
       "transformations": [
         {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "lower",
+                  "options": {
+                    "value": 0
+                  }
+                },
+                "fieldName": "BR"
+              }
+            ],
+            "match": "all",
+            "type": "exclude"
+          }
+        },
+        {
           "id": "calculateField",
           "options": {
             "alias": "Breathing Rate",
@@ -1510,28 +1503,9 @@
             "include": {
               "names": [
                 "Time",
-                "Sleeping Movement Activity",
                 "Breathing Rate"
               ]
             }
-          }
-        },
-        {
-          "id": "filterByValue",
-          "options": {
-            "filters": [
-              {
-                "config": {
-                  "id": "greater",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "Breathing Rate"
-              }
-            ],
-            "match": "all",
-            "type": "include"
           }
         }
       ],
@@ -4509,7 +4483,7 @@
               }
             ]
           },
-          "unit": "velocityms"
+          "unit": "velocitykmh"
         },
         "overrides": [
           {
@@ -4551,6 +4525,21 @@
                 "id": "color",
                 "value": {
                   "fixedColor": "light-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Speed (Km/Hour)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-green",
                   "mode": "fixed"
                 }
               }
@@ -4611,6 +4600,12 @@
                   "Speed"
                 ],
                 "type": "field"
+              },
+              {
+                "params": [
+                  "* 3.6"
+                ],
+                "type": "math"
               }
             ]
           ],
@@ -4628,7 +4623,7 @@
         {
           "id": "calculateField",
           "options": {
-            "alias": "Speed (meter/sec)",
+            "alias": "Speed (Km/Hour)",
             "mode": "windowFunctions",
             "reduce": {
               "reducer": "sum"
@@ -9676,6 +9671,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 93,
+  "version": 94,
   "weekStart": ""
 }
