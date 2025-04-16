@@ -787,24 +787,6 @@
       "title": "Stress",
       "transformations": [
         {
-          "id": "filterByValue",
-          "options": {
-            "filters": [
-              {
-                "config": {
-                  "id": "equal",
-                  "options": {
-                    "value": "-1"
-                  }
-                },
-                "fieldName": "Stress"
-              }
-            ],
-            "match": "any",
-            "type": "exclude"
-          }
-        },
-        {
           "id": "calculateField",
           "options": {
             "alias": "Stress Level",
@@ -820,6 +802,24 @@
               "windowSize": 0.005,
               "windowSizeMode": "percentage"
             }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "greater",
+                  "options": {
+                    "value": 0
+                  }
+                },
+                "fieldName": "Stress"
+              }
+            ],
+            "match": "any",
+            "type": "include"
           }
         },
         {
@@ -2838,7 +2838,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 6,
+        "w": 5,
         "x": 0,
         "y": 55
       },
@@ -3018,8 +3018,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 6,
-        "x": 6,
+        "w": 5,
+        "x": 5,
         "y": 55
       },
       "id": 44,
@@ -3165,7 +3165,7 @@
       "gridPos": {
         "h": 9,
         "w": 4,
-        "x": 12,
+        "x": 10,
         "y": 55
       },
       "id": 48,
@@ -3180,7 +3180,7 @@
           "placement": "bottom",
           "showLegend": true
         },
-        "orientation": "auto",
+        "orientation": "vertical",
         "showValue": "auto",
         "stacking": "none",
         "tooltip": {
@@ -3393,8 +3393,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 4,
-        "x": 16,
+        "w": 5,
+        "x": 14,
         "y": 55
       },
       "id": 53,
@@ -3409,7 +3409,7 @@
           "placement": "bottom",
           "showLegend": true
         },
-        "orientation": "auto",
+        "orientation": "vertical",
         "showValue": "never",
         "stacking": "none",
         "tooltip": {
@@ -3547,8 +3547,8 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 4,
-        "x": 20,
+        "w": 5,
+        "x": 19,
         "y": 55
       },
       "id": 54,
@@ -3563,7 +3563,7 @@
           "placement": "bottom",
           "showLegend": true
         },
-        "orientation": "auto",
+        "orientation": "vertical",
         "showValue": "never",
         "stacking": "none",
         "tooltip": {
@@ -4275,7 +4275,7 @@
               "type": "linear"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "dashed"
             }
           },
           "decimals": 0,
@@ -4290,7 +4290,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 120
               }
             ]
           },
@@ -9671,6 +9671,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 94,
+  "version": 98,
   "weekStart": ""
 }
