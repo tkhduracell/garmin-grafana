@@ -36,6 +36,8 @@ If you are a **Fitbit user**, please check out the [sister project](https://gith
 
 ## Install with Docker (Recommended)
 
+0. Install docker if you don't have it already. Docker is supported in all major platforms/OS. Please check the [docker installation guide](https://docs.docker.com/engine/install/).
+
 1. Create a folder named `garmin-fetch-data`, cd into the folder. Then create a folder named `garminconnect-tokens` inside the current folder (`garmin-fetch-data`) with the command `mkdir garminconnect-tokens`. Run `chown -R 1000:1000 garminconnect-tokens` to change the ownership of the garminconnect-tokens folder (so the `garmin-fetch-data` container's internal user can use it to store the Authentication tokens)
 
 2. Create a `compose.yml` file inside the current `garmin-fetch-data` folder with the content of the given [compose-example.yml](./compose-example.yml) ( Change the environment variables accordingly )
@@ -46,7 +48,7 @@ If you are a **Fitbit user**, please check out the [sister project](https://gith
 
 5. Finally run : `docker compose up -d` ( to launch the full stack in detached mode ). Thereafter you should check the logs with `docker compose logs --follow` to see any potential error from the containers. This will help you debug the issue, if there is any (specially read/write permission issues). if you are using docker volumes, there are little chance of this happending as file permissions will be managed by docker. For bind mounts, if you are having permission issues, please check the troubleshooting section.
 
-7. Now you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`, add influxdb as the data source, the influxdb hostname should be `influxdb` with port `8086`. Test the connection to make sure the influxdb is up and reachable (you are good to go if it finds the measurements when you test the connection)
+7. Now you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`, add influxdb as the data source. Please note the influxdb hostname is set as `influxdb` with port `8086` so you should use `http://influxdb:8086` for the address during data source setup and not `http://localhost:8086` because influxdb is a running as a seperate container but part of the same docker network and stack. Test the connection to make sure the influxdb is up and reachable (you are good to go if it finds the measurements when you test the connection)
 
 8. To use the Grafana dashboard, please use the [JSON file](https://github.com/arpanghosh8453/garmin-grafana/blob/main/Grafana_Dashboard/Garmin-Grafana-Dashboard.json) downloaded directly from GitHub or use the import code **23245** to pull them directly from the Grafana dashboard cloud.
 
