@@ -539,10 +539,10 @@ def get_activity_summary(date_str):
     for activity in activity_list:
         if activity.get('hasPolyline'):
             activity_with_gps_id_dict[activity.get('activityId')] = activity.get('activityType',{}).get('typeKey', "Unknown")
-        if 'beginTimestamp' in activity: # 'beginTimestamp' is not available for all multisport sub-activities (temp fix for #13)
+        if "startTimeGMT" in activity: # "startTimeGMT" should be available for all activities (fix #13)
             points_list.append({
                 "measurement":  "ActivitySummary",
-                "time": datetime.fromtimestamp(activity['beginTimestamp']/1000, tz=pytz.timezone("UTC")).isoformat(),
+                "time": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).isoformat(),
                 "tags": {
                     "Device": GARMIN_DEVICENAME
                 },
@@ -571,7 +571,7 @@ def get_activity_summary(date_str):
             })
             points_list.append({
                 "measurement":  "ActivitySummary",
-                "time": datetime.fromtimestamp((activity['beginTimestamp']/1000) + int(activity.get('elapsedDuration')), tz=pytz.timezone("UTC")).isoformat(),
+                "time": (datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC) + timedelta(seconds=int(activity.get('elapsedDuration', 0)))).isoformat(),
                 "tags": {
                     "Device": GARMIN_DEVICENAME
                 },
@@ -584,7 +584,7 @@ def get_activity_summary(date_str):
             })
             logging.info(f"Success : Fetching Activity summary with id {activity.get('activityId')} for date {date_str}")
         else:
-            logging.warning(f"Skipped : Timestamp missing for some partial activity in id {activity.get('activityId')} for date {date_str}")
+            logging.warning(f"Skipped : Start Timestamp missing for activity id {activity.get('activityId')} for date {date_str}")
     return points_list, activity_with_gps_id_dict
 
 # %%
