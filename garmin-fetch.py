@@ -573,7 +573,9 @@ def get_activity_summary(date_str):
                 "measurement":  "ActivitySummary",
                 "time": (datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC) + timedelta(seconds=int(activity.get('elapsedDuration', 0)))).isoformat(),
                 "tags": {
-                    "Device": GARMIN_DEVICENAME
+                    "Device": GARMIN_DEVICENAME,
+                    "ActivityID": activity.get('activityId'),
+                    "ActivitySelector": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).strftime('%Y%m%dT%H%M%SUTC-') + activity.get('activityType',{}).get('typeKey', "Unknown")
                 },
                 "fields": {
                     'activityId': activity.get('activityId'),
