@@ -48,6 +48,7 @@ RATE_LIMIT_CALLS_SECONDS = int(os.getenv("RATE_LIMIT_CALLS_SECONDS", 5)) # optio
 INFLUXDB_ENDPOINT_IS_HTTP = False if os.getenv("INFLUXDB_ENDPOINT_IS_HTTP") in ['False','false','FALSE','f','F','no','No','NO','0'] else True # optional
 GARMIN_DEVICENAME_AUTOMATIC = False if GARMIN_DEVICENAME != "Unknown" else True # optional
 UPDATE_INTERVAL_SECONDS = int(os.getenv("UPDATE_INTERVAL_SECONDS", 300)) # optional
+FETCH_ADVANCED_TRAINING_DATA = True if os.getenv("FETCH_ADVANCED_TRAINING_DATA") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
 
 # %%
 for handler in logging.root.handlers[:]:
@@ -653,6 +654,97 @@ def fetch_activity_GPS(activityIDdict):
         logging.info(f"Success : Fetching TCX details for activity with id {activityID}")
     return points_list
 
+def get_training_readiness(date_str):
+    points_list = []
+    tr_list_all = garmin_obj.get_training_readiness(date_str)
+    if tr_list_all:
+        for tr_dict in tr_list_all:
+            data_fields = {
+                    "level": tr_dict.get("level"),
+                    "score": tr_dict.get("score"),
+                    "sleepScore": tr_dict.get("sleepScore"),
+                    "sleepScoreFactorPercent": tr_dict.get("sleepScoreFactorPercent"),
+                    "recoveryTime": tr_dict.get("recoveryTime"),
+                    "recoveryTimeFactorPercent": tr_dict.get("recoveryTimeFactorPercent"),
+                    "acwrFactorPercent": tr_dict.get("acwrFactorPercent"),
+                    "acuteLoad": tr_dict.get("acuteLoad"),
+                    "stressHistoryFactorPercent": tr_dict.get("stressHistoryFactorPercent"),
+                    "hrvFactorPercent": tr_dict.get("hrvFactorPercent"),
+                }
+            if (not all(value is None for value in data_fields.values())) and tr_dict.get('timestamp'):
+                points_list.append({
+                    "measurement":  "TrainingReadiness",
+                    "time": pytz.timezone("UTC").localize(datetime.strptime(tr_dict['timestamp'],"%Y-%m-%dT%H:%M:%S.%f")).isoformat(), # Use GMT 12:00 for daily record
+                    "tags": {
+                        "Device": GARMIN_DEVICENAME
+                    },
+                    "fields": data_fields
+                })
+        logging.info(f"Success : Fetching Training Readiness for date {date_str}")
+    return points_list
+
+def get_hillscore(date_str):
+    points_list = []
+    hill_all = garmin_obj.get_hill_score(date_str, date_str)
+    if hill_all:
+        for hill in hill_all.get("hillScoreDTOList",[]):
+            data_fields = {
+                "strengthScore": hill.get("strengthScore"),
+                "enduranceScore": hill.get("enduranceScore"),
+                "hillScoreClassificationId": hill.get("hillScoreClassificationId"),
+                "overallScore": hill.get("overallScore"),
+                "hillScoreFeedbackPhraseId": hill.get("hillScoreFeedbackPhraseId")
+            }
+            if not all(value is None for value in data_fields.values()):
+                points_list.append({
+                    "measurement":  "HillScore",
+                    "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=12, tzinfo=pytz.UTC).isoformat(), # Use GMT 12:00 for daily record
+                    "tags": {
+                        "Device": GARMIN_DEVICENAME,
+                    },
+                    "fields": data_fields
+                })
+        logging.info(f"Success : Fetching Hill Score for date {date_str}")
+    return points_list
+
+def get_race_predictions(date_str):
+    points_list = []
+    rp_all = garmin_obj.get_race_predictions()
+    if rp_all:
+        data_fields = {
+            "time5K": rp_all.get("time5K"),
+            "time10K": rp_all.get("time10K"),
+            "timeHalfMarathon": rp_all.get("timeHalfMarathon"),
+            "timeMarathon": rp_all.get("timeMarathon"),
+        }
+        if not all(value is None for value in data_fields.values()):
+            points_list.append({
+                "measurement":  "RacePredictions",
+                "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=12, tzinfo=pytz.UTC).isoformat(), # Use GMT 12:00 for daily record
+                "tags": {
+                    "Device": GARMIN_DEVICENAME,
+                },
+                "fields": data_fields
+            })
+        logging.info(f"Success : Fetching Race Predictions for date {date_str}")
+    return points_list
+
+def get_vo2_max(date_str):
+    points_list = []
+    max_metrics = garmin_obj.get_max_metrics(date_str)
+    if max_metrics:
+        vo2_max_value = max_metrics[0].get("generic", {}).get("vo2MaxPreciseValue")
+        if vo2_max_value:
+            points_list.append({
+                "measurement":  "VO2_Max",
+                "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=12, tzinfo=pytz.UTC).isoformat(), # Use GMT 12:00 for daily record
+                "tags": {
+                    "Device": GARMIN_DEVICENAME,
+                },
+                "fields": {"VO2_max_value" : vo2_max_value}
+            })
+            logging.info(f"Success : Fetching VO2-max for date {date_str}")
+    return points_list
 # %%
 def daily_fetch_write(date_str):
     write_points_to_influxdb(get_daily_stats(date_str))
@@ -666,7 +758,11 @@ def daily_fetch_write(date_str):
     activity_summary_points_list, activity_with_gps_id_dict = get_activity_summary(date_str)
     write_points_to_influxdb(activity_summary_points_list)
     write_points_to_influxdb(fetch_activity_GPS(activity_with_gps_id_dict))
-    
+    if FETCH_ADVANCED_TRAINING_DATA:
+        write_points_to_influxdb(get_training_readiness(date_str))
+        write_points_to_influxdb(get_hillscore(date_str))
+        write_points_to_influxdb(get_race_predictions(date_str))
+        write_points_to_influxdb(get_vo2_max(date_str))
 
 # %%
 def fetch_write_bulk(start_date_str, end_date_str):
