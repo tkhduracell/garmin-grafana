@@ -136,6 +136,10 @@ Please note that this process is intentionally rate limited with a 5 second wait
 
 5. Now you can run the regular periodic update with `docker compose up -d`
 
+## Update to new versions
+
+Updating with docker is super simple. Just go to the folder where the `compose.yml` is and run `docker compose pull` and then `docker compose down && docker compose up -d`. Please verify if everything is running correctly by checking the logs with `docker compose logs --follow`
+
 
 ## Troubleshooting
 
