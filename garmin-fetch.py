@@ -654,6 +654,7 @@ def fetch_activity_GPS(activityIDdict):
         logging.info(f"Success : Fetching TCX details for activity with id {activityID}")
     return points_list
 
+# Contribution from PR #17 by @arturgoms 
 def get_training_readiness(date_str):
     points_list = []
     tr_list_all = garmin_obj.get_training_readiness(date_str)
@@ -683,6 +684,7 @@ def get_training_readiness(date_str):
         logging.info(f"Success : Fetching Training Readiness for date {date_str}")
     return points_list
 
+# Contribution from PR #17 by @arturgoms 
 def get_hillscore(date_str):
     points_list = []
     hill_all = garmin_obj.get_hill_score(date_str, date_str)
@@ -707,6 +709,7 @@ def get_hillscore(date_str):
         logging.info(f"Success : Fetching Hill Score for date {date_str}")
     return points_list
 
+# Contribution from PR #17 by @arturgoms 
 def get_race_predictions(date_str):
     points_list = []
     rp_all = garmin_obj.get_race_predictions()
@@ -758,7 +761,7 @@ def daily_fetch_write(date_str):
     activity_summary_points_list, activity_with_gps_id_dict = get_activity_summary(date_str)
     write_points_to_influxdb(activity_summary_points_list)
     write_points_to_influxdb(fetch_activity_GPS(activity_with_gps_id_dict))
-    if FETCH_ADVANCED_TRAINING_DATA:
+    if FETCH_ADVANCED_TRAINING_DATA: # Contribution from PR #17 by @arturgoms 
         write_points_to_influxdb(get_training_readiness(date_str))
         write_points_to_influxdb(get_hillscore(date_str))
         write_points_to_influxdb(get_race_predictions(date_str))
