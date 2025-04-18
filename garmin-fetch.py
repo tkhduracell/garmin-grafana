@@ -1,5 +1,5 @@
 # %%
-import base64, requests, time, pytz, logging, os, sys, dotenv
+import base64, requests, time, pytz, logging, os, sys, dotenv, io, zipfile
 from datetime import datetime, timedelta
 from influxdb import InfluxDBClient
 from influxdb.exceptions import InfluxDBClientError
@@ -49,6 +49,9 @@ INFLUXDB_ENDPOINT_IS_HTTP = False if os.getenv("INFLUXDB_ENDPOINT_IS_HTTP") in [
 GARMIN_DEVICENAME_AUTOMATIC = False if GARMIN_DEVICENAME != "Unknown" else True # optional
 UPDATE_INTERVAL_SECONDS = int(os.getenv("UPDATE_INTERVAL_SECONDS", 300)) # optional
 FETCH_ADVANCED_TRAINING_DATA = True if os.getenv("FETCH_ADVANCED_TRAINING_DATA") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
+KEEP_FIT_FILES = True if os.getenv("KEEP_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
+FIT_FILE_STORAGE_LOCATION = os.getenv("FIT_FILE_STORAGE_LOCATION", os.path.join(os.path.expanduser("~"), "fit_filestore"))
+PARSED_ACTIVITY_ID_LIST = []
 
 # %%
 for handler in logging.root.handlers[:]:
@@ -591,67 +594,123 @@ def get_activity_summary(date_str):
     return points_list, activity_with_gps_id_dict
 
 # %%
-def fetch_activity_GPS(activityIDdict):
+def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back to TCX
     points_list = []
     for activityID in activityIDdict.keys():
-        try:
-            root = ET.fromstring(garmin_obj.download_activity(activityID, dl_fmt=garmin_obj.ActivityDownloadFormat.TCX).decode("UTF-8"))
-        except requests.exceptions.Timeout as err:
-            logging.warning(f"Request timeout for fetching large activity record {activityID} - skipping record")
+        activity_type = activityIDdict[activityID]
+        if activityID in PARSED_ACTIVITY_ID_LIST:
+            logging.info(f"Skipping : Activity ID {activityID} has already been processed within current runtime")
             return []
-        ns = {"tcx": "http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2", "ns3": "http://www.garmin.com/xmlschemas/ActivityExtension/v2"}
-        for activity in root.findall("tcx:Activities/tcx:Activity", ns):
-            activity_type = activityIDdict[activityID]
-            activity_start_time = datetime.fromisoformat(activity.find("tcx:Id", ns).text.strip("Z"))
-            lap_index = 1
-            for lap in activity.findall("tcx:Lap", ns):
-                lap_start_time = datetime.fromisoformat(lap.attrib.get("StartTime").strip("Z"))
-                for tp in lap.findall(".//tcx:Trackpoint", ns):
-                    time_obj = datetime.fromisoformat(tp.findtext("tcx:Time", default=None, namespaces=ns).strip("Z"))
-                    lat = tp.findtext("tcx:Position/tcx:LatitudeDegrees", default=None, namespaces=ns)
-                    lon = tp.findtext("tcx:Position/tcx:LongitudeDegrees", default=None, namespaces=ns)
-                    alt = tp.findtext("tcx:AltitudeMeters", default=None, namespaces=ns)
-                    dist = tp.findtext("tcx:DistanceMeters", default=None, namespaces=ns)
-                    hr = tp.findtext("tcx:HeartRateBpm/tcx:Value", default=None, namespaces=ns)
-                    speed = tp.findtext("tcx:Extensions/ns3:TPX/ns3:Speed", default=None, namespaces=ns)
+        try:
+            logging.info(f"Processing : Activity ID {activityID} GPS data from fit file - this may take a while...")
+            zip_data = garmin_obj.download_activity(activityID, dl_fmt=garmin_obj.ActivityDownloadFormat.ORIGINAL)
+            zip_buffer = io.BytesIO(zip_data)
+            with zipfile.ZipFile(zip_buffer) as zip_ref:
+                fit_filename = next((f for f in zip_ref.namelist() if f.endswith('.fit')), None)
+                if not fit_filename:
+                    raise FileNotFoundError("No .fit file found in the downloaded archive.")
+                else:
+                    fit_data = zip_ref.read(fit_filename)
+                    fit_file_buffer = io.BytesIO(fit_data)
+                    all_records_list = []
+                    fitfile = FitFile(fit_file_buffer)
+                    for record in fitfile.get_messages('record'):
+                        record_dict = {}
+                        for data in record:
+                            record_dict[data.name] = data.value
+                        all_records_list.append(record_dict)
+                    activity_start_time = all_records_list[0]['timestamp'].replace(tzinfo=pytz.UTC)
+                    for parsed_record in all_records_list:
+                        if parsed_record.get('timestamp'):
+                            point = {
+                                "measurement": "ActivityGPS",
+                                "time": parsed_record['timestamp'].replace(tzinfo=pytz.UTC).isoformat(), 
+                                "tags": {
+                                    "Device": GARMIN_DEVICENAME,
+                                    "ActivityID": activityID,
+                                    "ActivitySelector": activity_start_time.strftime('%Y%m%dT%H%M%SUTC-') + activity_type
+                                },
+                                "fields": {
+                                    "ActivityName": activity_type,
+                                    "ActivityID": activityID,
+                                    "Latitude": parsed_record['position_lat'] * ( 180 / 2**31 ) if parsed_record.get('position_lat') else None,
+                                    "Longitude": parsed_record['position_long'] * ( 180 / 2**31 ) if parsed_record.get('position_long') else None,
+                                    "Altitude": parsed_record.get('enhanced_altitude', None),
+                                    "Distance": parsed_record.get('distance', None),
+                                    "HeartRate": parsed_record.get('heart_rate', None),
+                                    "Speed": parsed_record.get('enhanced_speed', None),
+                                    "Cadence": parsed_record.get('cadence', None),
+                                    "Fractional_Cadence": parsed_record.get('fractional_cadence', None)
+                                }
+                            }
+                            points_list.append(point)
+                    if KEEP_FIT_FILES:
+                        os.makedirs(FIT_FILE_STORAGE_LOCATION, exist_ok=True)
+                        fit_path = os.path.join(FIT_FILE_STORAGE_LOCATION, activity_start_time.strftime('%Y%m%dT%H%M%SUTC-') + activity_type + ".fit")
+                        with open(fit_path, "wb") as f:
+                            f.write(fit_data)
+                        logging.info(f"Success : Activity ID {activityID} stored in output file {fit_path}")
+        except FileNotFoundError:
+            logging.warning(f"Fallback : Failed to extract FIT file for activityID {activityID} - Trying TCX file...")
+            try:
+                root = ET.fromstring(garmin_obj.download_activity(activityID, dl_fmt=garmin_obj.ActivityDownloadFormat.TCX).decode("UTF-8"))
+            except requests.exceptions.Timeout as err:
+                logging.warning(f"Request timeout for fetching large activity record {activityID} - skipping record")
+                return []
+            root = ET.fromstring(garmin_obj.download_activity(activityID, dl_fmt=garmin_obj.ActivityDownloadFormat.TCX).decode("UTF-8"))
+            ns = {"tcx": "http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2", "ns3": "http://www.garmin.com/xmlschemas/ActivityExtension/v2"}
+            for activity in root.findall("tcx:Activities/tcx:Activity", ns):
+                activity_start_time = datetime.fromisoformat(activity.find("tcx:Id", ns).text.strip("Z"))
+                lap_index = 1
+                for lap in activity.findall("tcx:Lap", ns):
+                    lap_start_time = datetime.fromisoformat(lap.attrib.get("StartTime").strip("Z"))
+                    for tp in lap.findall(".//tcx:Trackpoint", ns):
+                        time_obj = datetime.fromisoformat(tp.findtext("tcx:Time", default=None, namespaces=ns).strip("Z"))
+                        lat = tp.findtext("tcx:Position/tcx:LatitudeDegrees", default=None, namespaces=ns)
+                        lon = tp.findtext("tcx:Position/tcx:LongitudeDegrees", default=None, namespaces=ns)
+                        alt = tp.findtext("tcx:AltitudeMeters", default=None, namespaces=ns)
+                        dist = tp.findtext("tcx:DistanceMeters", default=None, namespaces=ns)
+                        hr = tp.findtext("tcx:HeartRateBpm/tcx:Value", default=None, namespaces=ns)
+                        speed = tp.findtext("tcx:Extensions/ns3:TPX/ns3:Speed", default=None, namespaces=ns)
 
-                    try: lat = float(lat)
-                    except: lat = None
-                    try: lon = float(lon)
-                    except: lon = None
-                    try: alt = float(alt)
-                    except: alt = None
-                    try: dist = float(dist)
-                    except: dist = None
-                    try: hr = float(hr)
-                    except: hr = None
-                    try: speed = float(speed)
-                    except: speed = None
+                        try: lat = float(lat)
+                        except: lat = None
+                        try: lon = float(lon)
+                        except: lon = None
+                        try: alt = float(alt)
+                        except: alt = None
+                        try: dist = float(dist)
+                        except: dist = None
+                        try: hr = float(hr)
+                        except: hr = None
+                        try: speed = float(speed)
+                        except: speed = None
 
-                    point = {
-                        "measurement": "ActivityGPS",
-                        "time": time_obj.isoformat(), 
-                        "tags": {
-                            "Device": GARMIN_DEVICENAME,
-                            "ActivityID": activityID,
-                            "ActivitySelector": activity_start_time.strftime('%Y%m%dT%H%M%SUTC-') + activity_type
-                        },
-                        "fields": {
-                            "ActivityName": activity_type,
-                            "ActivityID": activityID,
-                            "Latitude": lat,
-                            "Longitude": lon,
-                            "Altitude": alt,
-                            "Distance": dist,
-                            "HeartRate": hr,
-                            "Speed": speed,
-                            "lap": lap_index
+                        point = {
+                            "measurement": "ActivityGPS",
+                            "time": time_obj.isoformat(), 
+                            "tags": {
+                                "Device": GARMIN_DEVICENAME,
+                                "ActivityID": activityID,
+                                "ActivitySelector": activity_start_time.strftime('%Y%m%dT%H%M%SUTC-') + activity_type
+                            },
+                            "fields": {
+                                "ActivityName": activity_type,
+                                "ActivityID": activityID,
+                                "Latitude": lat,
+                                "Longitude": lon,
+                                "Altitude": alt,
+                                "Distance": dist,
+                                "HeartRate": hr,
+                                "Speed": speed,
+                                "lap": lap_index
+                            }
                         }
-                    }
-                    points_list.append(point)
-                
-                lap_index += 1
-        logging.info(f"Success : Fetching TCX details for activity with id {activityID}")
+                        points_list.append(point)
+                    
+                    lap_index += 1
+        logging.info(f"Success : Fetching GPS details for activity with activity id {activityID}")
+        PARSED_ACTIVITY_ID_LIST.append(activityID)
     return points_list
 
 # Contribution from PR #17 by @arturgoms 
