@@ -88,6 +88,18 @@
       "id": "timeseries",
       "name": "Time series",
       "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "trend",
+      "name": "Trend",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "xychart",
+      "name": "XY Chart",
+      "version": ""
     }
   ],
   "annotations": {
@@ -1561,6 +1573,7 @@
         "x": 0,
         "y": 28
       },
+      "hideTimeOverride": true,
       "id": 32,
       "options": {
         "minVizHeight": 75,
@@ -1586,7 +1599,7 @@
             "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
-          "measurement": "DailyStats",
+          "measurement": "SleepSummary",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -1595,7 +1608,7 @@
             [
               {
                 "params": [
-                  "sleepingSeconds"
+                  "sleepTimeSeconds"
                 ],
                 "type": "field"
               },
@@ -1608,6 +1621,7 @@
           "tags": []
         }
       ],
+      "timeFrom": "24h",
       "title": "Last Sleep Hours",
       "transparent": true,
       "type": "gauge"
@@ -4219,7 +4233,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
             "axisBorderShow": false,
@@ -4271,7 +4285,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "semi-dark-red",
+                  "fixedColor": "dark-red",
                   "mode": "fixed"
                 }
               }
@@ -4293,8 +4307,12 @@
         "fullHighlight": true,
         "groupWidth": 1,
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -4344,39 +4362,6 @@
               "value": "/^$ActivityGPS$/"
             }
           ]
-        },
-        {
-          "alias": "speed",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${DS_GARMIN_STATS}"
-          },
-          "groupBy": [],
-          "hide": true,
-          "measurement": "ActivityGPS",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "query": "SELECT \"Speed\" FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/)",
-          "rawQuery": false,
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "Speed"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "ActivitySelector::tag",
-              "operator": "=~",
-              "value": "/^$ActivityGPS$/"
-            }
-          ]
         }
       ],
       "title": "GPS Track Heart Rate",
@@ -4400,7 +4385,445 @@
           }
         }
       ],
+      "transparent": true,
       "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_GARMIN_STATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "fieldMinMax": true,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "velocitykmh"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Distance"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "lengthm"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Heart Rate"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "BPM"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 84
+      },
+      "id": 57,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "alias": "Distance",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ActivityGPS",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"HeartRate\" FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "Distance"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "ActivitySelector::tag",
+              "operator": "=~",
+              "value": "/^$ActivityGPS$/"
+            }
+          ]
+        },
+        {
+          "alias": "Heart Rate",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ActivityGPS",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"HeartRate\" FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/)",
+          "rawQuery": false,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "HeartRate"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "ActivitySelector::tag",
+              "operator": "=~",
+              "value": "/^$ActivityGPS$/"
+            }
+          ]
+        },
+        {
+          "alias": "Pace",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ActivityGPS",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"HeartRate\" FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/)",
+          "rawQuery": false,
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "Speed"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "ActivitySelector::tag",
+              "operator": "=~",
+              "value": "/^$ActivityGPS$/"
+            }
+          ]
+        }
+      ],
+      "title": "Distance vs HR",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {}
+        }
+      ],
+      "transparent": true,
+      "type": "trend"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_GARMIN_STATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 34,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "pointShape": "circle",
+            "pointSize": {
+              "fixed": 5
+            },
+            "pointStrokeWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "show": "points"
+          },
+          "decimals": 0,
+          "fieldMinMax": true,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "velocitykmh"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Speed (Km/h)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Heart Rate"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "BPM"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 92
+      },
+      "id": 55,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "mapping": "auto",
+        "series": [
+          {
+            "frame": {
+              "matcher": {
+                "id": "byIndex",
+                "options": 0
+              }
+            },
+            "x": {
+              "matcher": {
+                "id": "byName",
+                "options": "Heart Rate"
+              }
+            },
+            "y": {
+              "matcher": {
+                "id": "byName",
+                "options": "Speed (Km/h)"
+              }
+            }
+          }
+        ],
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "alias": "Speed (Km/h)",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ActivityGPS",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"HeartRate\" FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "Speed"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [
+                  "* 3.6"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "ActivitySelector::tag",
+              "operator": "=~",
+              "value": "/^$ActivityGPS$/"
+            }
+          ]
+        },
+        {
+          "alias": "Heart Rate",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ActivityGPS",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"HeartRate\" FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/)",
+          "rawQuery": false,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "HeartRate"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "ActivitySelector::tag",
+              "operator": "=~",
+              "value": "/^$ActivityGPS$/"
+            }
+          ]
+        }
+      ],
+      "title": "Heart Rate vs Pace",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {}
+        }
+      ],
+      "transparent": true,
+      "type": "xychart"
     },
     {
       "datasource": {
@@ -4516,7 +4939,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 84
+        "y": 100
       },
       "id": 47,
       "options": {
@@ -4525,8 +4948,12 @@
         "fullHighlight": true,
         "groupWidth": 1,
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -4707,7 +5134,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 92
+        "y": 108
       },
       "id": 46,
       "options": {
@@ -4716,8 +5143,12 @@
         "fullHighlight": true,
         "groupWidth": 1,
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -4854,7 +5285,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 100
+        "y": 116
       },
       "id": 41,
       "options": {
@@ -4963,7 +5394,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 104
+        "y": 120
       },
       "id": 24,
       "options": {
@@ -5261,7 +5692,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 108
+        "y": 124
       },
       "id": 38,
       "options": {
@@ -5506,7 +5937,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 116
+        "y": 132
       },
       "id": 9,
       "panels": [],
@@ -5578,7 +6009,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 117
+        "y": 133
       },
       "id": 1,
       "options": {
@@ -5722,7 +6153,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 117
+        "y": 133
       },
       "id": 3,
       "options": {
@@ -5896,7 +6327,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 117
+        "y": 133
       },
       "id": 10,
       "options": {
@@ -6172,7 +6603,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 126
+        "y": 142
       },
       "id": 11,
       "options": {
@@ -6479,7 +6910,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 126
+        "y": 142
       },
       "id": 51,
       "options": {
@@ -6741,7 +7172,7 @@
         "h": 11,
         "w": 8,
         "x": 0,
-        "y": 135
+        "y": 151
       },
       "id": 13,
       "options": {
@@ -7051,7 +7482,7 @@
         "h": 11,
         "w": 8,
         "x": 8,
-        "y": 135
+        "y": 151
       },
       "id": 23,
       "options": {
@@ -7308,7 +7739,7 @@
         "h": 11,
         "w": 8,
         "x": 16,
-        "y": 135
+        "y": 151
       },
       "id": 12,
       "options": {
@@ -7560,7 +7991,7 @@
         "h": 11,
         "w": 9,
         "x": 0,
-        "y": 146
+        "y": 162
       },
       "id": 17,
       "options": {
@@ -7844,7 +8275,7 @@
         "h": 11,
         "w": 8,
         "x": 9,
-        "y": 146
+        "y": 162
       },
       "id": 19,
       "options": {
@@ -8067,7 +8498,7 @@
         "h": 11,
         "w": 7,
         "x": 17,
-        "y": 146
+        "y": 162
       },
       "id": 4,
       "options": {
@@ -8418,7 +8849,7 @@
         "h": 13,
         "w": 12,
         "x": 0,
-        "y": 157
+        "y": 173
       },
       "id": 18,
       "options": {
@@ -8751,7 +9182,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 157
+        "y": 173
       },
       "id": 22,
       "options": {
@@ -9041,7 +9472,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 167
+        "y": 183
       },
       "id": 34,
       "options": {
@@ -9186,7 +9617,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 170
+        "y": 186
       },
       "id": 37,
       "options": {
@@ -9380,7 +9811,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 177
+        "y": 193
       },
       "id": 20,
       "options": {
@@ -9505,7 +9936,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 177
+        "y": 193
       },
       "id": 27,
       "options": {
@@ -9629,13 +10060,13 @@
     ]
   },
   "time": {
-    "from": "now-30d",
-    "to": "now"
+    "from": "2025-04-15T22:00:00.000Z",
+    "to": "2025-04-17T21:59:59.000Z"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 99,
+  "version": 108,
   "weekStart": ""
 }
