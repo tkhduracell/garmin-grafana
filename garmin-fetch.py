@@ -882,12 +882,22 @@ else:
     except:
         logging.warning("No previously synced data found in local InfluxDB database, defaulting to 7 day initial fetching. Use specific start date ENV variable to bulk update past data")
         last_influxdb_sync_time_UTC = (datetime.today() - timedelta(days=7)).astimezone(pytz.timezone("UTC"))
+    try:
+        last_activity_dict = garmin_obj.get_last_activity() # (very unlineky event that this will be empty given Garmin's userbase, everyone should have at least one activity)
+        local_timediff = datetime.strptime(last_activity_dict['startTimeLocal'], '%Y-%m-%d %H:%M:%S') - datetime.strptime(last_activity_dict['startTimeGMT'], '%Y-%m-%d %H:%M:%S')
+        if datetime.strptime(last_activity_dict['startTimeLocal'], '%Y-%m-%d %H:%M:%S') > datetime.strptime(last_activity_dict['startTimeGMT'], '%Y-%m-%d %H:%M:%S'):
+            logging.info("Automatically identified user's local timezone as UTC+" + str(local_timediff))
+        else:
+            logging.info("Automatically identified user's local timezone as UTC-" + str(-local_timediff))
+    except KeyError as err:
+        logging.warning(f"Unable to automatically determine user's timezone from recent activity data. Defaulting to UTC offset of 0.")
+        local_timediff = timedelta(hours=0)
     
     while True:
         last_watch_sync_time_UTC = datetime.fromtimestamp(int(garmin_obj.get_device_last_used().get('lastUsedDeviceUploadTime')/1000)).astimezone(pytz.timezone("UTC"))
         if last_influxdb_sync_time_UTC < last_watch_sync_time_UTC:
             logging.info(f"Update found : Current watch sync time is {last_watch_sync_time_UTC} UTC")
-            fetch_write_bulk(last_influxdb_sync_time_UTC.strftime('%Y-%m-%d'), last_watch_sync_time_UTC.strftime('%Y-%m-%d'))
+            fetch_write_bulk((last_influxdb_sync_time_UTC + local_timediff).strftime('%Y-%m-%d'), (last_watch_sync_time_UTC + local_timediff).strftime('%Y-%m-%d')) # Using local dates for deciding which dates to fetch in current iteration (see issue #25)
             last_influxdb_sync_time_UTC = last_watch_sync_time_UTC
         else:
             logging.info(f"No new data found : Current watch and influxdb sync time is {last_watch_sync_time_UTC} UTC")
