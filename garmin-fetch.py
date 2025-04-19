@@ -1,5 +1,6 @@
 # %%
 import base64, requests, time, pytz, logging, os, sys, dotenv, io, zipfile
+from fitparse import FitFile
 from datetime import datetime, timedelta
 from influxdb import InfluxDBClient
 from influxdb.exceptions import InfluxDBClientError
@@ -633,14 +634,17 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                                 "fields": {
                                     "ActivityName": activity_type,
                                     "ActivityID": activityID,
-                                    "Latitude": parsed_record['position_lat'] * ( 180 / 2**31 ) if parsed_record.get('position_lat') else None,
-                                    "Longitude": parsed_record['position_long'] * ( 180 / 2**31 ) if parsed_record.get('position_long') else None,
+                                    "Latitude": int(parsed_record['position_lat']) * ( 180 / 2**31 ) if parsed_record.get('position_lat') else None,
+                                    "Longitude": int(parsed_record['position_long']) * ( 180 / 2**31 ) if parsed_record.get('position_long') else None,
                                     "Altitude": parsed_record.get('enhanced_altitude', None),
                                     "Distance": parsed_record.get('distance', None),
                                     "HeartRate": parsed_record.get('heart_rate', None),
                                     "Speed": parsed_record.get('enhanced_speed', None),
                                     "Cadence": parsed_record.get('cadence', None),
-                                    "Fractional_Cadence": parsed_record.get('fractional_cadence', None)
+                                    "Fractional_Cadence": parsed_record.get('fractional_cadence', None),
+                                    "Temperature": parsed_record.get('temperature', None),
+                                    "Accumulated_Power": parsed_record.get('accumulated_power', None),
+                                    "Power": parsed_record.get('power', None)
                                 }
                             }
                             points_list.append(point)

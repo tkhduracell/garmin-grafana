@@ -4,3 +4,4 @@ Requests>=2.32
 garth>=0.5.3
 garminconnect>=0.2.26
 dotenv>=0.9.9
+fitparse>=1.2.0
