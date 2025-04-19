@@ -638,7 +638,7 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                                     "Longitude": int(parsed_record['position_long']) * ( 180 / 2**31 ) if parsed_record.get('position_long') else None,
                                     "Altitude": parsed_record.get('enhanced_altitude', None),
                                     "Distance": parsed_record.get('distance', None),
-                                    "HeartRate": parsed_record.get('heart_rate', None),
+                                    "HeartRate": float(parsed_record.get('heart_rate', None)) if parsed_record.get('heart_rate', None) else None,
                                     "Speed": parsed_record.get('enhanced_speed', None),
                                     "Cadence": parsed_record.get('cadence', None),
                                     "Fractional_Cadence": parsed_record.get('fractional_cadence', None),
