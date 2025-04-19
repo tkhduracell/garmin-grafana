@@ -1,6 +1,6 @@
 # %%
 import base64, requests, time, pytz, logging, os, sys, dotenv, io, zipfile
-from fitparse import FitFile
+from fitparse import FitFile, FitParseError
 from datetime import datetime, timedelta
 from influxdb import InfluxDBClient
 from influxdb.exceptions import InfluxDBClientError
@@ -609,17 +609,13 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
             with zipfile.ZipFile(zip_buffer) as zip_ref:
                 fit_filename = next((f for f in zip_ref.namelist() if f.endswith('.fit')), None)
                 if not fit_filename:
-                    raise FileNotFoundError("No .fit file found in the downloaded archive.")
+                    raise FileNotFoundError("No FIT file found in the downloaded zip archive.")
                 else:
                     fit_data = zip_ref.read(fit_filename)
                     fit_file_buffer = io.BytesIO(fit_data)
-                    all_records_list = []
                     fitfile = FitFile(fit_file_buffer)
-                    for record in fitfile.get_messages('record'):
-                        record_dict = {}
-                        for data in record:
-                            record_dict[data.name] = data.value
-                        all_records_list.append(record_dict)
+                    fitfile.parse()
+                    all_records_list = [record.get_values() for record in fitfile.get_messages('record')]
                     activity_start_time = all_records_list[0]['timestamp'].replace(tzinfo=pytz.UTC)
                     for parsed_record in all_records_list:
                         if parsed_record.get('timestamp'):
@@ -636,10 +632,10 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                                     "ActivityID": activityID,
                                     "Latitude": int(parsed_record['position_lat']) * ( 180 / 2**31 ) if parsed_record.get('position_lat') else None,
                                     "Longitude": int(parsed_record['position_long']) * ( 180 / 2**31 ) if parsed_record.get('position_long') else None,
-                                    "Altitude": parsed_record.get('enhanced_altitude', None),
+                                    "Altitude": parsed_record.get('enhanced_altitude', None) or parsed_record.get('altitude', None),
                                     "Distance": parsed_record.get('distance', None),
                                     "HeartRate": float(parsed_record.get('heart_rate', None)) if parsed_record.get('heart_rate', None) else None,
-                                    "Speed": parsed_record.get('enhanced_speed', None),
+                                    "Speed": parsed_record.get('enhanced_speed', None) or parsed_record.get('speed', None),
                                     "Cadence": parsed_record.get('cadence', None),
                                     "Fractional_Cadence": parsed_record.get('fractional_cadence', None),
                                     "Temperature": parsed_record.get('temperature', None),
@@ -654,8 +650,9 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                         with open(fit_path, "wb") as f:
                             f.write(fit_data)
                         logging.info(f"Success : Activity ID {activityID} stored in output file {fit_path}")
-        except FileNotFoundError:
-            logging.warning(f"Fallback : Failed to extract FIT file for activityID {activityID} - Trying TCX file...")
+        except (FileNotFoundError, FitParseError) as err:
+            logging.error(err)
+            logging.warning(f"Fallback : Failed to use FIT file for activityID {activityID} - Trying TCX file...")
             try:
                 root = ET.fromstring(garmin_obj.download_activity(activityID, dl_fmt=garmin_obj.ActivityDownloadFormat.TCX).decode("UTF-8"))
             except requests.exceptions.Timeout as err:
