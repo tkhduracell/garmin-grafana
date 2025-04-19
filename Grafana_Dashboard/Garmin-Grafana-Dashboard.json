@@ -3160,7 +3160,7 @@
           "showLegend": true
         },
         "orientation": "vertical",
-        "showValue": "auto",
+        "showValue": "never",
         "stacking": "none",
         "tooltip": {
           "hideZeros": false,
@@ -6501,7 +6501,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": 259200000,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -9411,22 +9411,29 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 27,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "dash": [
+                0,
+                10
+              ],
+              "fill": "dot"
+            },
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
-            "spanNulls": false,
+            "showPoints": "always",
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -9465,6 +9472,21 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Weight in KG"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -9477,8 +9499,12 @@
       "id": 34,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -10060,13 +10086,13 @@
     ]
   },
   "time": {
-    "from": "2025-04-15T22:00:00.000Z",
-    "to": "2025-04-17T21:59:59.000Z"
+    "from": "now-30d",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 108,
+  "version": 111,
   "weekStart": ""
 }
