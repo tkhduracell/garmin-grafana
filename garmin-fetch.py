@@ -795,19 +795,22 @@ def get_race_predictions(date_str):
 def get_vo2_max(date_str):
     points_list = []
     max_metrics = garmin_obj.get_max_metrics(date_str)
-    if max_metrics:
-        vo2_max_value = max_metrics[0].get("generic", {}).get("vo2MaxPreciseValue")
-        if vo2_max_value:
-            points_list.append({
-                "measurement":  "VO2_Max",
-                "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=12, tzinfo=pytz.UTC).isoformat(), # Use GMT 12:00 for daily record
-                "tags": {
-                    "Device": GARMIN_DEVICENAME,
-                },
-                "fields": {"VO2_max_value" : vo2_max_value}
-            })
-            logging.info(f"Success : Fetching VO2-max for date {date_str}")
-    return points_list
+    try:
+        if max_metrics:
+            vo2_max_value = max_metrics[0].get("generic", {}).get("vo2MaxPreciseValue")
+            if vo2_max_value:
+                points_list.append({
+                    "measurement":  "VO2_Max",
+                    "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=12, tzinfo=pytz.UTC).isoformat(), # Use GMT 12:00 for daily record
+                    "tags": {
+                        "Device": GARMIN_DEVICENAME,
+                    },
+                    "fields": {"VO2_max_value" : vo2_max_value}
+                })
+                logging.info(f"Success : Fetching VO2-max for date {date_str}")
+        return points_list
+    except AttributeError as err:
+        return []
 # %%
 def daily_fetch_write(date_str):
     write_points_to_influxdb(get_daily_stats(date_str))
