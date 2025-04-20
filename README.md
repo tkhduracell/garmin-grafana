@@ -103,6 +103,7 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_PLUGINS_PREINSTALL=marcusolsson-hourly-heatmap-panel
     volumes:
       - grafana_data:/var/lib/grafana
     ports:
