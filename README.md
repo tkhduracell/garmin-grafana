@@ -142,6 +142,26 @@ Please note that this process is intentionally rate limited with a 5 second wait
 
 Updating with docker is super simple. Just go to the folder where the `compose.yml` is and run `docker compose pull` and then `docker compose down && docker compose up -d`. Please verify if everything is running correctly by checking the logs with `docker compose logs --follow`
 
+## Backup Database
+
+Whether you are using a bind mount or a docker volume, creating a restorable archival backup of your valuable health data is always advised. Assuming you named your database as `GarminStats` and influxdb container name is `influxdb`, you can use the following script to create a static archival backup of your data present in the influxdb database at that time point. This restore points can be used to re-create the influxdb database with the archived data without requesting them from Garmin's servers again, which is not only time consuming but also resource intensive. 
+
+```bash
+#!/bin/bash
+TIMESTAMP=$(date +%F_%H-%M)
+BACKUP_DIR="./influxdb_backups/$TIMESTAMP"
+mkdir -p "$BACKUP_DIR"
+docker exec influxdb influxd backup -portable -db GarminStats /tmp/influxdb_backup
+docker cp influxdb:/tmp/influxdb_backup "$BACKUP_DIR"
+docker exec influxdb rm -r /tmp/influxdb_backup"
+```
+
+The above bash script would create a folder named `influxdb_backups` inside your current working directory and create a subfolder under it with current date-time. Then it will create the backup for `GarminStats` database and copy the backup files to that location. 
+
+For restoring the data from a backup, you first need to make the files available inside the new influxdb docker container. You can use `docker cp` or volume bind mount for this. Once the backup data is available to the container internally, you can simply run `docker exec influxdb influxd restore -portable -db GarminStats /path/to/internal-backup-directory` to restore the backup.
+
+Please read detailed guide on this from the [influxDB documentation for backup and restore](https://docs.influxdata.com/influxdb/v1/administration/backup_and_restore/)
+
 
 ## Troubleshooting
 
