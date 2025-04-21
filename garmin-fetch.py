@@ -54,6 +54,7 @@ KEEP_FIT_FILES = True if os.getenv("KEEP_FIT_FILES") in ['True', 'true', 'TRUE',
 FIT_FILE_STORAGE_LOCATION = os.getenv("FIT_FILE_STORAGE_LOCATION", os.path.join(os.path.expanduser("~"), "fit_filestore"))
 ALWAYS_PROCESS_FIT_FILES = True if os.getenv("ALWAYS_PROCESS_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, will process all FIT files for all activities including indoor ones lacking GPS data
 FORCE_REPROCESS_ACTIVITIES = True if os.getenv("FORCE_REPROCESS_ACTIVITIES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, will process all FIT files for all activities including indoor ones lacking GPS data
+USER_TIMEZONE = os.getenv("USER_TIMEZONE", "") # optional, fetches timezone info from last activity automatically if left blank
 PARSED_ACTIVITY_ID_LIST = []
 
 # %%
@@ -527,7 +528,7 @@ def get_body_composition(date_str):
             if not all(value is None for value in data_fields.values()):
                 points_list.append({
                     "measurement":  "BodyComposition",
-                    "time": datetime.fromtimestamp((weight_dict['timestampGMT']/1000) , tz=pytz.timezone("UTC")).isoformat() if weight_dict['timestampGMT'] else datetime.strptime(date_str, "%Y-%m-%d").replace(hour=12, tzinfo=pytz.UTC).isoformat(), # Use GMT 12:00 is timestamp is not available (issue #15)
+                    "time": datetime.fromtimestamp((weight_dict['timestampGMT']/1000) , tz=pytz.timezone("UTC")).isoformat() if weight_dict['timestampGMT'] else datetime.strptime(date_str, "%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 is timestamp is not available (issue #15)
                     "tags": {
                         "Device": GARMIN_DEVICENAME,
                         "Frequency" : "Intraday",
@@ -741,7 +742,7 @@ def get_training_readiness(date_str):
             if (not all(value is None for value in data_fields.values())) and tr_dict.get('timestamp'):
                 points_list.append({
                     "measurement":  "TrainingReadiness",
-                    "time": pytz.timezone("UTC").localize(datetime.strptime(tr_dict['timestamp'],"%Y-%m-%dT%H:%M:%S.%f")).isoformat(), # Use GMT 12:00 for daily record
+                    "time": pytz.timezone("UTC").localize(datetime.strptime(tr_dict['timestamp'],"%Y-%m-%dT%H:%M:%S.%f")).isoformat(),
                     "tags": {
                         "Device": GARMIN_DEVICENAME
                     },
@@ -766,7 +767,7 @@ def get_hillscore(date_str):
             if not all(value is None for value in data_fields.values()):
                 points_list.append({
                     "measurement":  "HillScore",
-                    "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=12, tzinfo=pytz.UTC).isoformat(), # Use GMT 12:00 for daily record
+                    "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 for daily record
                     "tags": {
                         "Device": GARMIN_DEVICENAME,
                     },
@@ -789,7 +790,7 @@ def get_race_predictions(date_str):
         if not all(value is None for value in data_fields.values()):
             points_list.append({
                 "measurement":  "RacePredictions",
-                "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=12, tzinfo=pytz.UTC).isoformat(), # Use GMT 12:00 for daily record
+                "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 for daily record
                 "tags": {
                     "Device": GARMIN_DEVICENAME,
                 },
@@ -807,7 +808,7 @@ def get_vo2_max(date_str):
             if vo2_max_value:
                 points_list.append({
                     "measurement":  "VO2_Max",
-                    "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=12, tzinfo=pytz.UTC).isoformat(), # Use GMT 12:00 for daily record
+                    "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 for daily record
                     "tags": {
                         "Device": GARMIN_DEVICENAME,
                     },
@@ -892,14 +893,17 @@ else:
         logging.warning("No previously synced data found in local InfluxDB database, defaulting to 7 day initial fetching. Use specific start date ENV variable to bulk update past data")
         last_influxdb_sync_time_UTC = (datetime.today() - timedelta(days=7)).astimezone(pytz.timezone("UTC"))
     try:
-        last_activity_dict = garmin_obj.get_last_activity() # (very unlineky event that this will be empty given Garmin's userbase, everyone should have at least one activity)
-        local_timediff = datetime.strptime(last_activity_dict['startTimeLocal'], '%Y-%m-%d %H:%M:%S') - datetime.strptime(last_activity_dict['startTimeGMT'], '%Y-%m-%d %H:%M:%S')
+        if USER_TIMEZONE: # If provided by user, using that. 
+            local_timediff = pytz.timezone(USER_TIMEZONE).localize(datetime.utcnow()).utcoffset()
+        else: # otherwise try to set automatically
+            last_activity_dict = garmin_obj.get_last_activity() # (very unlineky event that this will be empty given Garmin's userbase, everyone should have at least one activity)
+            local_timediff = datetime.strptime(last_activity_dict['startTimeLocal'], '%Y-%m-%d %H:%M:%S') - datetime.strptime(last_activity_dict['startTimeGMT'], '%Y-%m-%d %H:%M:%S')
         if datetime.strptime(last_activity_dict['startTimeLocal'], '%Y-%m-%d %H:%M:%S') > datetime.strptime(last_activity_dict['startTimeGMT'], '%Y-%m-%d %H:%M:%S'):
-            logging.info("Automatically identified user's local timezone as UTC+" + str(local_timediff))
+            logging.info("Using user's local timezone as UTC+" + str(local_timediff))
         else:
-            logging.info("Automatically identified user's local timezone as UTC-" + str(-local_timediff))
+            logging.info("Using user's local timezone as UTC-" + str(-local_timediff))
     except (KeyError, TypeError) as err:
-        logging.warning(f"Unable to automatically determine user's timezone from recent activity data. Defaulting to UTC offset of 0.")
+        logging.warning(f"Unable to determine user's timezone - Defaulting to UTC. Consider providing TZ identifier with USER_TIMEZONE environment variable")
         local_timediff = timedelta(hours=0)
     
     while True:
