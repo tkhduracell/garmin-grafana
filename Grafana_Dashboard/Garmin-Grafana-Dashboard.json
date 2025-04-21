@@ -3211,7 +3211,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "maxHR",
@@ -3253,7 +3254,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Activity HR difference (Max-Avg)",
@@ -3423,7 +3425,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Activity Distance",
@@ -3577,7 +3580,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Activity Duration",
@@ -5478,7 +5482,8 @@
               "operator": "!=",
               "value": "No Activity"
             }
-          ]
+          ],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Duration",
@@ -5510,7 +5515,8 @@
               "operator": "!=",
               "value": "No Activity"
             }
-          ]
+          ],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Max HR",
@@ -5543,7 +5549,8 @@
               "operator": "!=",
               "value": "No Activity"
             }
-          ]
+          ],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Max Speed",
@@ -5576,7 +5583,8 @@
               "operator": "!=",
               "value": "No Activity"
             }
-          ]
+          ],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Distance",
@@ -5609,7 +5617,8 @@
               "operator": "!=",
               "value": "No Activity"
             }
-          ]
+          ],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Location",
@@ -5642,7 +5651,8 @@
               "operator": "!=",
               "value": "No Activity"
             }
-          ]
+          ],
+          "tz": "$TimeZone"
         }
       ],
       "timeFrom": "1w",
@@ -5765,7 +5775,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "timeFrom": "24h",
@@ -5896,7 +5907,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "timeFrom": "24h",
@@ -6238,7 +6250,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Steps",
@@ -6280,7 +6293,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Total Sleep",
@@ -6322,7 +6336,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "High Stress Duration",
@@ -6364,7 +6379,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "High Activity Duration",
@@ -6406,7 +6422,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Resting Heart Rate",
@@ -6447,7 +6464,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Avg SpO2",
@@ -6489,7 +6507,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Body Battery Change",
@@ -6531,7 +6550,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "timeFrom": "1w",
@@ -6681,7 +6701,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Daily Steps",
@@ -6825,7 +6846,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Daily Distance",
@@ -6999,7 +7021,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Activity Calories",
@@ -7040,7 +7063,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Daily Calories",
@@ -7265,7 +7289,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Avg HRV",
@@ -7307,7 +7332,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Avg Resting HR",
@@ -7349,7 +7375,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Daily avg health metrics",
@@ -7572,7 +7599,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Avg Stress",
@@ -7614,7 +7642,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Avg Sleeping Stress",
@@ -7656,10 +7685,11 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
-      "title": "Daily avg health metrics ",
+      "title": "Daily avg health metrics",
       "type": "timeseries"
     },
     {
@@ -7842,7 +7872,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Light Sleep",
@@ -7884,7 +7915,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "REM Sleep",
@@ -7926,7 +7958,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Awake",
@@ -7968,7 +8001,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Sleep Stages",
@@ -8154,7 +8188,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Intense Activity",
@@ -8196,7 +8231,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Fair Activity",
@@ -8238,7 +8274,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Sleeping",
@@ -8280,7 +8317,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Avg Activity over given duration",
@@ -8411,7 +8449,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Sleep Score",
@@ -8664,7 +8703,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Sedentary",
@@ -8706,7 +8746,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Active",
@@ -8747,7 +8788,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Highly Active",
@@ -8789,7 +8831,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Daily Activity Overview",
@@ -8948,7 +8991,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Drained",
@@ -8996,7 +9040,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Body Battery overview",
@@ -9170,7 +9215,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Vigorous Intensity",
@@ -9212,7 +9258,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Daily Intensity Minutes",
@@ -9522,7 +9569,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Rest stress duration",
@@ -9564,7 +9612,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Medium stress duration",
@@ -9606,7 +9655,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Uncategorized stress duration",
@@ -9648,7 +9698,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "High stress duration",
@@ -9689,7 +9740,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Stress overview",
@@ -9854,7 +9906,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Light",
@@ -9898,7 +9951,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "REM",
@@ -9942,7 +9996,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Awake",
@@ -9986,7 +10041,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Average Sleep trends",
@@ -10140,7 +10196,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "bb_high",
@@ -10182,7 +10239,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Body Battery Level Change",
@@ -10390,7 +10448,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Weight",
@@ -10545,7 +10604,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "hr_high",
@@ -10587,7 +10647,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "HR Range (Max-Min)",
@@ -10729,7 +10790,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Hourly walk heatmap",
@@ -10885,7 +10947,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Sleep Regularity",
@@ -10906,6 +10969,7 @@
           "uid": "${DS_GARMIN_STATS}"
         },
         "definition": "SHOW TAG VALUES FROM \"ActivityGPS\" WITH KEY = \"ActivitySelector\" WHERE $timeFilter",
+        "description": "List of Activities dropdown",
         "label": "Activity with GPS",
         "multi": true,
         "name": "ActivityGPS",
@@ -10918,6 +10982,34 @@
         "regex": "",
         "sort": 4,
         "type": "query"
+      },
+      {
+        "current": {
+          "text": "Europe/Budapest",
+          "value": "Europe/Budapest"
+        },
+        "description": "Your local time zone for grouping stats",
+        "label": "Local Time Zone",
+        "name": "TimeZone",
+        "options": [
+          {
+            "selected": true,
+            "text": "Europe/Budapest",
+            "value": "Europe/Budapest"
+          },
+          {
+            "selected": false,
+            "text": "America/Toronto",
+            "value": "America/Toronto"
+          },
+          {
+            "selected": false,
+            "text": "Asia/Kolkata",
+            "value": "Asia/Kolkata"
+          }
+        ],
+        "query": "Europe/Budapest, America/Toronto, Asia/Kolkata",
+        "type": "custom"
       }
     ]
   },
@@ -10929,6 +11021,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 128,
+  "version": 135,
   "weekStart": ""
 }
