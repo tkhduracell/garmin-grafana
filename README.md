@@ -115,7 +115,9 @@ volumes:
   grafana_data:
 
 ```
-✅ The Above compose file creates an open read/write access influxdb database with no authentication. Unless you expose this database to the open internet directly, this poses no threat. If you share your local network, you may enable authentication and grant appropriate read/write access to the influxdb_user on the GarminStats database manually if you want with INFLUXDB_ADMIN_ENABLED, INFLUXDB_ADMIN_USER, and INFLUXDB_ADMIN_PASSWORD ENV variables during the setup by following the [influxdb guide](https://github.com/docker-library/docs/blob/master/influxdb/README.md) but this won't be covered here for the sake of simplicity.
+### Additional configuration and environment variables
+
+✅ The Above compose file creates an open read/write access influxdb database with no authentication. Unless you expose this database to the open internet directly, this poses no threat. If you share your local network, you may enable authentication and grant appropriate read/write access to the influxdb_user on the GarminStats database manually if you want with `INFLUXDB_ADMIN_ENABLED`, `INFLUXDB_ADMIN_USER`, and `INFLUXDB_ADMIN_PASSWORD` ENV variables during the setup by following the [influxdb guide](https://github.com/docker-library/docs/blob/master/influxdb/README.md) but this won't be covered here for the sake of simplicity.
 
 ✅ You can also enable additional advanced training data fetching with `FETCH_ADVANCED_TRAINING_DATA=True` flag in the compose file. This will fetch and store data such as training readiness, hill score, VO2 max, and Race prediction if you have them available on Garmin connect. The implementations of this should work fine in theory but not throughly tested. This is currently an experimental feature. There is no panel showing these data on the provided grafana dashboard. You must create your own to visualize these on Grafana.
 
