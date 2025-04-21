@@ -892,7 +892,7 @@ else:
             logging.info("Automatically identified user's local timezone as UTC+" + str(local_timediff))
         else:
             logging.info("Automatically identified user's local timezone as UTC-" + str(-local_timediff))
-    except KeyError as err:
+    except (KeyError, TypeError) as err:
         logging.warning(f"Unable to automatically determine user's timezone from recent activity data. Defaulting to UTC offset of 0.")
         local_timediff = timedelta(hours=0)
     
