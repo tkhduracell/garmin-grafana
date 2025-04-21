@@ -52,6 +52,7 @@ UPDATE_INTERVAL_SECONDS = int(os.getenv("UPDATE_INTERVAL_SECONDS", 300)) # optio
 FETCH_ADVANCED_TRAINING_DATA = True if os.getenv("FETCH_ADVANCED_TRAINING_DATA") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
 KEEP_FIT_FILES = True if os.getenv("KEEP_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
 FIT_FILE_STORAGE_LOCATION = os.getenv("FIT_FILE_STORAGE_LOCATION", os.path.join(os.path.expanduser("~"), "fit_filestore"))
+ALWAYS_PROCESS_FIT_FILES = True if os.getenv("ALWAYS_PROCESS_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, will process all FIT files for all activities including indoor ones lacking GPS data
 PARSED_ACTIVITY_ID_LIST = []
 
 # %%
@@ -542,7 +543,9 @@ def get_activity_summary(date_str):
     activity_with_gps_id_dict = {}
     activity_list = garmin_obj.get_activities_by_date(date_str, date_str)
     for activity in activity_list:
-        if activity.get('hasPolyline'):
+        if activity.get('hasPolyline') or ALWAYS_PROCESS_FIT_FILES: # will process FIT files lacking GPS data if ALWAYS_PROCESS_FIT_FILES is set to True
+            if not activity.get('hasPolyline'):
+                logging.warning(f"Activity ID {activity.get('activityId')} got no GPS data - yet, activity FIT file data will be processed as ALWAYS_PROCESS_FIT_FILES is on")
             activity_with_gps_id_dict[activity.get('activityId')] = activity.get('activityType',{}).get('typeKey', "Unknown")
         if "startTimeGMT" in activity: # "startTimeGMT" should be available for all activities (fix #13)
             points_list.append({
@@ -603,8 +606,8 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
             logging.info(f"Skipping : Activity ID {activityID} has already been processed within current runtime")
             return []
         try:
-            logging.info(f"Processing : Activity ID {activityID} GPS data from fit file - this may take a while...")
             zip_data = garmin_obj.download_activity(activityID, dl_fmt=garmin_obj.ActivityDownloadFormat.ORIGINAL)
+            logging.info(f"Processing : Activity ID {activityID} FIT file data - this may take a while...")
             zip_buffer = io.BytesIO(zip_data)
             with zipfile.ZipFile(zip_buffer) as zip_ref:
                 fit_filename = next((f for f in zip_ref.namelist() if f.endswith('.fit')), None)
