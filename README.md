@@ -199,6 +199,8 @@ This project is made possible by **generous community contribution** towards the
 If you enjoy the project and love how it works with simple setup, please consider supporting me with a coffee ❤ for making this open source and accessible to everyone. You can view and analyze more detailed health statistics with this setup than paying a connect+ subscription fee to Garmin.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A84F3DP)
+<a href="https://www.buymeacoffee.com/arpandesign"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=✌️&slug=arpandesign&button_colour=5F7FFF&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00" width=200 height=32 alt="Buy me a coffee"/></a>
+<noscript><a href="https://liberapay.com/arpandesign/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
 
 ## Star History
 
