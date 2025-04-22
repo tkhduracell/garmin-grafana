@@ -2678,15 +2678,15 @@
               "options": {
                 "0": {
                   "index": 1,
-                  "text": "Light"
+                  "text": "Deep"
                 },
                 "1": {
                   "index": 3,
-                  "text": "REM"
+                  "text": "Light"
                 },
                 "2": {
                   "index": 5,
-                  "text": "Awake"
+                  "text": "REM"
                 },
                 "3": {
                   "index": 7,
@@ -2712,8 +2712,8 @@
               "type": "value"
             }
           ],
-          "max": 3,
-          "min": -0.5,
+          "max": 3.2,
+          "min": -0.2,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2722,15 +2722,15 @@
               },
               {
                 "color": "super-light-blue",
-                "value": 0
+                "value": 0.5
               },
               {
                 "color": "light-yellow",
-                "value": 1
+                "value": 1.5
               },
               {
                 "color": "semi-dark-red",
-                "value": 2
+                "value": 2.5
               },
               {
                 "color": "semi-dark-red",
@@ -11021,6 +11021,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 135,
+  "version": 137,
   "weekStart": ""
 }
