@@ -554,11 +554,13 @@ def get_activity_summary(date_str):
                 "measurement":  "ActivitySummary",
                 "time": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).isoformat(),
                 "tags": {
-                    "Device": GARMIN_DEVICENAME
+                    "Device": GARMIN_DEVICENAME,
+                    "ActivityID": activity.get('activityId'),
+                    "ActivitySelector": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).strftime('%Y%m%dT%H%M%SUTC-') + activity.get('activityType',{}).get('typeKey', "Unknown")
                 },
                 "fields": {
-                    'activityId': activity.get('activityId'),
-                    'deviceId': activity.get('deviceId'),
+                    "Activity_ID": activity.get('activityId'),
+                    'Device_ID': activity.get('deviceId'),
                     'activityName': activity.get('activityName'),
                     'activityType': activity.get('activityType',{}).get('typeKey',None),
                     'distance': activity.get('distance'),
@@ -588,8 +590,8 @@ def get_activity_summary(date_str):
                     "ActivitySelector": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).strftime('%Y%m%dT%H%M%SUTC-') + activity.get('activityType',{}).get('typeKey', "Unknown")
                 },
                 "fields": {
-                    'activityId': activity.get('activityId'),
-                    'deviceId': activity.get('deviceId'),
+                    "Activity_ID": activity.get('activityId'),
+                    'Device_ID': activity.get('deviceId'),
                     'activityName': "END",
                     'activityType': "No Activity",
                 }
@@ -616,14 +618,17 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
             with zipfile.ZipFile(zip_buffer) as zip_ref:
                 fit_filename = next((f for f in zip_ref.namelist() if f.endswith('.fit')), None)
                 if not fit_filename:
-                    raise FileNotFoundError("No FIT file found in the downloaded zip archive.")
+                    raise FileNotFoundError(f"No FIT file found in the downloaded zip archive for Activity ID {activityID}")
                 else:
                     fit_data = zip_ref.read(fit_filename)
                     fit_file_buffer = io.BytesIO(fit_data)
                     fitfile = FitFile(fit_file_buffer)
                     fitfile.parse()
                     all_records_list = [record.get_values() for record in fitfile.get_messages('record')]
-                    activity_start_time = all_records_list[0]['timestamp'].replace(tzinfo=pytz.UTC)
+                    if len(all_records_list) == 0:
+                        raise FileNotFoundError(f"No records found in FIT file for Activity ID {activityID} - Discarding FIT file")
+                    else:
+                        activity_start_time = all_records_list[0]['timestamp'].replace(tzinfo=pytz.UTC)
                     for parsed_record in all_records_list:
                         if parsed_record.get('timestamp'):
                             point = {
@@ -636,7 +641,7 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                                 },
                                 "fields": {
                                     "ActivityName": activity_type,
-                                    "ActivityID": activityID,
+                                    "Activity_ID": activityID,
                                     "Latitude": int(parsed_record['position_lat']) * ( 180 / 2**31 ) if parsed_record.get('position_lat') else None,
                                     "Longitude": int(parsed_record['position_long']) * ( 180 / 2**31 ) if parsed_record.get('position_long') else None,
                                     "Altitude": parsed_record.get('enhanced_altitude', None) or parsed_record.get('altitude', None),
@@ -665,7 +670,6 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
             except requests.exceptions.Timeout as err:
                 logging.warning(f"Request timeout for fetching large activity record {activityID} - skipping record")
                 return []
-            root = ET.fromstring(garmin_obj.download_activity(activityID, dl_fmt=garmin_obj.ActivityDownloadFormat.TCX).decode("UTF-8"))
             ns = {"tcx": "http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2", "ns3": "http://www.garmin.com/xmlschemas/ActivityExtension/v2"}
             for activity in root.findall("tcx:Activities/tcx:Activity", ns):
                 activity_start_time = datetime.fromisoformat(activity.find("tcx:Id", ns).text.strip("Z"))
@@ -704,7 +708,7 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                             },
                             "fields": {
                                 "ActivityName": activity_type,
-                                "ActivityID": activityID,
+                                "Activity_ID": activityID,
                                 "Latitude": lat,
                                 "Longitude": lon,
                                 "Altitude": alt,
@@ -717,7 +721,7 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                         points_list.append(point)
                     
                     lap_index += 1
-        logging.info(f"Success : Fetching GPS details for activity with activity id {activityID}")
+        logging.info(f"Success : Fetching detailed activity for Activity ID {activityID}")
         PARSED_ACTIVITY_ID_LIST.append(activityID)
     return points_list
 
