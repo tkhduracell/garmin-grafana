@@ -285,7 +285,7 @@ def get_sleep_data(date_str):
     sleep_levels_intraday = all_sleep_data.get("sleepLevels")
     if sleep_levels_intraday:
         for entry in sleep_levels_intraday:
-            if entry.get("activityLevel"):
+            if entry.get("activityLevel") or entry.get("activityLevel") == 0: # Include 0 for Deepsleep but not None - Refer to issue #43
                 points_list.append({
                     "measurement":  "SleepIntraday",
                     "time": pytz.timezone("UTC").localize(datetime.strptime(entry["startGMT"], "%Y-%m-%dT%H:%M:%S.%f")).isoformat(),
