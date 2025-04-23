@@ -56,9 +56,13 @@ If you are a **Fitbit user**, please check out the [sister project](https://gith
 
 10. If you are in mainland China and use Garmin-cn account you need to set `GARMINCONNECT_IS_CN=True`
 
+If you have come this far, everything should be working. If not, please check the **troubleshooting section** for known issues. If it is already working, CONGRATULATIONS! Enjoy your dashboard and keep exercising!. If you like the dashboard and my sincere effort behind it, please **star this repository**. If you enjoy it a lot and want to show your appreciation and share the joy with me, feel free to [buy me a coffee](https://ko-fi.com/A0A84F3DP). Maintaining this project takes a lot of my free time and your support keeps me motivated to develop more features for the community and spend more time on similar projects. if you are having any trouble, feel free to open an issue here, I will try my best to help you!
+
 ---
 
 This project is made for InfluxDB 1.11, as Flux queries on influxDB 2.x can be problematic to use with Grafana at times. In fact, InfluxQL is being reintroduced in InfluxDB 3.0, reflecting user feedback. Grafana also has better compatibility/stability with InfluxQL from InfluxDB 1.11. Moreover, there are statistical evidence that Influxdb 1.11 queries run faster compared to influxdb 2.x. Since InfluxDB 2.x offers no clear benefits for this project, there are no plans for a migration.
+
+Support of current [Influxdb 3](https://docs.influxdata.com/influxdb3/core/) OSS is also available with this project [ `Exprimental` ]
 
 Example `compose.yml` file contents is given here for a quick start.
 
@@ -74,13 +78,18 @@ services:
       - ./garminconnect-tokens:/home/appuser/.garminconnect # (persistent tokens storage - garminconnect-tokens folder must be owned by 1000:1000)
     environment:
       - INFLUXDB_HOST=influxdb
-      - INFLUXDB_PORT=8086
-      - INFLUXDB_USERNAME=influxdb_user # user should have read/write access to INFLUXDB_DATABASE
-      - INFLUXDB_PASSWORD=influxdb_secret_password
+      - INFLUXDB_PORT=8086 # Influxdb V3 maps to 8181 instead of 8086 of V1
+      - INFLUXDB_USERNAME=influxdb_user # user should have read/write access to INFLUXDB_DATABASE (Required for influxdb 1.x, ignore for influxdb 3.x - set the 3.x specific variables)
+      - INFLUXDB_PASSWORD=influxdb_secret_password # (Required for influxdb 1.x, ignore for influxdb 3.x - set the 3.x specific variables)
       - INFLUXDB_DATABASE=GarminStats
       - GARMINCONNECT_EMAIL=your_garminconnect_email # optional, read the setup docs
       - GARMINCONNECT_BASE64_PASSWORD=your_base64_encoded_garminconnect_password # optional, must be Base64 encoded, read setup docs
       - GARMINCONNECT_IS_CN=False # Set this to True if you are in mainland China or use Garmin-cn (Default False)
+      #####################################################################################
+      # The following ENV variables are required only if you are using influxdb V3 (You won't have to set the above )
+      #####################################################################################
+      - INFLUXDB_VERSION=1 # Required for influxdb V3, Default is 1, must be overridden with 3 if using Influxdb V3
+      - INFLUXDB_V3_ACCESS_TOKEN=your_influxdb_admin_access_token # Required for influxdb V3 (ignored for V1), Set this to your admin access token (or a token that has database R/W access)
       #####################################################################################
       # The following ENV variables will override some default settings. 
       # Please read the README guide before using them as they may change how the script behaves
@@ -103,11 +112,19 @@ services:
       - INFLUXDB_USER=influxdb_user
       - INFLUXDB_USER_PASSWORD=influxdb_secret_password
       - INFLUXDB_DATA_INDEX_VERSION=tsi1
+      ###############################################################################
+      # The following ENV variables are applicable for InfluxDB V3 - No effect for V1
+      ###############################################################################
+      - INFLUXDB3_MAX_HTTP_REQUEST_SIZE=10485760
+      - INFLUXDB3_NODE_IDENTIFIER_PREFIX=Influxdb-node1
+      - INFLUXDB3_BUCKET=GarminStats
+      - INFLUXDB3_OBJECT_STORE=file
+      - INFLUXDB3_DB_DIR=/data
     ports:
-      - '8086:8086'
+      - '8086:8086' # Influxdb V3 should map as "8181:8181" (Change INFLUXDB_PORT on garmin-fetch-data appropriately for InfluxDB V3)
     volumes:
-      - influxdb_data:/var/lib/influxdb
-    image: 'influxdb:1.11'
+      - influxdb_data:/var/lib/influxdb # InfluxDB V3 bind mount should be set like - influxdb_data:/data if you set INFLUXDB3_DB_DIR=/data (instead of /var/lib/influxdb)
+    image: 'influxdb:1.11' # You must change this to 'quay.io/influxdb/influxdb3-core:latest' for influxdb V3
 
   grafana:
     restart: unless-stopped
@@ -126,6 +143,7 @@ services:
 volumes:
   influxdb_data:
   grafana_data:
+
 ```
 ### Additional configuration and environment variables
 
@@ -206,13 +224,25 @@ This project is made possible by **generous community contribution** towards the
 
 - [garth](https://github.com/matin/garth) by [martin](https://github.com/matin) : Used for Garmin SSO Authentication
 
-## Support me
+## Love this project?
 
-If you enjoy the project and love how it works with simple setup, please consider supporting me with a coffee ❤ for making this open source and accessible to everyone. You can view and analyze more detailed health statistics with this setup than paying a connect+ subscription fee to Garmin.
+I'm thrilled that you're using this dashboard. Your interest and engagement mean a lot to me! You can view and analyze more detailed health statistics with this setup than paying a connect+ subscription fee to Garmin.
+
+Maintaining and improving this project takes a significant amount of my free time. Your support helps keep me motivated to add new features and work on similar projects that benefit the community.
+
+If you find this project helpful, please consider:
+
+⭐ Starring this repository to show your support and spread the news!
+
+☕ [Buying me a coffee](https://ko-fi.com/A0A84F3DP) if you'd like to contribute to its maintenance and future development.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A84F3DP)
 <a href="https://www.buymeacoffee.com/arpandesign"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=✌️&slug=arpandesign&button_colour=5F7FFF&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00" width=200 height=32 alt="Buy me a coffee"/></a>
 <noscript><a href="https://liberapay.com/arpandesign/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
+
+## Need Help?
+
+If you're experiencing any issues with running this project or have questions, feel free to [open an issue](https://github.com/arpanghosh8453/garmin-grafana/issues/new/choose) on this repository. I'll do my best to assist you.
 
 ## Star History
 

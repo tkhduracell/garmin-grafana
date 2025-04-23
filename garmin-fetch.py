@@ -4,6 +4,7 @@ from fitparse import FitFile, FitParseError
 from datetime import datetime, timedelta
 from influxdb import InfluxDBClient
 from influxdb.exceptions import InfluxDBClientError
+from influxdb_client_3 import InfluxDBClient3, InfluxDBError
 import xml.etree.ElementTree as ET
 from garth.exc import GarthHTTPError
 from garminconnect import (
@@ -31,11 +32,14 @@ if env_override:
     logging.warning("System ENV variables are overriden with override-default-vars.env")
 
 # %%
+INFLUXDB_VERSION = os.getenv("INFLUXDB_VERSION",'1') # Your influxdb database verion (accepted values are '1' or '3')
+assert INFLUXDB_VERSION in ['1','3'], "Only InfluxDB version 1 or 3 is allowed - please ensure to set this value to either 1 or 3"
 INFLUXDB_HOST = os.getenv("INFLUXDB_HOST",'your.influxdb.hostname') # Required
 INFLUXDB_PORT = int(os.getenv("INFLUXDB_PORT", 8086)) # Required
 INFLUXDB_USERNAME = os.getenv("INFLUXDB_USERNAME", 'influxdb_username') # Required
 INFLUXDB_PASSWORD = os.getenv("INFLUXDB_PASSWORD", 'influxdb_access_password') # Required
 INFLUXDB_DATABASE = os.getenv("INFLUXDB_DATABASE", 'GarminStats') # Required
+INFLUXDB_V3_ACCESS_TOKEN = os.getenv("INFLUXDB_V3_ACCESS_TOKEN",'') # InfluxDB V3 Access token, required only for InfluxDB V3
 TOKEN_DIR = os.getenv("TOKEN_DIR", "~/.garminconnect") # optional
 GARMINCONNECT_EMAIL = os.environ.get("GARMINCONNECT_EMAIL", None) # optional, asks in prompt on run if not provided
 GARMINCONNECT_PASSWORD = base64.b64decode(os.getenv("GARMINCONNECT_BASE64_PASSWORD")).decode("utf-8") if os.getenv("GARMINCONNECT_BASE64_PASSWORD") != None else None # optional, asks in prompt on run if not provided
@@ -73,12 +77,37 @@ logging.basicConfig(
 # %%
 try:
     if INFLUXDB_ENDPOINT_IS_HTTP:
-        influxdbclient = InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT, username=INFLUXDB_USERNAME, password=INFLUXDB_PASSWORD)
+        if INFLUXDB_VERSION == '1':
+            influxdbclient = InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT, username=INFLUXDB_USERNAME, password=INFLUXDB_PASSWORD)
+            influxdbclient.switch_database(INFLUXDB_DATABASE)
+        else:
+            influxdbclient = InfluxDBClient3(
+            host=f"http://{INFLUXDB_HOST}:{INFLUXDB_PORT}",
+            token=INFLUXDB_V3_ACCESS_TOKEN,
+            database=INFLUXDB_DATABASE
+            )
     else:
-        influxdbclient = InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT, username=INFLUXDB_USERNAME, password=INFLUXDB_PASSWORD, ssl=True, verify_ssl=True)
-    influxdbclient.switch_database(INFLUXDB_DATABASE)
-    influxdbclient.ping()
-except InfluxDBClientError as err:
+        if INFLUXDB_VERSION == '1':
+            influxdbclient = InfluxDBClient(host=INFLUXDB_HOST, port=INFLUXDB_PORT, username=INFLUXDB_USERNAME, password=INFLUXDB_PASSWORD, ssl=True, verify_ssl=True)
+            influxdbclient.switch_database(INFLUXDB_DATABASE)
+        else:
+            influxdbclient = InfluxDBClient3(
+            host=f"https://{INFLUXDB_HOST}:{INFLUXDB_PORT}",
+            token=INFLUXDB_V3_ACCESS_TOKEN,
+            database=INFLUXDB_DATABASE
+            )
+    demo_point = {
+    'measurement': 'DemoPoint',
+    'time': '1970-01-01T00:00:00+00:00',
+    'tags': {'DemoTag': 'DemoTagValue'},
+    'fields': {'DemoField': 0}
+     }
+    # The following code block tests the connection by writing/overwriting a demo point. raises error and aborts if connection fails. 
+    if INFLUXDB_VERSION == '1':
+        influxdbclient.write_points([demo_point])
+    else:
+        influxdbclient.write(record=[demo_point])
+except (InfluxDBClientError, InfluxDBError) as err:
     logging.error("Unable to connect with influxdb database! Aborted")
     raise InfluxDBClientError("InfluxDB connection failed:" + str(err))
 
@@ -135,10 +164,13 @@ def garmin_login():
 def write_points_to_influxdb(points):
     try:
         if len(points) != 0:
-            influxdbclient.write_points(points)
-            logging.info("Successfully updated influxdb database with new points")
-    except InfluxDBClientError as err:
-        logging.error("Unable to connect with database! " + str(err))
+            if INFLUXDB_VERSION == '1':
+                influxdbclient.write_points(points)
+            else:
+                influxdbclient.write(record=points)
+            logging.info("Success : updated influxDB database with new points")
+    except (InfluxDBClientError, InfluxDBError) as err:
+        logging.error("Write failed : Unable to connect with database! " + str(err))
 
 # %%
 def get_daily_stats(date_str):
