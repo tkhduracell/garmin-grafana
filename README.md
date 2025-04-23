@@ -71,7 +71,7 @@ services:
     depends_on:
       - influxdb
     volumes:
-      - ./garminconnect-tokens:/home/appuser/.garminconnect # (persistant tokens storage - garminconnect-tokens folder must be owned by 1000:1000)
+      - ./garminconnect-tokens:/home/appuser/.garminconnect # (persistent tokens storage - garminconnect-tokens folder must be owned by 1000:1000)
     environment:
       - INFLUXDB_HOST=influxdb
       - INFLUXDB_PORT=8086
@@ -80,9 +80,19 @@ services:
       - INFLUXDB_DATABASE=GarminStats
       - GARMINCONNECT_EMAIL=your_garminconnect_email # optional, read the setup docs
       - GARMINCONNECT_BASE64_PASSWORD=your_base64_encoded_garminconnect_password # optional, must be Base64 encoded, read setup docs
-      - GARMINCONNECT_IS_CN=if_you_are_using_chinese_account
-      - UPDATE_INTERVAL_SECONDS=300 # Default update check interval is set to 5 minutes
-      - LOG_LEVEL=INFO # change to DEBUG to get DEBUG logs
+      - GARMINCONNECT_IS_CN=False # Set this to True if you are in mainland China or use Garmin-cn (Default False)
+      #####################################################################################
+      # The following ENV variables will override some default settings. 
+      # Please read the README guide before using them as they may change how the script behaves
+      #####################################################################################
+      # - LOG_LEVEL=INFO # change to DEBUG to get DEBUG logs
+      # - UPDATE_INTERVAL_SECONDS=300 # Default update check interval is set to 5 minutes
+      # - FETCH_ADVANCED_TRAINING_DATA=False # This enables fetching Training readiliness, Activity VO2Max, Race Pediction metrics etc when set to True
+      # - KEEP_FIT_FILES=False # Stores the FIT files (downloads and saves them) when set to True - read docs for more details
+      # - ALWAYS_PROCESS_FIT_FILES=False # Enables processing FIT files even if GPS data is not present in it when set to True, default False
+      # - USER_TIMEZONE="" # Can hardcode user's timezone, fetches timezone automatically and dynamically on each run if set to empty (default) - Read docs
+      # - INFLUXDB_ENDPOINT_IS_HTTP=True # Set this to False if you are using HTTPS for your influxdb connection (over the internet)
+      # - FORCE_REPROCESS_ACTIVITIES=False # Enables re-processing of already processed FIT files on iterative updates when set to True
 
   influxdb:
     restart: unless-stopped
@@ -116,7 +126,6 @@ services:
 volumes:
   influxdb_data:
   grafana_data:
-
 ```
 ### Additional configuration and environment variables
 

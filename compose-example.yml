@@ -6,7 +6,7 @@ services:
     depends_on:
       - influxdb
     volumes:
-      - ./garminconnect-tokens:/home/appuser/.garminconnect # (persistant tokens storage - garminconnect-tokens folder must be owned by 1000:1000)
+      - ./garminconnect-tokens:/home/appuser/.garminconnect # (persistent tokens storage - garminconnect-tokens folder must be owned by 1000:1000)
     environment:
       - INFLUXDB_HOST=influxdb
       - INFLUXDB_PORT=8086
@@ -15,6 +15,7 @@ services:
       - INFLUXDB_DATABASE=GarminStats
       - GARMINCONNECT_EMAIL=your_garminconnect_email # optional, read the setup docs
       - GARMINCONNECT_BASE64_PASSWORD=your_base64_encoded_garminconnect_password # optional, must be Base64 encoded, read setup docs
+      - GARMINCONNECT_IS_CN=False # Set this to True if you are in mainland China or use Garmin-cn (Default False)
       #####################################################################################
       # The following ENV variables will override some default settings. 
       # Please read the README guide before using them as they may change how the script behaves
