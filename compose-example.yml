@@ -20,7 +20,7 @@ services:
       # The following ENV variables are required only if you are using influxdb V3 (You won't have to set the above )
       #####################################################################################
       - INFLUXDB_VERSION=1 # Required for influxdb V3, Default is 1, must be overridden with 3 if using Influxdb V3
-      - INFLUXDB_V3_ACCESS_TOKEN=your_influxdb_admin_access_token # Required for influxdb V3 (ignored for V1), Set this to your admin access token (or a token that has database R/W access) - You can generate this by following step 3.1 in the README installation
+      - INFLUXDB_V3_ACCESS_TOKEN=your_influxdb_admin_access_token # Required for influxdb V3 (ignored for V1), Set this to your admin access token (or a token that has database R/W access) - You can generate this by following step 3 notes in the README installation
       #####################################################################################
       # The following ENV variables will override some default settings. 
       # Please read the README guide before using them as they may change how the script behaves
