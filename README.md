@@ -112,14 +112,14 @@ services:
       - INFLUXDB_USER=influxdb_user
       - INFLUXDB_USER_PASSWORD=influxdb_secret_password
       - INFLUXDB_DATA_INDEX_VERSION=tsi1
-      ###############################################################################
-      # The following ENV variables are applicable for InfluxDB V3 - No effect for V1
-      ###############################################################################
-      - INFLUXDB3_MAX_HTTP_REQUEST_SIZE=10485760
-      - INFLUXDB3_NODE_IDENTIFIER_PREFIX=Influxdb-node1
-      - INFLUXDB3_BUCKET=GarminStats
-      - INFLUXDB3_OBJECT_STORE=file
-      - INFLUXDB3_DB_DIR=/data
+      #############################################################
+      # The following ENV variables are applicable for InfluxDB V3
+      #############################################################
+      # - INFLUXDB3_MAX_HTTP_REQUEST_SIZE=10485760
+      # - INFLUXDB3_NODE_IDENTIFIER_PREFIX=Influxdb-node1
+      # - INFLUXDB3_BUCKET=GarminStats
+      # - INFLUXDB3_OBJECT_STORE=file
+      # - INFLUXDB3_DB_DIR=/data
     ports:
       - '8086:8086' # Influxdb V3 should map as "8181:8181" (Change INFLUXDB_PORT on garmin-fetch-data appropriately for InfluxDB V3)
     volumes:
