@@ -259,7 +259,7 @@ def get_last_sync():
         },
         "fields": {
             "imageUrl": sync_data.get('imageUrl'),
-            "Device": GARMIN_DEVICENAME
+            "Device_Name": GARMIN_DEVICENAME
         }
     })
     if points_list:
