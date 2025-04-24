@@ -181,7 +181,8 @@ def get_daily_stats(date_str):
             "measurement":  "DailyStats",
             "time": pytz.timezone("UTC").localize(datetime.strptime(stats_json['wellnessStartTimeGmt'], "%Y-%m-%dT%H:%M:%S.%f")).isoformat(),
             "tags": {
-                "Device": GARMIN_DEVICENAME
+                "Device": GARMIN_DEVICENAME,
+                "Database_Name": INFLUXDB_DATABASE
             },
             "fields": {
                 "activeKilocalories": stats_json.get('activeKilocalories'),
@@ -255,7 +256,8 @@ def get_last_sync():
         "measurement":  "DeviceSync",
         "time": datetime.fromtimestamp(sync_data['lastUsedDeviceUploadTime']/1000, tz=pytz.timezone("UTC")).isoformat(),
         "tags": {
-            "Device": GARMIN_DEVICENAME
+            "Device": GARMIN_DEVICENAME,
+            "Database_Name": INFLUXDB_DATABASE
         },
         "fields": {
             "imageUrl": sync_data.get('imageUrl'),
@@ -278,7 +280,8 @@ def get_sleep_data(date_str):
         "measurement":  "SleepSummary",
         "time": datetime.fromtimestamp(sleep_json["sleepEndTimestampGMT"]/1000, tz=pytz.timezone("UTC")).isoformat(),
         "tags": {
-            "Device": GARMIN_DEVICENAME
+            "Device": GARMIN_DEVICENAME,
+            "Database_Name": INFLUXDB_DATABASE
             },
         "fields": {
             "sleepTimeSeconds": sleep_json.get("sleepTimeSeconds"),
@@ -308,7 +311,8 @@ def get_sleep_data(date_str):
                 "measurement":  "SleepIntraday",
                 "time": pytz.timezone("UTC").localize(datetime.strptime(entry["startGMT"], "%Y-%m-%dT%H:%M:%S.%f")).isoformat(),
                 "tags": {
-                    "Device": GARMIN_DEVICENAME
+                    "Device": GARMIN_DEVICENAME,
+                    "Database_Name": INFLUXDB_DATABASE
                 },
                 "fields": {
                     "SleepMovementActivityLevel": entry.get("activityLevel",-1),
@@ -323,7 +327,8 @@ def get_sleep_data(date_str):
                     "measurement":  "SleepIntraday",
                     "time": pytz.timezone("UTC").localize(datetime.strptime(entry["startGMT"], "%Y-%m-%dT%H:%M:%S.%f")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "SleepStageLevel": entry.get("activityLevel"),
@@ -338,7 +343,8 @@ def get_sleep_data(date_str):
                     "measurement":  "SleepIntraday",
                     "time": datetime.fromtimestamp(entry["startGMT"]/1000, tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "sleepRestlessValue": entry.get("value")
@@ -352,7 +358,8 @@ def get_sleep_data(date_str):
                     "measurement":  "SleepIntraday",
                     "time": pytz.timezone("UTC").localize(datetime.strptime(entry["epochTimestamp"], "%Y-%m-%dT%H:%M:%S.%f")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "spo2Reading": entry.get("spo2Reading")
@@ -366,7 +373,8 @@ def get_sleep_data(date_str):
                     "measurement":  "SleepIntraday",
                     "time": datetime.fromtimestamp(entry["startTimeGMT"]/1000, tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "respirationValue": entry.get("respirationValue")
@@ -380,7 +388,8 @@ def get_sleep_data(date_str):
                     "measurement":  "SleepIntraday",
                     "time": datetime.fromtimestamp(entry["startGMT"]/1000, tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "heartRate": entry.get("value")
@@ -394,7 +403,8 @@ def get_sleep_data(date_str):
                     "measurement":  "SleepIntraday",
                     "time": datetime.fromtimestamp(entry["startGMT"]/1000, tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "stressValue": entry.get("value")
@@ -408,7 +418,8 @@ def get_sleep_data(date_str):
                     "measurement":  "SleepIntraday",
                     "time": datetime.fromtimestamp(entry["startGMT"]/1000, tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "bodyBattery": entry.get("value")
@@ -422,7 +433,8 @@ def get_sleep_data(date_str):
                     "measurement":  "SleepIntraday",
                     "time": datetime.fromtimestamp(entry["startGMT"]/1000, tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "hrvData": entry.get("value")
@@ -442,7 +454,8 @@ def get_intraday_hr(date_str):
                     "measurement":  "HeartRateIntraday",
                     "time": datetime.fromtimestamp(entry[0]/1000, tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "HeartRate": entry[1]
@@ -462,7 +475,8 @@ def get_intraday_steps(date_str):
                     "measurement":  "StepsIntraday",
                     "time": pytz.timezone("UTC").localize(datetime.strptime(entry['startGMT'], "%Y-%m-%dT%H:%M:%S.%f")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "StepsCount": entry["steps"]
@@ -482,7 +496,8 @@ def get_intraday_stress(date_str):
                     "measurement":  "StressIntraday",
                     "time": datetime.fromtimestamp(entry[0]/1000, tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "stressLevel": entry[1]
@@ -495,7 +510,8 @@ def get_intraday_stress(date_str):
                     "measurement":  "BodyBatteryIntraday",
                     "time": datetime.fromtimestamp(entry[0]/1000, tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "BodyBatteryLevel": entry[2]
@@ -515,7 +531,8 @@ def get_intraday_br(date_str):
                     "measurement":  "BreathingRateIntraday",
                     "time": datetime.fromtimestamp(entry[0]/1000, tz=pytz.timezone("UTC")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "BreathingRate": entry[1]
@@ -535,7 +552,8 @@ def get_intraday_hrv(date_str):
                     "measurement":  "HRV_Intraday",
                     "time": pytz.timezone("UTC").localize(datetime.strptime(entry['readingTimeGMT'],"%Y-%m-%dT%H:%M:%S.%f")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {
                         "hrvValue": entry.get('hrvValue')
@@ -564,6 +582,7 @@ def get_body_composition(date_str):
                     "time": datetime.fromtimestamp((weight_dict['timestampGMT']/1000) , tz=pytz.timezone("UTC")).isoformat() if weight_dict['timestampGMT'] else datetime.strptime(date_str, "%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 is timestamp is not available (issue #15)
                     "tags": {
                         "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE,
                         "Frequency" : "Intraday",
                         "SourceType" : weight_dict.get('sourceType', "Unknown")
                     },
@@ -588,6 +607,7 @@ def get_activity_summary(date_str):
                 "time": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).isoformat(),
                 "tags": {
                     "Device": GARMIN_DEVICENAME,
+                    "Database_Name": INFLUXDB_DATABASE,
                     "ActivityID": activity.get('activityId'),
                     "ActivitySelector": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).strftime('%Y%m%dT%H%M%SUTC-') + activity.get('activityType',{}).get('typeKey', "Unknown")
                 },
@@ -619,6 +639,7 @@ def get_activity_summary(date_str):
                 "time": (datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC) + timedelta(seconds=int(activity.get('elapsedDuration', 0)))).isoformat(),
                 "tags": {
                     "Device": GARMIN_DEVICENAME,
+                    "Database_Name": INFLUXDB_DATABASE,
                     "ActivityID": activity.get('activityId'),
                     "ActivitySelector": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).strftime('%Y%m%dT%H%M%SUTC-') + activity.get('activityType',{}).get('typeKey', "Unknown")
                 },
@@ -669,6 +690,7 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                                 "time": parsed_record['timestamp'].replace(tzinfo=pytz.UTC).isoformat(), 
                                 "tags": {
                                     "Device": GARMIN_DEVICENAME,
+                                    "Database_Name": INFLUXDB_DATABASE,
                                     "ActivityID": activityID,
                                     "ActivitySelector": activity_start_time.strftime('%Y%m%dT%H%M%SUTC-') + activity_type
                                 },
@@ -736,6 +758,7 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                             "time": time_obj.isoformat(), 
                             "tags": {
                                 "Device": GARMIN_DEVICENAME,
+                                "Database_Name": INFLUXDB_DATABASE,
                                 "ActivityID": activityID,
                                 "ActivitySelector": activity_start_time.strftime('%Y%m%dT%H%M%SUTC-') + activity_type
                             },
@@ -781,7 +804,8 @@ def get_training_readiness(date_str):
                     "measurement":  "TrainingReadiness",
                     "time": pytz.timezone("UTC").localize(datetime.strptime(tr_dict['timestamp'],"%Y-%m-%dT%H:%M:%S.%f")).isoformat(),
                     "tags": {
-                        "Device": GARMIN_DEVICENAME
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": data_fields
                 })
@@ -807,6 +831,7 @@ def get_hillscore(date_str):
                     "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 for daily record
                     "tags": {
                         "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": data_fields
                 })
@@ -830,6 +855,7 @@ def get_race_predictions(date_str):
                 "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 for daily record
                 "tags": {
                     "Device": GARMIN_DEVICENAME,
+                    "Database_Name": INFLUXDB_DATABASE
                 },
                 "fields": data_fields
             })
@@ -848,6 +874,7 @@ def get_vo2_max(date_str):
                     "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 for daily record
                     "tags": {
                         "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
                     },
                     "fields": {"VO2_max_value" : vo2_max_value}
                 })
