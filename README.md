@@ -42,7 +42,7 @@ If you are a **Fitbit user**, please check out the [sister project](https://gith
 
 2. Create a `compose.yml` file inside the current `garmin-fetch-data` folder with the content of the given [compose-example.yml](./compose-example.yml) ( Change the environment variables accordingly )
 
-3. You can use two additional environment variables `GARMINCONNECT_EMAIL` and `GARMINCONNECT_BASE64_PASSWORD` to add the login information directly. otherwise you will need to enter them in the initial setup phase when prompted. Please note that the password must be encoded with [Base64](http://base64encode.org/) when using the `GARMINCONNECT_BASE64_PASSWORD` ENV variable. This is to ensure your Garmin Connect password is not in plaintext in the compose file. The script will decode it and use it when required. If you set these two ENV variables and do not have two factor authentication (via SMS or email), you can directly jump to `step 5`.
+3. You can use two additional environment variables `GARMINCONNECT_EMAIL` and `GARMINCONNECT_BASE64_PASSWORD` to add the login information directly. otherwise you will need to enter them in the initial setup phase when prompted. If you are not using these environment variables to pass your garmin Connect login informations, you must remove them altogether (remove the full lines including the variable names or comment out with a `#` in front of the variable names) from the compose file - leaving them to placeholder values or empty values might lead to invalid login attempt and possibily `401 Client Error`. Please note that the password must be encoded with [Base64](http://base64encode.org/) when using the `GARMINCONNECT_BASE64_PASSWORD` ENV variable. This is to ensure your Garmin Connect password is not in plaintext in the compose file. The script will decode it and use it when required. If you set these two ENV variables and do not have two factor authentication (via SMS or email), you can directly jump to `step 5`.
 
 **Note:** If you are planning to use Influxdb V3, you need to enter the admin access token in `INFLUXDB_V3_ACCESS_TOKEN`. To generate the admin token you should run `docker exec influxdb influxdb3 create token --admin` command. This will give you the admin token which you must update to `INFLUXDB_V3_ACCESS_TOKEN` ENV variable. You can do this only once and the token can't be viewed or retrieved ever again (influxdb only stores a hash of it in the database for comparison). So please store this token carefully. 
 
@@ -87,8 +87,8 @@ services:
       - INFLUXDB_USERNAME=influxdb_user # user should have read/write access to INFLUXDB_DATABASE (Required for influxdb 1.x, ignore for influxdb 3.x - set the 3.x specific variables)
       - INFLUXDB_PASSWORD=influxdb_secret_password # (Required for influxdb 1.x, ignore for influxdb 3.x - set the 3.x specific variables)
       - INFLUXDB_DATABASE=GarminStats
-      - GARMINCONNECT_EMAIL=your_garminconnect_email # optional, read the setup docs
-      - GARMINCONNECT_BASE64_PASSWORD=your_base64_encoded_garminconnect_password # optional, must be Base64 encoded, read setup docs
+      - GARMINCONNECT_EMAIL=your_garminconnect_email # optional, read the setup docs. (remove or comment out this line altogether if not used)
+      - GARMINCONNECT_BASE64_PASSWORD=your_base64_encoded_garminconnect_password # optional, must be Base64 encoded, read setup docs. (remove or comment out this line altogether if not used)
       - GARMINCONNECT_IS_CN=False # Set this to True if you are in mainland China or use Garmin-cn (Default False)
       #####################################################################################
       # The following ENV variables are required only if you are using influxdb V3 (You won't have to set the above )
