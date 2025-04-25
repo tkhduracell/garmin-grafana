@@ -14,6 +14,9 @@ jobs:
   build_and_push:
     name: Build Multi-Arch Docker Image and Push to Docker Hub & GHCR
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
 
