@@ -71,6 +71,9 @@ Support of current [Influxdb 3](https://docs.influxdata.com/influxdb3/core/) OSS
 
 Example `compose.yml` file contents is given here for a quick start.
 
+> [!TIP]
+> The Docker image is also available as `ghcr.io/arpanghosh8453/garmin-fetch-data:latest` alongside `thisisarpanghosh/garmin-fetch-data:latest`.
+
 ```yaml
 services:
   garmin-fetch-data:
