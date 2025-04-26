@@ -112,7 +112,7 @@ services:
       # - ALWAYS_PROCESS_FIT_FILES=False # Enables processing FIT files even if GPS data is not present in it when set to True, default False
       # - USER_TIMEZONE="" # Can hardcode user's timezone, fetches timezone automatically and dynamically on each run if set to empty (default) - Read docs
       # - INFLUXDB_ENDPOINT_IS_HTTP=True # Set this to False if you are using HTTPS for your influxdb connection (over the internet)
-      # - FORCE_REPROCESS_ACTIVITIES=False # Enables re-processing of already processed FIT files on iterative updates when set to True
+      # - FORCE_REPROCESS_ACTIVITIES=True # Enables re-processing of FIT files on iterative updates when set to True (default), setting to False may save processing time but known for skipping activities
 
   influxdb:
     restart: unless-stopped
