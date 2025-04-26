@@ -898,7 +898,8 @@ def daily_fetch_write(date_str):
     if FETCH_ADVANCED_TRAINING_DATA: # Contribution from PR #17 by @arturgoms 
         write_points_to_influxdb(get_training_readiness(date_str))
         write_points_to_influxdb(get_hillscore(date_str))
-        write_points_to_influxdb(get_race_predictions(date_str))
+        if not MANUAL_START_DATE: # Race Predictions data is always calculated for current stage, bulk fatching past race predictions based on date is not possible ( see issue #54)
+            write_points_to_influxdb(get_race_predictions(date_str))
         write_points_to_influxdb(get_vo2_max(date_str))
 
 # %%
