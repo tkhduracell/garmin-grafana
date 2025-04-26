@@ -882,6 +882,31 @@ def get_vo2_max(date_str):
         return points_list
     except AttributeError as err:
         return []
+
+def get_endurance_score(date_str):
+    points_list = []
+    endurance_dict = garmin_obj.get_endurance_score(date_str, date_str)
+    available_dates_dict = endurance_dict.get("groupMap",{})
+    if available_dates_dict:
+        for date_key in available_dates_dict:
+            EnduranceScoreAvg = available_dates_dict[date_key].get("groupAverage", None)
+            EnduranceScoreMax = available_dates_dict[date_key].get("groupMax", None)
+            if EnduranceScoreAvg or EnduranceScoreMax:
+                points_list.append({
+                    "measurement":  "EnduranceScore",
+                    "time": pytz.timezone("UTC").localize(datetime.strptime(date_key,"%Y-%m-%d")).isoformat(), # Use GMT 00:00 is timestamp is not available
+                    "tags": {
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE
+                    },
+                    "fields": {
+                        "EnduranceScoreAvg": EnduranceScoreAvg,
+                        "EnduranceScoreMax": EnduranceScoreMax
+                        }
+                })
+        logging.info(f"Success : Fetching Endurance Score for date {date_str}")
+    return points_list
+
 # %%
 def daily_fetch_write(date_str):
     write_points_to_influxdb(get_daily_stats(date_str))
@@ -898,9 +923,10 @@ def daily_fetch_write(date_str):
     if FETCH_ADVANCED_TRAINING_DATA: # Contribution from PR #17 by @arturgoms 
         write_points_to_influxdb(get_training_readiness(date_str))
         write_points_to_influxdb(get_hillscore(date_str))
+        write_points_to_influxdb(get_vo2_max(date_str))
+        write_points_to_influxdb(get_endurance_score(date_str))
         if not MANUAL_START_DATE: # Race Predictions data is always calculated for current stage, bulk fatching past race predictions based on date is not possible ( see issue #54)
             write_points_to_influxdb(get_race_predictions(date_str))
-        write_points_to_influxdb(get_vo2_max(date_str))
 
 # %%
 def fetch_write_bulk(start_date_str, end_date_str):
