@@ -254,7 +254,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "2m"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "measurement": "HeartRateIntraday",
           "orderByTime": "ASC",
           "policy": "default",
@@ -267,6 +280,10 @@
                   "HeartRate"
                 ],
                 "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
               }
             ]
           ],
@@ -4400,6 +4417,167 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 85,
+            "fillOpacity": 56,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "decimals": 0,
+          "displayName": "Cadence",
+          "fieldMinMax": true,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Cadence"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 84
+      },
+      "id": 61,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "Heart Rate",
+        "fullHighlight": true,
+        "groupWidth": 1,
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Name",
+          "sortDesc": true
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Time",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "alias": "Cadence",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ActivityGPS",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"HeartRate\" FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "Cadence"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "ActivitySelector::tag",
+              "operator": "=~",
+              "value": "/^$ActivityGPS$/"
+            }
+          ]
+        }
+      ],
+      "title": "GPS Track Cadence",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Cadence",
+            "mode": "windowFunctions",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true,
+            "window": {
+              "field": "Cadence",
+              "reducer": "mean",
+              "windowAlignment": "centered",
+              "windowSize": 5,
+              "windowSizeMode": "fixed"
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_GARMIN_STATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "fixed"
           },
           "custom": {
@@ -4494,7 +4672,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 84
+        "y": 92
       },
       "id": 57,
       "options": {
@@ -4705,7 +4883,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 92
+        "y": 100
       },
       "id": 55,
       "options": {
@@ -4943,7 +5121,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 100
+        "y": 108
       },
       "id": 47,
       "options": {
@@ -5138,7 +5316,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 108
+        "y": 116
       },
       "id": 46,
       "options": {
@@ -5424,7 +5602,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 116
+        "y": 124
       },
       "id": 38,
       "options": {
@@ -5732,7 +5910,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 124
+        "y": 132
       },
       "id": 41,
       "options": {
@@ -5842,7 +6020,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 128
+        "y": 136
       },
       "id": 24,
       "options": {
@@ -5949,7 +6127,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 132
+        "y": 140
       },
       "id": 9,
       "panels": [],
@@ -6185,7 +6363,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 133
+        "y": 141
       },
       "hideTimeOverride": false,
       "id": 59,
@@ -6629,7 +6807,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 144
+        "y": 152
       },
       "id": 1,
       "options": {
@@ -6774,7 +6952,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 144
+        "y": 152
       },
       "id": 3,
       "options": {
@@ -6949,7 +7127,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 144
+        "y": 152
       },
       "id": 10,
       "options": {
@@ -7227,7 +7405,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 153
+        "y": 161
       },
       "id": 11,
       "options": {
@@ -7537,7 +7715,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 153
+        "y": 161
       },
       "id": 51,
       "options": {
@@ -7802,7 +7980,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 162
+        "y": 170
       },
       "id": 13,
       "options": {
@@ -8116,7 +8294,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 162
+        "y": 170
       },
       "id": 23,
       "options": {
@@ -8377,7 +8555,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 162
+        "y": 170
       },
       "id": 12,
       "options": {
@@ -8630,7 +8808,7 @@
         "h": 11,
         "w": 9,
         "x": 0,
-        "y": 171
+        "y": 179
       },
       "id": 17,
       "options": {
@@ -8918,7 +9096,7 @@
         "h": 11,
         "w": 8,
         "x": 9,
-        "y": 171
+        "y": 179
       },
       "id": 19,
       "options": {
@@ -9143,7 +9321,7 @@
         "h": 11,
         "w": 7,
         "x": 17,
-        "y": 171
+        "y": 179
       },
       "id": 4,
       "options": {
@@ -9496,7 +9674,7 @@
         "h": 14,
         "w": 10,
         "x": 0,
-        "y": 182
+        "y": 190
       },
       "id": 18,
       "options": {
@@ -9834,7 +10012,7 @@
         "h": 6,
         "w": 7,
         "x": 10,
-        "y": 182
+        "y": 190
       },
       "id": 22,
       "options": {
@@ -10130,7 +10308,7 @@
         "h": 7,
         "w": 7,
         "x": 17,
-        "y": 182
+        "y": 190
       },
       "id": 37,
       "options": {
@@ -10387,7 +10565,7 @@
         "h": 8,
         "w": 7,
         "x": 10,
-        "y": 188
+        "y": 196
       },
       "id": 34,
       "options": {
@@ -10538,7 +10716,7 @@
         "h": 7,
         "w": 7,
         "x": 17,
-        "y": 189
+        "y": 197
       },
       "id": 58,
       "options": {
@@ -10734,7 +10912,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 196
+        "y": 204
       },
       "id": 20,
       "options": {
@@ -10860,7 +11038,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 196
+        "y": 204
       },
       "id": 27,
       "options": {
@@ -11034,10 +11212,10 @@
         ]
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 206
+        "y": 214
       },
       "id": 60,
       "options": {
@@ -11161,6 +11339,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 145,
+  "version": 148,
   "weekStart": ""
 }
