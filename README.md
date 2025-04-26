@@ -8,7 +8,8 @@
 
 A docker container to fetch data from Garmin servers and store the data in a local influxdb database for appealing visualization with Garfana.
 
-If you are a **Fitbit user**, please check out the [sister project](https://github.com/arpanghosh8453/fitbit-grafana) made for Fitbit
+> [!TIP]
+> If you are a **Fitbit user**, please check out the [sister project](https://github.com/arpanghosh8453/fitbit-grafana) made for Fitbit
 
 ## Dashboard Example
 
@@ -36,7 +37,8 @@ If you are a **Fitbit user**, please check out the [sister project](https://gith
 
 ## Install with Docker (Recommended)
 
-0. Install docker if you don't have it already. Docker is supported in all major platforms/OS. Please check the [docker installation guide](https://docs.docker.com/engine/install/).
+> [!IMPORTANT]
+> Install docker if you don't have it already. Docker is supported in all major platforms/OS. Please check the [docker installation guide](https://docs.docker.com/engine/install/). You can install it on Windows via WSL, on Unraid via Docker Compose plugin, on Proxmox via Docker-LXC, and natively on Linux and Mac.
 
 1. Create a folder named `garmin-fetch-data`, cd into the folder. Then create a folder named `garminconnect-tokens` inside the current folder (`garmin-fetch-data`) with the command `mkdir garminconnect-tokens`. Run `chown -R 1000:1000 garminconnect-tokens` to change the ownership of the garminconnect-tokens folder (so the `garmin-fetch-data` container's internal user can use it to store the Authentication tokens)
 
@@ -44,7 +46,8 @@ If you are a **Fitbit user**, please check out the [sister project](https://gith
 
 3. You can use two additional environment variables `GARMINCONNECT_EMAIL` and `GARMINCONNECT_BASE64_PASSWORD` to add the login information directly. otherwise you will need to enter them in the initial setup phase when prompted. If you are not using these environment variables to pass your garmin Connect login informations, you must remove them altogether (remove the full lines including the variable names or comment out with a `#` in front of the variable names) from the compose file - leaving them to placeholder values or empty values might lead to invalid login attempt and possibily `401 Client Error`. Please note that the password must be encoded with [Base64](http://base64encode.org/) when using the `GARMINCONNECT_BASE64_PASSWORD` ENV variable. This is to ensure your Garmin Connect password is not in plaintext in the compose file. The script will decode it and use it when required. If you set these two ENV variables and do not have two factor authentication (via SMS or email), you can directly jump to `step 5`.
 
-**Note:** If you are planning to use Influxdb V3, you need to enter the admin access token in `INFLUXDB_V3_ACCESS_TOKEN`. To generate the admin token you should run `docker exec influxdb influxdb3 create token --admin` command. This will give you the admin token which you must update to `INFLUXDB_V3_ACCESS_TOKEN` ENV variable. You can do this only once and the token can't be viewed or retrieved ever again (influxdb only stores a hash of it in the database for comparison). So please store this token carefully. 
+> [!NOTE]
+> If you are planning to use Influxdb V3, you need to enter the admin access token in `INFLUXDB_V3_ACCESS_TOKEN`. To generate the admin token you should run `docker exec influxdb influxdb3 create token --admin` command. This will give you the admin token which you must update to `INFLUXDB_V3_ACCESS_TOKEN` ENV variable. You can do this only once and the token can't be viewed or retrieved ever again (influxdb only stores a hash of it in the database for comparison). So please store this token carefully. 
 
 4. If you did not set up the email and password ENV variables or have 2FA enabled, you must run the following command first to get the Email, password and 2FA code prompt interactively: `docker pull thisisarpanghosh/garmin-fetch-data:latest && docker compose run --rm garmin-fetch-data`. Enter the Email, Password (the characters will be visible when you type to avoid confusion, so find some privacy. If you paste the password, make sure there is no trailing space or unwanted characters), and 2FA code (if you have that enabled). Once you see the successful authentication message followed by successful data fetching in the stdout log, exit out with `ctrl + c`. This will automatically remove this orphan container as this was started with the `--rm` flag. You need to login like this **only once**. The script will [save the session Authentication tokens](https://github.com/cyberjunky/python-garminconnect/issues/213#issuecomment-2213292471) in the container's internal `/home/appuser/.garminconnect` folder for future use. That token can be used for all the future requests as long as it's valid (expected session token lifetime is about [one year](https://github.com/cyberjunky/python-garminconnect/issues/213), as Garmin seems to use long term valid access tokens instead of short term valid {access token + refresh token} pairs). This helps in reusing the authentication without logging in every time when the container starts, as that leads to `429 Client Error`, when login is attempted repeatedly from the same IP address. If you run into `429 Client Error` during your first login attempt with this script, please refer to the troubleshooting section below. 
 
@@ -58,7 +61,7 @@ If you are a **Fitbit user**, please check out the [sister project](https://gith
 
 10. If you are in mainland China and use Garmin-cn account you need to set `GARMINCONNECT_IS_CN=True`
 
-If you have come this far, everything should be working. If not, please check the **troubleshooting section** for known issues. If it is already working, CONGRATULATIONS! Enjoy your dashboard and keep exercising!. If you like the dashboard and my sincere effort behind it, please **star this repository**. If you enjoy it a lot and want to show your appreciation and share the joy with me, feel free to [buy me a coffee](https://ko-fi.com/A0A84F3DP). Maintaining this project takes a lot of my free time and your support keeps me motivated to develop more features for the community and spend more time on similar projects. if you are having any trouble, feel free to open an issue here, I will try my best to help you!
+If you have come this far, everything should be working. If not, please check the **troubleshooting section** for known issues. If it is already working, **CONGRATULATIONS!**. Enjoy your dashboard and keep exercising!. If you like the dashboard and my sincere effort behind it, please **star this repository**. If you enjoy it a lot and want to show your appreciation and share the joy with me, feel free to [buy me a coffee](https://ko-fi.com/A0A84F3DP). Maintaining this project takes a lot of my free time and your support keeps me motivated to develop more features for the community and spend more time on similar projects. if you are having any trouble, feel free to open an issue here, I will try my best to help you!
 
 ---
 
@@ -166,11 +169,38 @@ volumes:
 
 ✅ If you are having missing data on previous days till midnight (which are available on Garmin Connect but missing on dashboard) or sync issues when using the automatic periodic fetching, consider updating the container to recent version and use `USER_TIMEZONE` environment variable under the `garmin-fetch-data` service. This variable is optional and the script tries to determine the timezone and fetch the UTC offset automatically if this variable is set as empty. If you see the automatic identification is not working for you, this variable can be used to override that behaviour and ensures the script is using the hardcoded timezone for all data fetching related activities. The previous gaps won't be filled (you need to fetch them using historic bulk update method), but moving forward, the script will keep everything in sync. 
 
-✅ Want this dashboard in **Imperial units** instead of **metric units**? I can't maintain two separate dashboards at the same time but here is an [excellent step-by-step guide](https://github.com/arpanghosh8453/garmin-grafana/issues/27#issuecomment-2817081738) on how you can do it yourself on your dashboard! 
+✅ Want this dashboard in **Imperial units** instead of **metric units**? I can't maintain two separate dashboards at the same time but here is an [excellent step-by-step guide](https://github.com/arpanghosh8453/garmin-grafana/issues/27#issuecomment-2817081738) on how you can do it yourself on your dashboard!
+
+## Collecting periodic watch battery levels
+
+Unfortunately, Garmin Connect does not sync the device battery level (possibly due to infrequent passive syncing intervals). Hence, it's not possible to get the watch's battery data directly using this setup. However, I have found an alternative, which requires a lot of additional setup (out of the scope for this project - but I will give a brief walkthrough). 
+
+You will need a self-hosted/cloud instance of [homeassistant](https://www.home-assistant.io/) and [GarminHomeAssistant (Watch Application) from Connect IQ](https://apps.garmin.com/en-US/apps/61c91d28-ec5e-438d-9f83-39e9f45b199d). Detailed installation instructions are [available here](https://github.com/house-of-abbey/GarminHomeAssistant). This application is Free and open source as well just like this project, and the maintainer is very supportive! 
+
+After you install it, you need to enable the battery level and other stats collection (background running) in the application settings on Connect IQ. You will see the battery level history on HomeAssistant entities panel (appearing as `sensor.garmin_device_battery_level`) thereafter. If you want to integrate this data to the InfluxDB database and Grafana dashboard you have with this project, you need to add an additional InfluxDB addon configuration in the `configuration.yaml` file of HomeAssistant installation like following. 
+
+```yaml
+influxdb:
+  host: influxdb
+  port: 8086
+  database: GarminStats
+  username: influxdb_user
+  password: influxdb_secret_password
+  ssl: false
+  verify_ssl: false
+  max_retries: 3
+  include:
+    entities:
+       - sensor.garmin_device_battery_level
+  tags:
+    source: hass
+```
+There is a Grafana panel in the dashboard (given with this project) which displays this data when available. If you do not have this setup, you should remove that panel from the dashboard, as battery data collection is not possible from the watch otherwise.  
 
 ## Historical data fetching (bulk update)
 
-Please note that this process is intentionally rate limited with a 5 second wait period between each day update to ensure the Garmin servers are not overloaded with requests when using bulk update. You can update the value with `RATE_LIMIT_CALLS_SECONDS` ENV variable in the `garmin-fetch-data` container, but lowering it is not recommended, 
+> [!TIP]
+> Please note that this process is intentionally rate limited with a 5 second wait period between each day update to ensure the Garmin servers are not overloaded with requests when using bulk update. You can update the value with `RATE_LIMIT_CALLS_SECONDS` ENV variable in the `garmin-fetch-data` container, but lowering it is not recommended, 
 
 #### Procedure
 
@@ -189,6 +219,9 @@ Please note that this process is intentionally rate limited with a 5 second wait
 ## Update to new versions
 
 Updating with docker is super simple. Just go to the folder where the `compose.yml` is and run `docker compose pull` and then `docker compose down && docker compose up -d`. Please verify if everything is running correctly by checking the logs with `docker compose logs --follow`
+
+> [!CAUTION]
+> If you run `docker compose down -v`, that (using the `-v` flag) will purge the persistant docker volumes for the influxdb (if you are using docker volumes - default setup) which will wipe out all the data and databases stored in the influxdb container. Please be careful about this action but it can be useful if you want to start fresh wiping out the old database and container. This action cannot be undone. 
 
 ## Backup Database
 
@@ -221,7 +254,9 @@ Please read detailed guide on this from the [influxDB documentation for backup a
 
 - If you want to bind mount the docker volumes for the `garmin-fetch-data` container, please keep in mind that the script runs with the internal user `appuser` with uid and gid set as 1000. So please chown the bind mount folder accordingly as stated in the above instructions. Also, `grafana` container requires the bind mount folders to be owned by `472:472` and `influxdb:1.11` container requires the bind mount folders to be owned by `1500:1500`. If none of this solves the `Permission Denied` issue for you, you can change the bind mount folder permission as `777` with `chmod -R 777 garminconnect-tokens`. Another solutiuon could be to add `user: root` in the container configuration to run it as root instead of default `appuser` (this option has security considerations)
 
-- If the Activities details (GPS, Pace, HR, Altitude) are not appearing on the dashboard, make sure to select an Activity listed on the top left conner of the Dashboard (In the `Activity with GPS` variable dropdown). If you see no values are available there, but in the log you see the activities are being pulled successfully, then it's due to a Grafana Bug. Go to the dashboard variable settings, and please ensure the correct datasource is selected for the variable and the query is set to `SHOW TAG VALUES FROM "ActivityGPS" WITH KEY = "ActivitySelector" WHERE $timeFilter`. Once you set this properly after the dashboard import, the values should show up correctly in the dropdown and you will be able to select specific Activity and view it's stats on the dashboard. 
+- If the Activities details (GPS, Pace, HR, Altitude) are not appearing on the dashboard, make sure to select an Activity listed on the top left conner of the Dashboard (In the `Activity with GPS` variable dropdown). If you see no values are available there, but in the log you see the activities are being pulled successfully, then it's due to a Grafana Bug. Go to the dashboard variable settings, and please ensure the correct datasource is selected for the variable and the query is set to `SHOW TAG VALUES FROM "ActivityGPS" WITH KEY = "ActivitySelector" WHERE $timeFilter`. Once you set this properly after the dashboard import, the values should show up correctly in the dropdown and you will be able to select specific Activity and view it's stats on the dashboard.
+
+- Missing the battery levels data on the dashboard? Check out the section titled `Collecting periodic watch battery levels` to know how to set it up. 
 
 ## Credits
 
