@@ -54,7 +54,7 @@ RATE_LIMIT_CALLS_SECONDS = int(os.getenv("RATE_LIMIT_CALLS_SECONDS", 5)) # optio
 INFLUXDB_ENDPOINT_IS_HTTP = False if os.getenv("INFLUXDB_ENDPOINT_IS_HTTP") in ['False','false','FALSE','f','F','no','No','NO','0'] else True # optional
 GARMIN_DEVICENAME_AUTOMATIC = False if GARMIN_DEVICENAME != "Unknown" else True # optional
 UPDATE_INTERVAL_SECONDS = int(os.getenv("UPDATE_INTERVAL_SECONDS", 300)) # optional
-FETCH_ADVANCED_TRAINING_DATA = True if os.getenv("FETCH_ADVANCED_TRAINING_DATA") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
+FETCH_ADVANCED_TRAINING_DATA = True if os.getenv("FETCH_ADVANCED_TRAINING_DATA") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional (Fetches additional data : Training Readiness, Hill score and Endurance score when available)
 KEEP_FIT_FILES = True if os.getenv("KEEP_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
 FIT_FILE_STORAGE_LOCATION = os.getenv("FIT_FILE_STORAGE_LOCATION", os.path.join(os.path.expanduser("~"), "fit_filestore"))
 ALWAYS_PROCESS_FIT_FILES = True if os.getenv("ALWAYS_PROCESS_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, will process all FIT files for all activities including indoor ones lacking GPS data
@@ -809,7 +809,7 @@ def get_training_readiness(date_str):
                     },
                     "fields": data_fields
                 })
-        logging.info(f"Success : Fetching Training Readiness for date {date_str}")
+                logging.info(f"Success : Fetching Training Readiness for date {date_str}")
     return points_list
 
 # Contribution from PR #17 by @arturgoms 
@@ -835,13 +835,14 @@ def get_hillscore(date_str):
                     },
                     "fields": data_fields
                 })
-        logging.info(f"Success : Fetching Hill Score for date {date_str}")
+                logging.info(f"Success : Fetching Hill Score for date {date_str}")
     return points_list
 
 # Contribution from PR #17 by @arturgoms 
 def get_race_predictions(date_str):
     points_list = []
-    rp_all = garmin_obj.get_race_predictions()
+    rp_all_list = garmin_obj.get_race_predictions(startdate=date_str, enddate=date_str, _type="daily")
+    rp_all = rp_all_list[0] if len(rp_all_list) > 0 else {}
     if rp_all:
         data_fields = {
             "time5K": rp_all.get("time5K"),
@@ -859,7 +860,7 @@ def get_race_predictions(date_str):
                 },
                 "fields": data_fields
             })
-        logging.info(f"Success : Fetching Race Predictions for date {date_str}")
+            logging.info(f"Success : Fetching Race Predictions for date {date_str}")
     return points_list
 
 def get_vo2_max(date_str):
@@ -904,7 +905,7 @@ def get_endurance_score(date_str):
                         "EnduranceScoreMax": EnduranceScoreMax
                         }
                 })
-        logging.info(f"Success : Fetching Endurance Score for date {date_str}")
+                logging.info(f"Success : Fetching Endurance Score for date {date_str}")
     return points_list
 
 # %%
@@ -916,6 +917,8 @@ def daily_fetch_write(date_str):
     write_points_to_influxdb(get_intraday_stress(date_str))
     write_points_to_influxdb(get_intraday_br(date_str))
     write_points_to_influxdb(get_intraday_hrv(date_str))
+    write_points_to_influxdb(get_vo2_max(date_str))
+    write_points_to_influxdb(get_race_predictions(date_str))
     write_points_to_influxdb(get_body_composition(date_str))
     activity_summary_points_list, activity_with_gps_id_dict = get_activity_summary(date_str)
     write_points_to_influxdb(activity_summary_points_list)
@@ -923,10 +926,8 @@ def daily_fetch_write(date_str):
     if FETCH_ADVANCED_TRAINING_DATA: # Contribution from PR #17 by @arturgoms 
         write_points_to_influxdb(get_training_readiness(date_str))
         write_points_to_influxdb(get_hillscore(date_str))
-        write_points_to_influxdb(get_vo2_max(date_str))
         write_points_to_influxdb(get_endurance_score(date_str))
-        if not MANUAL_START_DATE: # Race Predictions data is always calculated for current stage, bulk fatching past race predictions based on date is not possible ( see issue #54)
-            write_points_to_influxdb(get_race_predictions(date_str))
+            
 
 # %%
 def fetch_write_bulk(start_date_str, end_date_str):
