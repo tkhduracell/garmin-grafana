@@ -7,8 +7,10 @@ on:
     paths:
       - 'garmin-fetch.py'
       - 'compose-example.yml'
-      - 'requirements.txt'
+      - 'pyproject.toml'
       - 'Dockerfile'
+      - '.python-version'
+      - 'uv.lock'
 
 env:
   IMAGE_NAME: garmin-fetch-data
