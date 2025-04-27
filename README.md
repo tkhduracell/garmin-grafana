@@ -51,7 +51,7 @@ cd ~ && git clone https://github.com/arpanghosh8453/garmin-grafana.git && cd gar
 ```
 Enter the credentials when prompted and you should be all up and running. Once the data keeps coming, you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`. Check out the dashboards link on the left sidebar. you should have a dashboard auto-configured as `Garmin-Stats` under the dashboards section. There you should see the data added. It will keep updating automatically as soon as new data syncs with your Garmin Connect account.  
 
-## manual Install with Docker (Recommended if you understand linux concepts)
+## Manual Install with Docker (Recommended if you understand linux concepts)
 
 > [!IMPORTANT]
 > Install docker if you don't have it already. Docker is supported in all major platforms/OS. Please check the [docker installation guide](https://docs.docker.com/engine/install/). You can install it on Windows via WSL, on Unraid via Docker Compose plugin, on Proxmox via Docker-LXC, and natively on Linux and Mac.
