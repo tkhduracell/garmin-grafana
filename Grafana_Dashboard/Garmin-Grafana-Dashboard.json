@@ -1,4 +1,107 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_GARMIN_STATS",
+      "label": "Garmin Stats",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "geomap",
+      "name": "Geomap",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.6.0"
+    },
+    {
+      "type": "panel",
+      "id": "histogram",
+      "name": "Histogram",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "marcusolsson-hourly-heatmap-panel",
+      "name": "Hourly heatmap",
+      "version": "2.0.1"
+    },
+    {
+      "type": "panel",
+      "id": "piechart",
+      "name": "Pie chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "state-timeline",
+      "name": "State timeline",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "trend",
+      "name": "Trend",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "xychart",
+      "name": "XY Chart",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -18,7 +121,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 11,
+  "id": null,
   "links": [],
   "panels": [
     {
@@ -35,10 +138,6 @@
       "type": "row"
     },
     {
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 3,
         "w": 3,
@@ -63,7 +162,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -153,7 +252,7 @@
           "alias": "Heart Rate",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -237,7 +336,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -299,7 +398,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "HeartRateIntraday",
@@ -332,7 +431,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -426,7 +525,7 @@
           "alias": "Heart rate histogram",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -471,7 +570,7 @@
           "alias": "Heart rate histogram > 96",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -499,7 +598,7 @@
           "alias": "Heart rate histogram < 60",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -527,7 +626,7 @@
           "alias": "Heart rate histogram > 110",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -560,7 +659,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -667,7 +766,7 @@
           "alias": "Stress",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "StressIntraday",
@@ -691,7 +790,7 @@
           "alias": "Body Battery",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -771,7 +870,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "description": "",
       "fieldConfig": {
@@ -835,7 +934,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "DailyStats",
@@ -873,7 +972,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "description": "",
       "fieldConfig": {
@@ -937,7 +1036,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "DailyStats",
@@ -975,7 +1074,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1074,7 +1173,7 @@
           "alias": "Intraday Steps",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -1166,7 +1265,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "description": "",
       "fieldConfig": {
@@ -1230,7 +1329,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "DailyStats",
@@ -1268,7 +1367,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1366,7 +1465,7 @@
           "alias": "BR",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -1462,7 +1561,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1531,7 +1630,7 @@
           "alias": "Total Asleep",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "SleepSummary",
@@ -1564,7 +1663,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1662,7 +1761,7 @@
           "alias": "Sleeping Movement Activity",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -1692,7 +1791,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1760,7 +1859,7 @@
           "alias": "Stress",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "DailyStats",
@@ -1792,7 +1891,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1965,7 +2064,7 @@
           "alias": "Sleeping Heart Rate",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -1990,7 +2089,7 @@
           "alias": "SpO2",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2015,7 +2114,7 @@
           "alias": "HRV",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2078,7 +2177,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2197,7 +2296,7 @@
           "alias": "Deep",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2228,7 +2327,7 @@
           "alias": "Light",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2259,7 +2358,7 @@
           "alias": "REM",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2290,7 +2389,7 @@
           "alias": "Awake",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2326,7 +2425,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "description": "",
       "fieldConfig": {
@@ -2447,7 +2546,7 @@
           "alias": "Sedentary",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2476,7 +2575,7 @@
           "alias": "Intense Activity",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2505,7 +2604,7 @@
           "alias": "Fair Activity",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2534,7 +2633,7 @@
           "alias": "Sleeping",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2568,7 +2667,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2702,7 +2801,7 @@
           "alias": "Sleep Stages",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2732,7 +2831,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2784,7 +2883,7 @@
           "alias": "Zone 1",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "ActivitySummary",
@@ -2808,7 +2907,7 @@
           "alias": "Zone 2",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2833,7 +2932,7 @@
           "alias": "Zone 3",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2858,7 +2957,7 @@
           "alias": "Zone 4",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2883,7 +2982,7 @@
           "alias": "Zone 5",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -2912,7 +3011,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -2963,7 +3062,7 @@
           "alias": "calories",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "ActivitySummary",
@@ -2987,7 +3086,7 @@
           "alias": "BMR calories",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -3016,7 +3115,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -3111,7 +3210,7 @@
           "alias": "avgHR",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -3153,7 +3252,7 @@
           "alias": "maxHR",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -3246,7 +3345,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -3342,7 +3441,7 @@
           "alias": "Distance",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "ActivitySummary",
@@ -3371,7 +3470,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -3497,7 +3596,7 @@
           "alias": "Duration",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "ActivitySummary",
@@ -3539,7 +3638,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -3685,7 +3784,7 @@
           "alias": "lat",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -3718,7 +3817,7 @@
           "alias": "lon",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -3751,7 +3850,7 @@
           "alias": "HR",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -3784,7 +3883,7 @@
           "alias": "speed",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -3829,7 +3928,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -4023,7 +4122,7 @@
           "alias": "lat",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4056,7 +4155,7 @@
           "alias": "lon",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4089,7 +4188,7 @@
           "alias": "HR",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4122,7 +4221,7 @@
           "alias": "speed",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4167,7 +4266,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -4273,7 +4372,7 @@
           "alias": "HR",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4330,7 +4429,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -4434,7 +4533,7 @@
           "alias": "Cadence",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4491,7 +4590,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -4612,7 +4711,7 @@
           "alias": "Distance",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4645,7 +4744,7 @@
           "alias": "Heart Rate",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4678,7 +4777,7 @@
           "alias": "Pace",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4721,7 +4820,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -4846,7 +4945,7 @@
           "alias": "Speed (Km/h)",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4885,7 +4984,7 @@
           "alias": "Heart Rate",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -4928,7 +5027,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -5074,7 +5173,7 @@
           "alias": "Speed",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -5136,7 +5235,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -5269,7 +5368,7 @@
           "alias": "Altitude",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -5325,7 +5424,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "description": "",
       "fieldConfig": {
@@ -5551,7 +5650,7 @@
           "alias": "Activity Type",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -5585,7 +5684,7 @@
           "alias": "Duration",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "ActivitySummary",
@@ -5618,7 +5717,7 @@
           "alias": "Max HR",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -5652,7 +5751,7 @@
           "alias": "Max Speed",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -5686,7 +5785,7 @@
           "alias": "Distance",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -5720,7 +5819,7 @@
           "alias": "Location",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "hide": false,
@@ -5768,7 +5867,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -5853,7 +5952,7 @@
           "alias": "Activity Timeline",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [],
           "measurement": "ActivitySummary",
@@ -5883,7 +5982,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -5964,7 +6063,7 @@
           "alias": "Heart rate",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6055,7 +6154,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -6146,6 +6245,13 @@
               {
                 "id": "custom.width",
                 "value": 179
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -6190,6 +6296,13 @@
               {
                 "id": "custom.width",
                 "value": 186
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -6210,7 +6323,7 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "continuous-GrYlRd"
+                  "mode": "continuous-BlYlRd"
                 }
               }
             ]
@@ -6242,6 +6355,12 @@
               {
                 "id": "custom.width",
                 "value": 174
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-BlPu"
+                }
               }
             ]
           },
@@ -6310,7 +6429,7 @@
           "alias": "Distance Covered",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6353,7 +6472,7 @@
           "alias": "Steps",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6396,7 +6515,7 @@
           "alias": "Total Sleep",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6439,7 +6558,7 @@
           "alias": "High Stress Duration",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6482,7 +6601,7 @@
           "alias": "High Activity Duration",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6525,7 +6644,7 @@
           "alias": "Resting Heart Rate",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6567,7 +6686,7 @@
           "alias": "Avg SpO2",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6610,7 +6729,7 @@
           "alias": "Body Battery Change",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6663,7 +6782,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -6762,7 +6881,7 @@
           "alias": "Steps",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6807,7 +6926,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -6907,7 +7026,7 @@
           "alias": "Distance Covered",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -6952,7 +7071,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -7081,7 +7200,7 @@
           "alias": "BMR Calories",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -7124,7 +7243,7 @@
           "alias": "Activity Calories",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -7187,7 +7306,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -7204,7 +7323,7 @@
             "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 17,
-            "gradientMode": "hue",
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -7349,7 +7468,7 @@
           "alias": "Avg SpO2",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -7392,7 +7511,7 @@
           "alias": "Avg HRV",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -7435,7 +7554,7 @@
           "alias": "Avg Resting HR",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -7481,7 +7600,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -7498,7 +7617,7 @@
             "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 17,
-            "gradientMode": "hue",
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -7659,7 +7778,7 @@
           "alias": "Avg Breathing Rate",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -7702,7 +7821,7 @@
           "alias": "Avg Stress",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -7745,7 +7864,7 @@
           "alias": "Avg Sleeping Stress",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -7791,7 +7910,526 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 17,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 259200000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-red"
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Full Marathon"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Half Marathon"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time 5K"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time 10K"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 170
+      },
+      "id": 63,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "alias": "Time 5K",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "RacePredictions",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "time5K"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "tz": "$TimeZone"
+        },
+        {
+          "alias": "Time 10K",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "RacePredictions",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "time10K"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "tz": "$TimeZone"
+        },
+        {
+          "alias": "Half Marathon",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "RacePredictions",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "timeHalfMarathon"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "tz": "$TimeZone"
+        },
+        {
+          "alias": "Full Marathon",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "RacePredictions",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "timeMarathon"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "tz": "$TimeZone"
+        }
+      ],
+      "title": "Race Predictions",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_GARMIN_STATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 42,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "dash": [
+                0,
+                10
+              ],
+              "fill": "dot"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-red"
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Full Marathon"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Half Marathon"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time 5K"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time 10K"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 170
+      },
+      "id": 64,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "alias": "VO2 Max",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "VO2_Max",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "VO2_max_value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [],
+          "tz": "$TimeZone"
+        }
+      ],
+      "title": "VO2 Max",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -7898,7 +8536,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 170
+        "y": 179
       },
       "id": 13,
       "options": {
@@ -7932,7 +8570,7 @@
           "alias": "Deep Sleep",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -7975,7 +8613,7 @@
           "alias": "Light Sleep",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8018,7 +8656,7 @@
           "alias": "REM Sleep",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8061,7 +8699,7 @@
           "alias": "Awake",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8125,7 +8763,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "description": "",
       "fieldConfig": {
@@ -8212,7 +8850,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 170
+        "y": 179
       },
       "id": 23,
       "options": {
@@ -8248,7 +8886,7 @@
           "alias": "Sedentary",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8291,7 +8929,7 @@
           "alias": "Intense Activity",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8334,7 +8972,7 @@
           "alias": "Fair Activity",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8377,7 +9015,7 @@
           "alias": "Sleeping",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8423,7 +9061,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -8473,7 +9111,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 170
+        "y": 179
       },
       "id": 12,
       "options": {
@@ -8509,7 +9147,7 @@
           "alias": "Sleep Score",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8573,7 +9211,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -8726,7 +9364,7 @@
         "h": 11,
         "w": 9,
         "x": 0,
-        "y": 179
+        "y": 188
       },
       "id": 17,
       "options": {
@@ -8763,7 +9401,7 @@
           "alias": "Sleeping",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8806,7 +9444,7 @@
           "alias": "Sedentary",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8849,7 +9487,7 @@
           "alias": "Active",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8891,7 +9529,7 @@
           "alias": "Highly Active",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -8937,7 +9575,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -9014,7 +9652,7 @@
         "h": 11,
         "w": 8,
         "x": 9,
-        "y": 179
+        "y": 188
       },
       "id": 19,
       "options": {
@@ -9051,7 +9689,7 @@
           "alias": "Charged",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -9094,7 +9732,7 @@
           "alias": "Drained",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -9146,7 +9784,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -9239,7 +9877,7 @@
         "h": 11,
         "w": 7,
         "x": 17,
-        "y": 179
+        "y": 188
       },
       "id": 4,
       "options": {
@@ -9276,7 +9914,7 @@
           "alias": "Moderate Intensity",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -9318,7 +9956,7 @@
           "alias": "Vigorous Intensity",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -9364,7 +10002,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -9592,7 +10230,7 @@
         "h": 14,
         "w": 10,
         "x": 0,
-        "y": 190
+        "y": 199
       },
       "id": 18,
       "options": {
@@ -9629,7 +10267,7 @@
           "alias": "Low Stress duration",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -9672,7 +10310,7 @@
           "alias": "Rest stress duration",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -9715,7 +10353,7 @@
           "alias": "Medium stress duration",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -9758,7 +10396,7 @@
           "alias": "Uncategorized stress duration",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -9801,7 +10439,7 @@
           "alias": "High stress duration",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -9846,7 +10484,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -9930,7 +10568,7 @@
         "h": 6,
         "w": 7,
         "x": 10,
-        "y": 190
+        "y": 199
       },
       "id": 22,
       "options": {
@@ -9964,7 +10602,7 @@
           "alias": "Deep",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -10009,7 +10647,7 @@
           "alias": "Light",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -10054,7 +10692,7 @@
           "alias": "REM",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -10099,7 +10737,7 @@
           "alias": "Awake",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -10147,7 +10785,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -10226,7 +10864,7 @@
         "h": 7,
         "w": 7,
         "x": 17,
-        "y": 190
+        "y": 199
       },
       "id": 37,
       "options": {
@@ -10257,7 +10895,7 @@
           "alias": "bb_low",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -10299,7 +10937,7 @@
           "alias": "bb_high",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -10384,7 +11022,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -10483,7 +11121,7 @@
         "h": 8,
         "w": 7,
         "x": 10,
-        "y": 196
+        "y": 205
       },
       "id": 34,
       "options": {
@@ -10509,7 +11147,7 @@
           "alias": "Weight in KG",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -10554,7 +11192,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -10634,7 +11272,7 @@
         "h": 7,
         "w": 7,
         "x": 17,
-        "y": 197
+        "y": 206
       },
       "id": 58,
       "options": {
@@ -10665,7 +11303,7 @@
           "alias": "hr_low",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -10707,7 +11345,7 @@
           "alias": "hr_high",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -10792,7 +11430,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "description": "",
       "fieldConfig": {
@@ -10830,7 +11468,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 204
+        "y": 213
       },
       "id": 20,
       "options": {
@@ -10851,7 +11489,7 @@
           "alias": "Hourly Steps",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -10903,7 +11541,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "description": "",
       "fieldConfig": {
@@ -10956,7 +11594,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 204
+        "y": 213
       },
       "id": 27,
       "options": {
@@ -11011,7 +11649,7 @@
           "alias": "Sleep Regularity",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -11054,7 +11692,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "feii8qgde7z7ke"
+        "uid": "${DS_GARMIN_STATS}"
       },
       "fieldConfig": {
         "defaults": {
@@ -11133,7 +11771,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 214
+        "y": 223
       },
       "id": 60,
       "options": {
@@ -11155,7 +11793,7 @@
           "alias": "Device Battery Level",
           "datasource": {
             "type": "influxdb",
-            "uid": "feii8qgde7z7ke"
+            "uid": "${DS_GARMIN_STATS}"
           },
           "groupBy": [
             {
@@ -11192,7 +11830,6 @@
       "type": "timeseries"
     }
   ],
-  "preload": false,
   "refresh": "5m",
   "schemaVersion": 41,
   "tags": [],
@@ -11200,17 +11837,10 @@
     "list": [
       {
         "allowCustomValue": false,
-        "current": {
-          "text": [
-            "20250426T151235UTC-walking"
-          ],
-          "value": [
-            "20250426T151235UTC-walking"
-          ]
-        },
+        "current": {},
         "datasource": {
           "type": "influxdb",
-          "uid": "feii8qgde7z7ke"
+          "uid": "${DS_GARMIN_STATS}"
         },
         "definition": "SHOW TAG VALUES FROM \"ActivityGPS\" WITH KEY = \"ActivitySelector\" WHERE $timeFilter",
         "description": "List of Activities dropdown",
@@ -11265,5 +11895,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 151
+  "version": 154,
+  "weekStart": ""
 }
