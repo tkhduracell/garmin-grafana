@@ -147,7 +147,8 @@ def garmin_login():
             logging.info(f"Oauth tokens stored in '{TOKEN_DIR}' directory for future use")
 
             garmin.login(TOKEN_DIR)
-            logging.info("login to Garmin Connect successful using stored session tokens.")
+            logging.info("login to Garmin Connect successful using stored session tokens. Please restart the script. Saved logins will be used automatically")
+            exit() # terminating script
 
         except (
             FileNotFoundError,
