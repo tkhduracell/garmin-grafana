@@ -35,7 +35,23 @@ A docker container to fetch data from Garmin servers and store the data in a loc
 - Automated data fetching in regular interval (set and forget)
 - Historical data backfilling
 
-## Install with Docker (Recommended)
+## Automatic Install with helper script (Recommended For less techy people)
+
+> [!IMPORTANT]
+> This script is for initial setup only. if you already have used it or followed the manual setup to deploy this project, you should not run this again once the garminconnect OAuth tokens are saved (first successful data fetch). Please check the `update to new versions` section for upgrading the container(s).  
+
+This script just requires a linux environment. If you are on `windows` you should consider using [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) to get a linux subsystem up and running. You should be fine with any other system that gives you a linux terminal natively (i.e. Linux VM, Mac etc.)
+
+This is a simple automated installation process with a helper script that does the steps described below automatically. Although this script tries to install docker automatically if not available already, It is recommended that you [install docker manually](https://docs.docker.com/engine/install/) if you can before running this script. 
+
+simply run the following command from your linux command line (terminal) - You may need to switch to your linux terminal with the `wsl` command if you are on windows using wsl. You may need to run the script with `sudo` (linux administrator) privilages if it fails due to some permission error. To do this just append `sudo` in front of the command `bash ./easy-install.sh` provided below (i.e. `cd garmin-grafana && sudo bash ./easy-install.sh`).
+
+```bash
+cd ~ && git clone https://github.com/arpanghosh8453/garmin-grafana.git && cd garmin-grafana && bash ./easy-install.sh
+```
+Enter the credentials when prompted and you should be all up and running. Once the data keeps coming, you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`. Check out the dashboards link on the left sidebar. you should have a dashboard auto-configured as `Garmin-Stats` under the dashboards section. There you should see the data added. It will keep updating automatically as soon as new data syncs with your Garmin Connect account.  
+
+## manual Install with Docker (Recommended if you understand linux concepts)
 
 > [!IMPORTANT]
 > Install docker if you don't have it already. Docker is supported in all major platforms/OS. Please check the [docker installation guide](https://docs.docker.com/engine/install/). You can install it on Windows via WSL, on Unraid via Docker Compose plugin, on Proxmox via Docker-LXC, and natively on Linux and Mac.
