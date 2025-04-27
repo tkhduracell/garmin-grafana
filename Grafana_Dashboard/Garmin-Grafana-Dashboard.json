@@ -3373,6 +3373,7 @@
               "mode": "off"
             }
           },
+          "displayName": "Distance",
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -3464,6 +3465,31 @@
         }
       ],
       "title": "Activity Distance",
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Distance": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "Time": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Value": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              }
+            }
+          }
+        }
+      ],
       "transparent": true,
       "type": "barchart"
     },
@@ -3498,6 +3524,7 @@
               "mode": "off"
             }
           },
+          "displayName": "Duration",
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -3619,6 +3646,31 @@
         }
       ],
       "title": "Activity Duration",
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Duration": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "Time": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Value": {
+                "aggregations": [
+                  "lastNotNull"
+                ],
+                "operation": "aggregate"
+              }
+            }
+          }
+        }
+      ],
       "transparent": true,
       "type": "barchart"
     },
@@ -11895,6 +11947,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 154,
+  "version": 155,
   "weekStart": ""
 }
