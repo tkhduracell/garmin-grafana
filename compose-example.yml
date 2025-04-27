@@ -54,8 +54,8 @@ services:
       # - INFLUXDB3_OBJECT_STORE=file
       # - INFLUXDB3_DB_DIR=/data
       # - INFLUXDB3_QUERY_FILE_LIMIT=5000 # this set to be a very high value if you want to view long term data
-    ports:
-      - '8086:8086' # Influxdb V3 should map as "8181:8181" (Change INFLUXDB_PORT on garmin-fetch-data appropriately for InfluxDB V3)
+    expose:
+      - '8086' # Influxdb V3 should expose "8181" (Change INFLUXDB_PORT on garmin-fetch-data appropriately for InfluxDB V3)
     volumes:
       - influxdb_data:/var/lib/influxdb # InfluxDB V3 bind mount should be set like - influxdb_data:/data if you set INFLUXDB3_DB_DIR=/data (instead of /var/lib/influxdb)
     image: 'influxdb:1.11' # You must change this to 'quay.io/influxdb/influxdb3-core:latest' for influxdb V3
@@ -70,6 +70,8 @@ services:
       - GF_PLUGINS_PREINSTALL=marcusolsson-hourly-heatmap-panel
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./Grafana_Datasource:/etc/grafana/provisioning/datasources # (optional) Self provisioning influxdb datasource
+      - ./Grafana_Dashboard:/etc/grafana/provisioning/dashboards # (optional) self provisioning grafana dashboard
     ports:
       - '3000:3000'
     image: 'grafana/grafana:latest'
