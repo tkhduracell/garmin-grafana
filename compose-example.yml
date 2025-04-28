@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     image: thisisarpanghosh/garmin-fetch-data:latest
     container_name: garmin-fetch-data
+    # user: root # Runs the container as root user, uncomment this line if you are getting permission issues which can't be resolved otherwise
     depends_on:
       - influxdb
     volumes:
