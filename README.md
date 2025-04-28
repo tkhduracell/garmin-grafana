@@ -38,29 +38,34 @@ A docker container to fetch data from Garmin servers and store the data in a loc
 ## Automatic Install with helper script (Recommended For less techy people)
 
 > [!IMPORTANT]
-> This script is for initial setup only. if you already have used it or followed the manual setup to deploy this project, you should not run this again once the garminconnect OAuth tokens are saved (first successful data fetch). Please check the `update to new versions` section for upgrading the container(s).  
+> This script is for initial setup only. if you already have used it or followed the manual setup to deploy this project, you should not run this again once the garminconnect OAuth tokens are saved (first successful data fetch). Please check the `update to new versions` section for upgrading the container(s).
 
-This script just requires a linux environment. If Docker is not installed on your Linux environment, follow the instructions to [install docker manually](https://docs.docker.com/engine/install/) on Linux.  If you are on `windows` you should consider using [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) to get a linux subsystem up and running. You should be fine with any other system that gives you a linux terminal natively (i.e. Linux VM, Mac etc.)
+> [!TIP]
+> If you are getting some errors you can't figure out, give the almighty [ChatGPT](https://chat.openai.com/) as try, it's often known to be helpful troubleshooting issues with this project and script. 
+
+This script requires a linux environment. If Docker is not installed on your Linux/MacOS system, follow the instructions to [install docker manually](https://docs.docker.com/engine/install/) on Linux. There is also an [automated docker installation script](https://github.com/docker/docker-install) available using the one-liner command `curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh`.
+
+If you are on `Windows` you should consider using [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) to get a linux sub-system up and running.
 
 #### Detailed steps for Windows users are as follows:
 
 - [Install docker desktop](https://docs.docker.com/get-started/introduction/get-docker-desktop/)
 - Install WSL and Ubuntu from the Micorosft store
-- Start->Run then enter: WSL.exe.  Follow the prompts to create your Linux sudo (admin) user
+- Start -> Run -> type `WSL.exe`, Follow the prompts to create your Linux sudo (admin) user and password
 - Open docker desktop to agree to the EULA
-- Reboot
-- Once back up, WSL and Docker should be linked.
-- Start->Run then enter: WSL.exe, then run the below bash command
+- Reboot your machine
+- Once back up, WSL and Docker should be installed and linked together.
+- Start -> Run -> type `WSL.exe`,then run the below bash command
 
-simply run the following command from your linux command line (terminal). You may need to run the script with `sudo` (linux administrator) privilages if it fails due to some permission error. To do this just append `sudo` in front of the command `bash ./easy-install.sh` provided below (i.e. `cd garmin-grafana && sudo bash ./easy-install.sh`).
+For Linux or MacOS, simply run the following bash command from your linux command line (terminal). 
+
+You may need to run the script with `sudo` (linux administrator) privilages if it fails due to some permission error. To do this just append `sudo` in front of the command `bash ./easy-install.sh` provided below (i.e. `cd garmin-grafana && sudo bash ./easy-install.sh`).
 
 ```bash
 cd ~ && git clone https://github.com/arpanghosh8453/garmin-grafana.git garmin-grafana && cd garmin-grafana && bash ./easy-install.sh
-```
-> [!TIP]
-> If you are getting some errors you can't figure out, give the almighty [ChatGPT](https://chat.openai.com/) as try, it's often known to be helpful troubleshooting issues with this project and script.   
+```  
 
-Enter the credentials when prompted and you should be all up and running. Once the data keeps coming, you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`. Check out the dashboards link on the left sidebar. you should have a dashboard auto-configured as `Garmin-Stats` under the dashboards section. There you should see the data added. It will keep updating automatically as soon as new data syncs with your Garmin Connect account.  
+Enter the Garmin Connect credentials when prompted and you should be all up and running (your will be prompted for 2FA code as well if you have that set up). Once the data keeps coming, you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`. Check out the dashboards link on the left sidebar. you should have a dashboard auto-configured as `Garmin-Stats` under the dashboards section. There you should see the data added. It will keep updating automatically as soon as new data syncs with your Garmin Connect account.  
 
 ## Manual Install with Docker (Recommended if you understand linux concepts)
 
@@ -69,7 +74,7 @@ Enter the credentials when prompted and you should be all up and running. Once t
 
 1. Clone this repository with the command `git clone https://github.com/arpanghosh8453/garmin-grafana.git`. Change your working directory with `cd garmin-grafana`. Then create a folder named `garminconnect-tokens` inside the current folder (`garmin-grafana`) with the command `mkdir garminconnect-tokens`. Run `chown -R 1000:1000 garminconnect-tokens` to change the ownership of the garminconnect-tokens folder (so the `garmin-fetch-data` container's internal user can use it to store the Authentication tokens). You can also run `chmod -R 777 garminconnect-tokens` to make the folder generally available for every user on the system if you keep getting `PermissionError` during script execution. Cloning this repository allows you to maintain the forder and files structure, and allows you to use Grafana self-privisioning database.
 
-2. Create a empty `compose.yml` file inside the current `garmin-grafana` folder with the content of the given [compose-example.yml](./compose-example.yml) or simply rename the present `compose-example.yml` file to `compose.yml` with `mv compose-example.yml compose.yml` ( Change the environment variables inside according to instructions )
+2. Create an empty `compose.yml` file inside the current `garmin-grafana` folder with the content of the given [compose-example.yml](./compose-example.yml) or simply rename the present `compose-example.yml` file to `compose.yml` with `mv compose-example.yml compose.yml` ( Change the environment variables inside according to instructions )
 
 3. You can use two additional environment variables `GARMINCONNECT_EMAIL` and `GARMINCONNECT_BASE64_PASSWORD` to add the login information directly. otherwise you will need to enter them in the initial setup phase when prompted. If you are not using these environment variables to pass your garmin Connect login informations, you must remove them altogether (remove the full lines including the variable names or comment out with a `#` in front of the variable names - as done in the example be default) from the compose file - leaving them to placeholder values or empty values might lead to invalid login attempt and possibily `401 Client Error`. Please note that here the password must be encoded with [Base64](http://base64encode.org/) when using the `GARMINCONNECT_BASE64_PASSWORD` ENV variable. This is to ensure your Garmin Connect password is not in plaintext in the compose file. The script will decode it and use it when required. If you set these two ENV variables and do not have two factor authentication (via SMS or email), you can directly jump to `step 5`. If you are in mainland China and use Garmin-cn account you need to set `GARMINCONNECT_IS_CN=True`
 
