@@ -37,12 +37,12 @@ else
     sed -i 's/\${DS_GARMIN_STATS}/garmin_influxdb/g' ./Grafana_Dashboard/Garmin-Grafana-Dashboard.json
 fi
 
-echo "Setting garmin-fetch-data Docker container user as root..."
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' 's/# user: root/user: root/g' ./compose.yml
-else
-    sed -i 's/# user: root/user: root/g' ./compose.yml
-fi
+# echo "Setting garmin-fetch-data Docker container user as root..."
+# if [[ "$OSTYPE" == "darwin"* ]]; then
+#     sed -i '' 's/# user: root/user: root/g' ./compose.yml
+# else
+#     sed -i 's/# user: root/user: root/g' ./compose.yml
+# fi
 
 echo "🐳 Pulling the latest thisisarpanghosh/garmin-fetch-data Docker image..."
 docker pull thisisarpanghosh/garmin-fetch-data:latest || { echo "Docker pull failed. Do you have docker installed and can run docker commands?"; exit 1; }
