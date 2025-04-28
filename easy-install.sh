@@ -24,8 +24,8 @@ fi
 echo "Creating garminconnect-tokens directory..."
 mkdir -p garminconnect-tokens
 
-echo "Setting ownership of garminconnect-tokens to UID 1000...(matching grafana-data-fetch container's internal user)"
-chown -R 1000:1000 garminconnect-tokens || { echo "Permission change failed - you may need to run this as sudo?. Exiting."; exit 1; }
+echo "Setting folder permission to 777 for generel accessibility"
+chmod -R 777 garminconnect-tokens || { echo "Permission change failed - you may need to run this as sudo?. Exiting."; exit 1; }
 
 echo "Renaming compose-example.yml to compose.yml..."
 mv compose-example.yml compose.yml
@@ -35,6 +35,9 @@ sed -i 's/\${DS_GARMIN_STATS}/garmin_influxdb/g' ./Grafana_Dashboard/Garmin-Graf
 
 echo "🐳 Pulling the latest thisisarpanghosh/garmin-fetch-data Docker image..."
 docker pull thisisarpanghosh/garmin-fetch-data:latest || { echo "Docker pull failed. Do you have docker installed and can run docker commands?"; exit 1; }
+
+echo "🐳Terminating any previous running containers from this stack"
+docker compose down
 
 echo "🐳 Running garmin-fetch-data in initialization mode...setting up authentication"
 docker compose run --rm garmin-fetch-data || { echo "Unable to run garmin-fetch-data container. Exiting."; exit 1; }
