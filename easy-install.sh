@@ -31,7 +31,11 @@ echo "Renaming compose-example.yml to compose.yml..."
 mv compose-example.yml compose.yml
 
 echo "Replacing {DS_GARMIN_STATS} variable with garmin_influxdb in the dashboard JSON..."
-sed -i 's/\${DS_GARMIN_STATS}/garmin_influxdb/g' ./Grafana_Dashboard/Garmin-Grafana-Dashboard.json
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' 's/\${DS_GARMIN_STATS}/garmin_influxdb/g' ./Grafana_Dashboard/Garmin-Grafana-Dashboard.json
+else
+    sed -i 's/\${DS_GARMIN_STATS}/garmin_influxdb/g' ./Grafana_Dashboard/Garmin-Grafana-Dashboard.json
+fi
 
 echo "🐳 Pulling the latest thisisarpanghosh/garmin-fetch-data Docker image..."
 docker pull thisisarpanghosh/garmin-fetch-data:latest || { echo "Docker pull failed. Do you have docker installed and can run docker commands?"; exit 1; }
