@@ -35,6 +35,18 @@ A docker container to fetch data from Garmin servers and store the data in a loc
 - Automated data fetching in regular interval (set and forget)
 - Historical data backfilling
 
+## Why use this project?
+
+- **Free and Fully Open Source**: 100% transparent and open project — modify, distribute extend, and self-host as you wish, with no hidden costs. Just credit the author and support this project as you please!
+
+- **Local Ownership**: Keep a complete, private backup of your Garmin data. The script automatically syncs new data after each Garmin Connect upload — no manual action needed ("set and forget").
+
+- **Full Visualization Freedom**: You're not limited by Garmin’s app. Combine multiple metrics on a single panel, zoom into specific time windows, view raw (non-averaged) data over days or weeks, and build fully custom dashboards.
+
+- **Deeper Insights - All day metrics**: Explore your data to discover patterns, optimize performance, and track trends over longer periods of time. Export for advanced analysis (Python, Excel, etc.) from Grafana, set custom alerts, or create new personalized metrics. This project fetches _almost_ everything from your Garmin watch - not just limited to Activities analytics like most other online platforms 
+
+- **No 3rd party data sharing**: You avoid sharing your sensitive health related data with any 3rd party service provider while having a great data visualization platform for free!
+
 ## Automatic Install with helper script (Recommended For less techy people)
 
 > [!IMPORTANT]
@@ -306,6 +318,10 @@ This project is made possible by **generous community contribution** towards the
 - [python-garminconnect](https://github.com/cyberjunky/python-garminconnect) by [cyberjunky](https://github.com/cyberjunky) : Garmin Web API wrapper
 
 - [garth](https://github.com/matin/garth) by [martin](https://github.com/matin) : Used for Garmin SSO Authentication
+
+## Limitations
+
+This project depends on Garmin cloud. This does not directly sync data from your watch. Your data syncs to Garmin cloud first, and then within the set interval, the script periodically fetches the data from the Garmin servers using the locally stored Oauth tokens. Implementing direct sync is quite tricky and it will unpair your current device and overtake the syncing activities. If there is any script or user error, this might cause permanent data loss. As this project do not come with any kind of liability or warranty, it falls on the user using this. If you are looking for direct sync from your watch, this project is not for you. You might look into the [Gargetbridge project](https://gadgetbridge.org/gadgets/wearables/garmin/), which might be able to accomplish this for you if you are ready to take full responsibility of your data. This direct sync feature is currently not in our roadmap. 
 
 ## Love this project?
 
