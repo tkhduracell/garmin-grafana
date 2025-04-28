@@ -84,7 +84,7 @@ Enter the Garmin Connect credentials when prompted and you should be all up and 
 4. If you did not set up the email and password ENV variables or have 2FA enabled, you must run the following command first to get the Email, password and 2FA code prompt interactively: `docker pull thisisarpanghosh/garmin-fetch-data:latest && docker compose run --rm garmin-fetch-data`. Enter the Email, Password (the characters will be visible when you type to avoid confusion, so find some privacy. If you paste the password, make sure there is no trailing space or unwanted characters), and 2FA code (if you have that enabled). Once you see the successful authentication message, you are good to go. The script will exit on it's own prompting you to restart the script (follow next step). This will automatically remove this orphan container as this was started with the `--rm` flag. You need to login like this **only once**. The script will [save the session Authentication tokens](https://github.com/cyberjunky/python-garminconnect/issues/213#issuecomment-2213292471) in the container's internal `/home/appuser/.garminconnect` folder for future use. That token can be used for all the future requests as long as it's valid (expected session token lifetime is about [one year](https://github.com/cyberjunky/python-garminconnect/issues/213), as Garmin seems to use long term valid access tokens instead of short term valid {access token + refresh token} pairs). This helps in reusing the authentication without logging in every time when the container starts, as that leads to `429 Client Error`, when login is attempted repeatedly from the same IP address. If you run into `429 Client Error` during your first login attempt with this script, please refer to the troubleshooting section below. 
 
 > [!TIP]
-> You can un-comment the line `# user: root` in the `compose.yml` file to run the container as root (superuser) - this will resolve any permission error or read/write issue you are encountering. Use this if the above `chown` or `chmod` did not work for you and you keep getting the `Permission Error` during running this initial setup. 
+> You can un-comment the line `# user: root` in the `compose.yml` file to run the container as root (superuser) - this will resolve any permission error or read/write issue you are encountering. Use this if the above `chown` or `chmod` did not work for you and you keep getting the `Permission Error` during running this initial setup. If you do this, you must change the compose volume mount from `./garminconnect-tokens:/home/appuser/.garminconnect` to `./garminconnect-tokens:/root/.garminconnect` so that the token files are preserved when you take down the containers with `docker compose down` for restarting or rebuilding. 
 
 5. If you are using self provisioning provided with this project for Grafana setup, then you should run `sed -i 's/\${DS_GARMIN_STATS}/garmin_influxdb/g' Grafana_Dashboard/Garmin-Grafana-Dashboard.json` (assuming you are currently in the root garmin-grafana directory) to update the placeholder variable name `${DS_GARMIN_STATS}` (for supporting external import) in the dashboard JSON to static `garmin_influxdb` as it is the uid set during the self provisioning of the dashboard. 
    
@@ -118,11 +118,11 @@ services:
     restart: unless-stopped
     image: thisisarpanghosh/garmin-fetch-data:latest
     container_name: garmin-fetch-data
-    # user: root # Runs the container as root user, uncomment this line if you are getting permission issues which can't be resolved otherwise
+    # user: root # Runs the container as root user, uncomment this line if you are getting permission issues which can't be resolved otherwise For this, you also need to change the below volume mount from ./garminconnect-tokens:/home/appuser/.garminconnect to ./garminconnect-tokens:/root/.garminconnect to ensure the token files persist during container rebuilding. 
     depends_on:
       - influxdb
     volumes:
-      - ./garminconnect-tokens:/home/appuser/.garminconnect # (persistent tokens storage - garminconnect-tokens folder must be owned by 1000:1000)
+      - ./garminconnect-tokens:/home/appuser/.garminconnect # (persistent tokens storage - garminconnect-tokens folder must be owned by 1000:1000) - should be './garminconnect-tokens:/root/.garminconnect' instead if using user: root
     environment:
       - INFLUXDB_HOST=influxdb
       - INFLUXDB_PORT=8086 # Influxdb V3 maps to 8181 instead of 8086 of V1
