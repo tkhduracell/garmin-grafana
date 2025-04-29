@@ -77,7 +77,16 @@ You may need to run the script with `sudo` (linux administrator) privilages or i
 cd ~ && git clone https://github.com/arpanghosh8453/garmin-grafana.git garmin-grafana && cd garmin-grafana && sudo bash ./easy-install.sh
 ```  
 
-Enter the Garmin Connect credentials when prompted and you should be all up and running (your will be prompted for 2FA code as well if you have that set up). Once the data keeps coming, you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`. Check out the dashboards link on the left sidebar. you should have a dashboard auto-configured as `Garmin-Stats` under the dashboards section. There you should see the data added. It will keep updating automatically as soon as new data syncs with your Garmin Connect account.  
+Enter the Garmin Connect credentials when prompted and you should be all up and running (your will be prompted for 2FA code as well if you have that set up). Once the data keeps coming, you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`. Check out the dashboards link on the left sidebar. you should have a dashboard auto-configured as `Garmin-Stats` under the dashboards section. There you should see the data added. It will **keep updating automatically** as soon as new data syncs with your Garmin Connect account.
+
+> [!NOTE]
+> When you run this for the first time, it will only automatically fetch the data for **last 7 days** only and keep pulling new data that syncs with Garmin Connect moving forward. if you want to sync your older data, that is super easy to do. You just need the run the following command in the terminal replacing the YYYY-MM-DD with appropriate start and end dates (MANUAL_START_DATE value must be older than MANUAL_END_DATE value) 
+>
+> ```bash
+> docker compose run --rm -e MANUAL_START_DATE=YYYY-MM-DD -e MANUAL_END_DATE=YYYY-MM-DD garmin-fetch-data
+> ```
+
+That should be everything you need for now! 
 
 ## Manual Install with Docker (Recommended if you understand linux concepts)
 
@@ -107,6 +116,13 @@ Enter the Garmin Connect credentials when prompted and you should be all up and 
 8. if you are not using self-provisioning, then you need to manually add influxdb as the data source and continue follow the rest of these instructions. Please note the influxdb hostname is set as `influxdb` with port `8086` so you should use `http://influxdb:8086` for the address during data source setup and not `http://localhost:8086` because influxdb is a running as a separate container but part of the same docker network and stack. Here the database name should be `GarminStats` matching the influxdb DB name from the docker compose. The query language used for the dashboard is `influxql` which is supported by both InfluxDB 1.x and 3.x, so please select that from the language dropdown during setup. Use the same username and password you used for your influxdb container (check your docker compose config for influxdb container, here we used `influxdb_user` and `influxdb_secret_password` in default configuration) Test the connection to make sure the influxdb is up and reachable (you are good to go if it finds the measurements when you test the connection)
 
 9. To use the Grafana dashboard with manual import, please use the [JSON file](https://github.com/arpanghosh8453/garmin-grafana/blob/main/Grafana_Dashboard/Garmin-Grafana-Dashboard.json) downloaded directly from GitHub or use the import code **23245** to pull them directly from the Grafana dashboard cloud. In the Grafana dashboard, the heatmap panels require an additional plugin that you must install. This can be done by using the `GF_PLUGINS_PREINSTALL=marcusolsson-hourly-heatmap-panel` environment variable like in the [compose-example.yml](./compose-example.yml) file, or after the creation of the container very easily with docker commands. Just run `docker exec -it grafana grafana cli plugins install marcusolsson-hourly-heatmap-panel` and then run `docker restart grafana` to apply that plugin update. Now, you should be able to see the Heatmap panels on the dashboard loading successfully.
+
+> [!NOTE]
+> When you run this for the first time, it will only automatically fetch the data for **last 7 days** only and keep pulling new data that syncs with Garmin Connect moving forward. In order to sync back older data, use the following command replacing the YYYY-MM-DD with appropriate start and end dates (MANUAL_START_DATE value must be older than MANUAL_END_DATE value) 
+>
+> ```bash
+> docker compose run --rm -e MANUAL_START_DATE=YYYY-MM-DD -e MANUAL_END_DATE=YYYY-MM-DD garmin-fetch-data
+> ```
 
 If you have come this far, everything should be working. If not, please check the **troubleshooting section** for known issues. If it is already working, **CONGRATULATIONS!**. Enjoy your dashboard and keep exercising!. If you like the dashboard and my sincere effort behind it, please **star this repository**. If you enjoy it a lot and want to show your appreciation and share the joy with me, feel free to [buy me a coffee](https://ko-fi.com/A0A84F3DP). Maintaining this project takes a lot of my free time and your support keeps me motivated to develop more features for the community and spend more time on similar projects. if you are having any trouble, feel free to open an issue here, I will try my best to help you!
 
