@@ -9,7 +9,7 @@ echo "Checking if Docker is installed..."
 if ! command -v docker &> /dev/null
 then
     echo "Docker is not installed. Attempting to install docker... If this seep fails, you can re-try this script after installing docker manually"
-    curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+    curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh || { echo "Automatic Docker installation failed - Please install docker manually. Exiting."; exit 1; }
     echo "Docker installed, adding current user to docker group (requires superuser access)"
     sudo groupadd docker; sudo usermod -aG docker $USER; newgrp docker
 fi
@@ -17,8 +17,14 @@ fi
 echo "Checking if Docker daemon is running..."
 if ! docker info &> /dev/null
 then
-    echo "Docker daemon is not running. Please start Docker and try again."
-    exit 1
+    echo "Docker daemon is not running. Trying to start it automatically...."
+    sudo systemctl start docker || { echo "Automatic Docker restart failed (only works on debian/ubuntu based systems) - Please restart docker manually."; }
+    sleep 3;
+    if ! docker info &> /dev/null
+    then
+        echo "Docker daemon is not running. Please start/re-start Docker and try again."
+        exit 1
+    fi
 fi
 
 echo "Creating garminconnect-tokens directory..."
@@ -37,11 +43,13 @@ else
     sed -i 's/\${DS_GARMIN_STATS}/garmin_influxdb/g' ./Grafana_Dashboard/Garmin-Grafana-Dashboard.json
 fi
 
-# echo "Setting garmin-fetch-data Docker container user as root..."
+# echo "Setting garmin-fetch-data Docker container user as root..." # This replacement runs the container as root and requires the bind volume mount for the token storage updated accordingly as well. 
 # if [[ "$OSTYPE" == "darwin"* ]]; then
 #     sed -i '' 's/# user: root/user: root/g' ./compose.yml
+#     sed -i '' 's|/home/appuser/.garminconnect|/root/.garminconnect|g' ./compose.yml
 # else
 #     sed -i 's/# user: root/user: root/g' ./compose.yml
+#     sed -i 's|/home/appuser/.garminconnect|/root/.garminconnect|g' ./compose.yml
 # fi
 
 echo "🐳 Pulling the latest thisisarpanghosh/garmin-fetch-data Docker image..."

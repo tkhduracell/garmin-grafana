@@ -69,12 +69,12 @@ If you are on `Windows` you should consider using [WSL](https://learn.microsoft.
 - Once back up, WSL and Docker should be installed and linked together.
 - Start -> Run -> type `WSL.exe`,then run the below bash command
 
-For Linux or MacOS, simply run the following bash command from your linux command line (terminal). 
+For Linux or MacOS, simply run the following bash command from your linux command line (terminal).
 
-You may need to run the script with `sudo` (linux administrator) privilages if it fails due to some permission error. To do this just append `sudo` in front of the command `bash ./easy-install.sh` provided below (i.e. `cd garmin-grafana && sudo bash ./easy-install.sh`).
+You may need to run the script with `sudo` (linux administrator) privilages or it may fail due to some permission error.
 
 ```bash
-cd ~ && git clone https://github.com/arpanghosh8453/garmin-grafana.git garmin-grafana && cd garmin-grafana && bash ./easy-install.sh
+cd ~ && git clone https://github.com/arpanghosh8453/garmin-grafana.git garmin-grafana && cd garmin-grafana && sudo bash ./easy-install.sh
 ```  
 
 Enter the Garmin Connect credentials when prompted and you should be all up and running (your will be prompted for 2FA code as well if you have that set up). Once the data keeps coming, you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`. Check out the dashboards link on the left sidebar. you should have a dashboard auto-configured as `Garmin-Stats` under the dashboards section. There you should see the data added. It will keep updating automatically as soon as new data syncs with your Garmin Connect account.  
@@ -130,11 +130,11 @@ services:
     restart: unless-stopped
     image: thisisarpanghosh/garmin-fetch-data:latest
     container_name: garmin-fetch-data
-    # user: root # Runs the container as root user, uncomment this line if you are getting permission issues which can't be resolved otherwise For this, you also need to change the below volume mount from ./garminconnect-tokens:/home/appuser/.garminconnect to ./garminconnect-tokens:/root/.garminconnect to ensure the token files persist during container rebuilding. 
+    # user: root # Runs the container as root user, uncomment this line if you are getting permission issues which can't be resolved otherwise For this, you also need to change the below volume mount from './garminconnect-tokens:/home/appuser/.garminconnect' to './garminconnect-tokens:/root/.garminconnect' to ensure the token files persist during container rebuilding. 
     depends_on:
       - influxdb
     volumes:
-      - ./garminconnect-tokens:/home/appuser/.garminconnect # (persistent tokens storage - garminconnect-tokens folder must be owned by 1000:1000) - should be './garminconnect-tokens:/root/.garminconnect' instead if using user: root
+      - ./garminconnect-tokens:/home/appuser/.garminconnect # (persistent tokens storage - garminconnect-tokens folder must be owned by 1000:1000) - should be './garminconnect-tokens:/root/.garminconnect' instead if you are using user: root
     environment:
       - INFLUXDB_HOST=influxdb
       - INFLUXDB_PORT=8086 # Influxdb V3 maps to 8181 instead of 8086 of V1
