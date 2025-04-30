@@ -991,7 +991,7 @@ else:
         last_influxdb_sync_time_UTC = (datetime.today() - timedelta(days=7)).astimezone(pytz.timezone("UTC"))
     try:
         if USER_TIMEZONE: # If provided by user, using that. 
-            local_timediff = pytz.timezone(USER_TIMEZONE).localize(datetime.utcnow()).utcoffset()
+            local_timediff = datetime.now(tz=pytz.timezone(USER_TIMEZONE)).utcoffset()
         else: # otherwise try to set automatically
             last_activity_dict = garmin_obj.get_last_activity() # (very unlineky event that this will be empty given Garmin's userbase, everyone should have at least one activity)
             local_timediff = datetime.strptime(last_activity_dict['startTimeLocal'], '%Y-%m-%d %H:%M:%S') - datetime.strptime(last_activity_dict['startTimeGMT'], '%Y-%m-%d %H:%M:%S')
