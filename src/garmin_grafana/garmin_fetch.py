@@ -680,6 +680,8 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                     fitfile = FitFile(fit_file_buffer)
                     fitfile.parse()
                     all_records_list = [record.get_values() for record in fitfile.get_messages('record')]
+                    all_lengths_list = [record.get_values() for record in fitfile.get_messages('length')]
+                    all_laps_list = [record.get_values() for record in fitfile.get_messages('lap')]
                     if len(all_records_list) == 0:
                         raise FileNotFoundError(f"No records found in FIT file for Activity ID {activityID} - Discarding FIT file")
                     else:
@@ -709,6 +711,57 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                                     "Temperature": parsed_record.get('temperature', None),
                                     "Accumulated_Power": parsed_record.get('accumulated_power', None),
                                     "Power": parsed_record.get('power', None)
+                                }
+                            }
+                            points_list.append(point)
+                    for length_record in all_lengths_list:
+                        if length_record.get('timestamp'):
+                            point = {
+                                "measurement": "ActivityLength",
+                                "time": length_record['timestamp'].replace(tzinfo=pytz.UTC).isoformat(), 
+                                "tags": {
+                                    "Device": GARMIN_DEVICENAME,
+                                    "Database_Name": INFLUXDB_DATABASE,
+                                    "ActivityID": activityID,
+                                    "ActivitySelector": activity_start_time.strftime('%Y%m%dT%H%M%SUTC-') + activity_type
+                                },
+                                "fields": {
+                                    "Index": int(length_record.get('message_index', -1)) + 1,
+                                    "ActivityName": activity_type,
+                                    "Activity_ID": activityID,
+                                    "Elapsed_Time": length_record.get('total_elapsed_time', None),
+                                    "Strokes": length_record.get('total_strokes', None),
+                                    "Avg_Speed": length_record.get('avg_speed', None),
+                                    "Calories": length_record.get('total_calories', None),
+                                    "Avg_Cadence": length_record.get('avg_swimming_cadence', None)
+                                }
+                            }
+                            points_list.append(point)
+                    for lap_record in all_laps_list:
+                        if lap_record.get('timestamp'):
+                            point = {
+                                "measurement": "ActivityLap",
+                                "time": lap_record['timestamp'].replace(tzinfo=pytz.UTC).isoformat(), 
+                                "tags": {
+                                    "Device": GARMIN_DEVICENAME,
+                                    "Database_Name": INFLUXDB_DATABASE,
+                                    "ActivityID": activityID,
+                                    "ActivitySelector": activity_start_time.strftime('%Y%m%dT%H%M%SUTC-') + activity_type
+                                },
+                                "fields": {
+                                    "Index": int(lap_record.get('message_index', -1)) + 1,
+                                    "ActivityName": activity_type,
+                                    "Activity_ID": activityID,
+                                    "Elapsed_Time": lap_record.get('total_elapsed_time', None),
+                                    "Distance": lap_record.get('total_distance', None),
+                                    "Cycles": lap_record.get('total_cycles', None),
+                                    "Moving_Duration": lap_record.get('total_moving_time', None),
+                                    "Standing_Duration": lap_record.get('time_standing', None),
+                                    "Avg_Speed": lap_record.get('enhanced_avg_speed', None),
+                                    "Calories": lap_record.get('total_calories', None),
+                                    "Avg_Power": lap_record.get('avg_power', None),
+                                    "Avg_HR": lap_record.get('avg_heart_rate', None),
+                                    "Avg_Temperature": lap_record.get('avg_temperature', None)
                                 }
                             }
                             points_list.append(point)
