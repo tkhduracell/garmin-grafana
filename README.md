@@ -13,27 +13,24 @@ A docker container to fetch data from Garmin servers and store the data in a loc
 
 ## Table of contents
 
-- [Garmin Grafana](#garmin-grafana)
-  - [Table of contents](#table-of-contents)
-  - [Dashboard Example](#dashboard-example)
-  - [Features](#features)
-  - [Why use this project?](#why-use-this-project)
-  - [Automatic Install with helper script (Recommended For less techy people)](#automatic-install-with-helper-script-recommended-for-less-techy-people)
-      - [Detailed steps for Windows users are as follows:](#detailed-steps-for-windows-users-are-as-follows)
-  - [Manual Install with Docker (Recommended if you understand linux concepts)](#manual-install-with-docker-recommended-if-you-understand-linux-concepts)
-    - [Additional configuration and environment variables](#additional-configuration-and-environment-variables)
-    - [Collecting periodic watch battery levels](#collecting-periodic-watch-battery-levels)
-  - [Update to new versions](#update-to-new-versions)
-  - [Historical data fetching (bulk update)](#historical-data-fetching-bulk-update)
-      - [Procedure](#procedure)
-  - [Backup InfluxDB Database](#backup-influxdb-database)
-  - [Troubleshooting](#troubleshooting)
+- [Dashboard Example](#dashboard-example)
+- [Features](#features)
+- [Why use this project?](#why-use-this-project)
+- **Installation**
+  - EASY : [Automated installation](#automatic-install-with-helper-script-recommended-for-less-techy-people) with helper script
+  - ADVANCED : [Manual step by step installation](#manual-install-with-docker-recommended-if-you-understand-linux-concepts) guide
+- **How to**
+  - How to [pull historic (old) data](#historical-data-fetching-bulk-update) (bulk update)?
+  - How to [update to newer versions](#update-to-new-versions) of this project?
+  - How to [backup the InfluxDB Database?](#backup-influxdb-database)
+  - [Troubleshooting](#troubleshooting) Guide
+  - [Need Help?](#need-help)
+- Project suppliment
   - [Credits](#credits)
   - [Dependencies](#dependencies)
   - [Limitations](#limitations)
-  - [Love this project?](#love-this-project)
-  - [Need Help?](#need-help)
-  - [Star History](#star-history)
+- [Support this project](#love-this-project)
+- [Star History](#star-history)
 
 ## Dashboard Example
 
