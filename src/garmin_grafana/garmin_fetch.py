@@ -54,7 +54,7 @@ RATE_LIMIT_CALLS_SECONDS = int(os.getenv("RATE_LIMIT_CALLS_SECONDS", 5)) # optio
 INFLUXDB_ENDPOINT_IS_HTTP = False if os.getenv("INFLUXDB_ENDPOINT_IS_HTTP") in ['False','false','FALSE','f','F','no','No','NO','0'] else True # optional
 GARMIN_DEVICENAME_AUTOMATIC = False if GARMIN_DEVICENAME != "Unknown" else True # optional
 UPDATE_INTERVAL_SECONDS = int(os.getenv("UPDATE_INTERVAL_SECONDS", 300)) # optional
-FETCH_ADVANCED_TRAINING_DATA = True if os.getenv("FETCH_ADVANCED_TRAINING_DATA") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional (Fetches additional data : Training Readiness, Hill score and Endurance score when available)
+FETCH_SELECTION = os.getenv("FETCH_SELECTION", "daily_avg,sleep,steps,heartrate,stress,breathing,hrv,vo2,activity,race_prediction,body_composition") # additional available values are training_readiness,hill_score,endurance_score which you can add to the list seperated by , without any space
 KEEP_FIT_FILES = True if os.getenv("KEEP_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
 FIT_FILE_STORAGE_LOCATION = os.getenv("FIT_FILE_STORAGE_LOCATION", os.path.join(os.path.expanduser("~"), "fit_filestore"))
 ALWAYS_PROCESS_FIT_FILES = True if os.getenv("ALWAYS_PROCESS_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, will process all FIT files for all activities including indoor ones lacking GPS data
@@ -964,23 +964,36 @@ def get_endurance_score(date_str):
 
 # %%
 def daily_fetch_write(date_str):
-    write_points_to_influxdb(get_daily_stats(date_str))
-    write_points_to_influxdb(get_sleep_data(date_str))
-    write_points_to_influxdb(get_intraday_steps(date_str))
-    write_points_to_influxdb(get_intraday_hr(date_str))
-    write_points_to_influxdb(get_intraday_stress(date_str))
-    write_points_to_influxdb(get_intraday_br(date_str))
-    write_points_to_influxdb(get_intraday_hrv(date_str))
-    write_points_to_influxdb(get_vo2_max(date_str))
-    write_points_to_influxdb(get_race_predictions(date_str))
-    write_points_to_influxdb(get_body_composition(date_str))
-    activity_summary_points_list, activity_with_gps_id_dict = get_activity_summary(date_str)
-    write_points_to_influxdb(activity_summary_points_list)
-    write_points_to_influxdb(fetch_activity_GPS(activity_with_gps_id_dict))
-    if FETCH_ADVANCED_TRAINING_DATA: # Contribution from PR #17 by @arturgoms 
+    if 'daily_avg' in FETCH_SELECTION:
+        write_points_to_influxdb(get_daily_stats(date_str))
+    if 'sleep' in FETCH_SELECTION:
+        write_points_to_influxdb(get_sleep_data(date_str))
+    if 'steps' in FETCH_SELECTION:
+        write_points_to_influxdb(get_intraday_steps(date_str))
+    if 'heartrate' in FETCH_SELECTION:
+        write_points_to_influxdb(get_intraday_hr(date_str))
+    if 'stress' in FETCH_SELECTION:
+        write_points_to_influxdb(get_intraday_stress(date_str))
+    if 'breathing' in FETCH_SELECTION:
+        write_points_to_influxdb(get_intraday_br(date_str))
+    if 'hrv' in FETCH_SELECTION:
+        write_points_to_influxdb(get_intraday_hrv(date_str))
+    if 'vo2' in FETCH_SELECTION:
+        write_points_to_influxdb(get_vo2_max(date_str))
+    if 'race_prediction' in FETCH_SELECTION:
+        write_points_to_influxdb(get_race_predictions(date_str))
+    if 'body_composition' in FETCH_SELECTION:
+        write_points_to_influxdb(get_body_composition(date_str))
+    if 'training_readiness' in FETCH_SELECTION:
         write_points_to_influxdb(get_training_readiness(date_str))
+    if 'hill_score' in FETCH_SELECTION:
         write_points_to_influxdb(get_hillscore(date_str))
+    if 'endurance_score' in FETCH_SELECTION:
         write_points_to_influxdb(get_endurance_score(date_str))
+    if 'activity' in FETCH_SELECTION:
+        activity_summary_points_list, activity_with_gps_id_dict = get_activity_summary(date_str)
+        write_points_to_influxdb(activity_summary_points_list)
+        write_points_to_influxdb(fetch_activity_GPS(activity_with_gps_id_dict))
             
 
 # %%
