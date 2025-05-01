@@ -54,7 +54,7 @@ RATE_LIMIT_CALLS_SECONDS = int(os.getenv("RATE_LIMIT_CALLS_SECONDS", 5)) # optio
 INFLUXDB_ENDPOINT_IS_HTTP = False if os.getenv("INFLUXDB_ENDPOINT_IS_HTTP") in ['False','false','FALSE','f','F','no','No','NO','0'] else True # optional
 GARMIN_DEVICENAME_AUTOMATIC = False if GARMIN_DEVICENAME != "Unknown" else True # optional
 UPDATE_INTERVAL_SECONDS = int(os.getenv("UPDATE_INTERVAL_SECONDS", 300)) # optional
-FETCH_SELECTION = os.getenv("FETCH_SELECTION", "daily_avg,sleep,steps,heartrate,stress,breathing,hrv,vo2,activity,race_prediction,body_composition") # additional available values are training_readiness,hill_score,endurance_score which you can add to the list seperated by , without any space
+FETCH_SELECTION = os.getenv("FETCH_SELECTION", "daily_avg,sleep,steps,heartrate,stress,breathing,hrv,vo2,activity,race_prediction,body_composition") # additional available values are training_readiness,hill_score,endurance_score,blood_pressure,hydration which you can add to the list seperated by , without any space
 KEEP_FIT_FILES = True if os.getenv("KEEP_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
 FIT_FILE_STORAGE_LOCATION = os.getenv("FIT_FILE_STORAGE_LOCATION", os.path.join(os.path.expanduser("~"), "fit_filestore"))
 ALWAYS_PROCESS_FIT_FILES = True if os.getenv("ALWAYS_PROCESS_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, will process all FIT files for all activities including indoor ones lacking GPS data
@@ -962,6 +962,53 @@ def get_endurance_score(date_str):
                 logging.info(f"Success : Fetching Endurance Score for date {date_str}")
     return points_list
 
+def get_blood_pressure(date_str):
+    points_list = []
+    bp_all = garmin_obj.get_blood_pressure(date_str, date_str).get('measurementSummaries',[])
+    if len(bp_all) > 0:
+        bp_list = bp_all[0].get('measurements',[])
+        for bp_measurement in bp_list:
+            data_fields = {
+                'Systolic': bp_measurement.get('systolic', None),
+                "Diastolic": bp_measurement.get('diastolic', None),
+                "Pulse": bp_measurement.get('pulse', None)
+            }
+            if not all(value is None for value in data_fields.values()) and 'measurementTimestampGMT' in bp_measurement:
+                points_list.append({
+                    "measurement":  "BloodPressure",
+                    "time": pytz.UTC.localize(datetime.strptime(bp_measurement['measurementTimestampGMT'], '%Y-%m-%dT%H:%M:%S.%f')),
+                    "tags": {
+                        "Device": GARMIN_DEVICENAME,
+                        "Database_Name": INFLUXDB_DATABASE,
+                        "Source": bp_measurement.get('sourceType', None)
+                    },
+                    "fields": data_fields
+                })
+        logging.info(f"Success : Fetching Blood Pressure for date {date_str}")
+    return points_list
+
+def get_hydration(date_str):
+    points_list = []
+    hydration_dict = garmin_obj.get_hydration_data(date_str)
+    data_fields = {
+        'ValueInML': hydration_dict.get('valueInML', None),
+        "SweatLossInML": hydration_dict.get('sweatLossInML', None),
+        "GoalInML": hydration_dict.get('goalInML', None),
+        "ActivityIntakeInML": hydration_dict.get('activityIntakeInML', None)
+    }
+    if not all(value is None for value in data_fields.values()):
+        points_list.append({
+            "measurement":  "Hydration",
+            "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 for daily record
+            "tags": {
+                "Device": GARMIN_DEVICENAME,
+                "Database_Name": INFLUXDB_DATABASE
+            },
+            "fields": data_fields
+        })
+        logging.info(f"Success : Fetching Blood Pressure for date {date_str}")
+    return points_list
+
 # %%
 def daily_fetch_write(date_str):
     if 'daily_avg' in FETCH_SELECTION:
@@ -990,6 +1037,10 @@ def daily_fetch_write(date_str):
         write_points_to_influxdb(get_hillscore(date_str))
     if 'endurance_score' in FETCH_SELECTION:
         write_points_to_influxdb(get_endurance_score(date_str))
+    if 'blood_pressure' in FETCH_SELECTION:
+        write_points_to_influxdb(get_blood_pressure(date_str))
+    if 'hydration' in FETCH_SELECTION:
+        write_points_to_influxdb(get_hydration(date_str))
     if 'activity' in FETCH_SELECTION:
         activity_summary_points_list, activity_with_gps_id_dict = get_activity_summary(date_str)
         write_points_to_influxdb(activity_summary_points_list)
