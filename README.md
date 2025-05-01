@@ -83,19 +83,17 @@ If you are on `Windows` you should consider using [WSL](https://learn.microsoft.
 #### Detailed steps for Windows users are as follows:
 
 - [Install docker desktop](https://docs.docker.com/get-started/introduction/get-docker-desktop/)
-- Install WSL and Ubuntu from the Micorosft store
-- Start -> Run -> type `WSL.exe`, Follow the prompts to create your Linux sudo (admin) user and password
-- Open docker desktop to agree to the EULA
-- Reboot your machine
+- Install `WSL` and `Ubuntu` from the Micorosft store
+- Start -> Run -> type `WSL.exe`, Follow the prompts to create your Linux sudo (admin) user and password. This password will be required for later steps. 
+- Open docker desktop and agree to the EULA
+- Reboot your machine (important)
 - Once back up, WSL and Docker should be installed and linked together.
-- Start -> Run -> type `WSL.exe`,then run the below bash command
+- Start -> Run -> type `WSL.exe`, then run the below bash command in the terminal window.  
 
-For Linux or MacOS, simply run the following bash command from your linux command line (terminal).
-
-You may need to run the script with `sudo` (linux administrator) privilages or it may fail due to some permission error.
+For Linux or MacOS, simply run the following bash command from your linux command line (terminal). If you are using a non-debian distribution, you need to swap `apt` with your OS specific package manager. 
 
 ```bash
-cd ~ && git clone https://github.com/arpanghosh8453/garmin-grafana.git garmin-grafana && cd garmin-grafana && sudo bash ./easy-install.sh
+cd ~ && sudo apt install git && git clone https://github.com/arpanghosh8453/garmin-grafana.git garmin-grafana && cd garmin-grafana && sudo bash ./easy-install.sh
 ```  
 
 Enter the Garmin Connect credentials when prompted and you should be all up and running (your will be prompted for 2FA code as well if you have that set up). Once the data keeps coming, you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`. Check out the dashboards link on the left sidebar. you should have a dashboard auto-configured as `Garmin-Stats` under the dashboards section. There you should see the data added. It will **keep updating automatically** as soon as new data syncs with your Garmin Connect account.
@@ -107,7 +105,7 @@ Enter the Garmin Connect credentials when prompted and you should be all up and 
 > docker compose run --rm -e MANUAL_START_DATE=YYYY-MM-DD -e MANUAL_END_DATE=YYYY-MM-DD garmin-fetch-data
 > ```
 
-That should be everything you need for now! 
+That should be everything you need for now! The script will be running in the background as long as your machine is up. After a restart, make sure to open docker desktop if you are on windows (if it does not start automatically) so that the containers get booted up as well. For Linux, everything should restart reliably after a reboot. If you are having issues, make sure the docker daemon is running and check the container status with `docker ps` command
 
 ## Manual Install with Docker (Recommended if you understand linux concepts)
 
