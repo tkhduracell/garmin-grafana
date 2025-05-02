@@ -1006,7 +1006,7 @@ def get_hydration(date_str):
             },
             "fields": data_fields
         })
-        logging.info(f"Success : Fetching Blood Pressure for date {date_str}")
+        logging.info(f"Success : Fetching Hydration data for date {date_str}")
     return points_list
 
 # %%
