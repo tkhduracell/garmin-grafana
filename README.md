@@ -90,10 +90,13 @@ If you are on `Windows` you should consider using [WSL](https://learn.microsoft.
 - Once back up, WSL and Docker should be installed and linked together.
 - Start -> Run -> type `WSL.exe`, then run the below bash command in the terminal window.  
 
-For Linux or MacOS, simply run the following bash command from your linux command line (terminal). If you are using a non-debian distribution, you need to swap `apt` with your OS specific package manager. 
+For Linux or MacOS, simply run the following bash command from your linux command line (terminal).
+
+> [!NOTE]
+> If you get the error that `git : command not found` then you need to install `git` with the command `sudo apt install git` for Ubuntu/Debian/WSL(windows) based systems. For Mac, you need to use `brew install git`. If you are on a non-debian linux distribution, please use your OS specific package manager replacing `apt`.
 
 ```bash
-cd ~ && sudo apt install git && git clone https://github.com/arpanghosh8453/garmin-grafana.git garmin-grafana && cd garmin-grafana && sudo bash ./easy-install.sh
+cd ~ && git clone https://github.com/arpanghosh8453/garmin-grafana.git garmin-grafana && cd garmin-grafana && sudo bash ./easy-install.sh
 ```  
 
 Enter the Garmin Connect credentials when prompted and you should be all up and running (your will be prompted for 2FA code as well if you have that set up). Once the data keeps coming, you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`. Check out the dashboards link on the left sidebar. you should have a dashboard auto-configured as `Garmin-Stats` under the dashboards section. There you should see the data added. It will **keep updating automatically** as soon as new data syncs with your Garmin Connect account.
