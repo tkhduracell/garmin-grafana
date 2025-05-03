@@ -156,8 +156,7 @@ If you have come this far, everything should be working. If not, please check th
 This project is made for InfluxDB 1.11, as Flux queries on influxDB 2.x can be problematic to use with Grafana at times. In fact, InfluxQL is being reintroduced in InfluxDB 3.0, reflecting user feedback. Grafana also has better compatibility/stability with InfluxQL from InfluxDB 1.11. Moreover, there are statistical evidence that Influxdb 1.11 queries run faster compared to influxdb 2.x. Since InfluxDB 2.x offers no clear benefits for this project, there are no plans for a migration.
 
 > [!IMPORTANT]
-> Please note that InfluxDB 3.x OSS limits the query time limit to 72 hours. This can be extended more by setting `INFLUXDB3_QUERY_FILE_LIMIT` to a very high value with a potential risk of crashing the container (OOM Error). As we are interested in visualization long term data trends, this limit defeats the purpose. Hence, we strongly recommend using InfluxDB 1.11.x (default settings) to our users as long as it's not discontinued from production. 
-
+> If you have an existing **InfluxDB v2.x** database and want to integrate that with this project, you can follow [this guide](https://github.com/arpanghosh8453/garmin-grafana/discussions/63#discussioncomment-13025100), although we officially do not support InfluxDB v2.x with this project. We have direct support for **InfluxDB v3.x**, but we do not actively encourage people to use that as it comes with paywalled features (InfluxDB v3.x OSS limits the data query time to 72 hours - long term queries are only available in enterprise and InfluxData cloud hosted instances) that are essential for long term data visualization. As we are interested in visualization of long term data trends, this limit defeats the purpose. Hence, we strongly recommend using InfluxDB 1.11.x (default settings) to our users as long as it's not discontinued from production. 
 
 ### Additional configuration and environment variables
 
