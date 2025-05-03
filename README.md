@@ -102,10 +102,10 @@ cd ~ && git clone https://github.com/arpanghosh8453/garmin-grafana.git garmin-gr
 Enter the Garmin Connect credentials when prompted and you should be all up and running (your will be prompted for 2FA code as well if you have that set up). Once the data keeps coming, you can check out the `http://localhost:3000` to reach Grafana (by default), do the initial setup with the default username `admin` and password `admin`. Check out the dashboards link on the left sidebar. you should have a dashboard auto-configured as `Garmin-Stats` under the dashboards section. There you should see the data added. It will **keep updating automatically** as soon as new data syncs with your Garmin Connect account.
 
 > [!NOTE]
-> When you run this for the first time, it will only automatically fetch the data for **last 7 days** only and keep pulling new data that syncs with Garmin Connect moving forward. if you want to sync your older data, that is super easy to do. You just need the run the following command in the terminal replacing the YYYY-MM-DD with appropriate start and end dates (MANUAL_START_DATE value must be older than MANUAL_END_DATE value) 
+> When you run this for the first time, it will only automatically fetch the data for **last 7 days** only and keep pulling new data that syncs with Garmin Connect moving forward. if you want to sync your older data, that is super easy to do. You just need the run the following command in the terminal (`WSL` for windows) replacing the YYYY-MM-DD with appropriate start and end dates (MANUAL_START_DATE value must be older than MANUAL_END_DATE value) 
 >
 > ```bash
-> docker compose run --rm -e MANUAL_START_DATE=YYYY-MM-DD -e MANUAL_END_DATE=YYYY-MM-DD garmin-fetch-data
+> cd ~/garmin-grafana && docker compose run --rm -e MANUAL_START_DATE=YYYY-MM-DD -e MANUAL_END_DATE=YYYY-MM-DD garmin-fetch-data
 > ```
 
 That should be everything you need for now! The script will be running in the background as long as your machine is up. After a restart, make sure to open docker desktop if you are on windows (if it does not start automatically) so that the containers get booted up as well. For Linux, everything should restart reliably after a reboot. If you are having issues, make sure the docker daemon is running and check the container status with `docker ps` command
