@@ -22,6 +22,7 @@ A docker container to fetch data from Garmin servers and store the data in a loc
 - **How to**
   - How to [pull historic (old) data](#historical-data-fetching-bulk-update) (bulk update)?
   - How to [update to newer versions](#update-to-new-versions) of this project?
+  - How to [export data as CSV files](#export-data-to-csv-files) for AI insights?
   - How to [backup the InfluxDB Database?](#backup-influxdb-database)
   - [Troubleshooting](#troubleshooting) Guide
   - [Need Help?](#need-help)
@@ -230,6 +231,24 @@ Updating with docker is super simple. Just go to the folder where the `compose.y
 2. After successful bulk fetching, you will see a `Bulk update success` message and the container will exit and remove itself automatically. 
 
 3. Now you can run the regular periodic update with `docker compose up -d`
+
+## Export Data to CSV files
+
+This project provides additional utilities to export the data as CSV for external analysis or AI integration. After the export, you can use the CSV files to feed into ChatGPT (If you are not in EU, your data will be used for training) or any locally hosted LLM chat interface with [Openweb-UI](https://github.com/open-webui/open-webui) to get insights from your long term health data. If you turn on chat history, you may be able to get more insightful recommendations over time. 
+
+There are two ways to export the data into CSV files. 
+
+1. Use the native CSV export functionality of Grafana, where you can export the data shown on any Grafana panel using [this guide](https://grafana.com/blog/2024/05/30/how-to-export-any-grafana-visualization-to-a-csv-file-microsoft-excel-or-google-sheets/) as CSV. 
+
+2. If the above method is tidious and you want to grab all measurements in detail as CSV files with one command directly from the local InfluxDB database, a convinient exporter script is provided with this project (included inside the docker container). 
+
+   2.1 Simply run the following docker command from your terminal `docker exec garmin-fetch-data uv run /app/garmin_grafana/influxdb_exporter.py` to export the last 30 days data. The script takes additional arguments such as `last-n-days` or `start-date` and `end-date` if you want to export data for last n days or for a specific date range. You should run the command like `docker exec garmin-fetch-data uv run /app/garmin_grafana/influxdb_exporter.py --last-n-days=7` or `docker exec garmin-fetch-data uv run /app/garmin_grafana/influxdb_exporter.py --start-date=2025-01-01 --end-date=2025-03-01`
+
+   2.2 When the export is finished, you will see a output file path in the format ` Exported N measurement CSVs into /tmp/GarminStats_Export_XYZ.zip`. The zip filename will vary based on when you run the command and how many days you ran. Take note of the full export path name. 
+
+   2.3 Now the exported zip is saved inside the container, we need to copy it to our host machine. To do this, run `docker cp garmin-fetch-data:/tmp/GarminStats_Export_XYZ.zip ./` and replace the `/tmp/GarminStats_Export_XYZ.zip` part with your zip filename from the output of the previous command.Thos command will place the zip file in your current working directory - you can replace the `./` ending of the command with a local path like `~/garmin-grafana/` if you want to place it somewhere specific. Once the clone is complete, you can remove the export zip from the container by running `docker exec garmin-fetch-data rm /tmp/GarminStats_Export_XYZ.zip` to free up some space (optional)
+
+   2.4 Now unzip the zip file you have and you will see all the measurements are available as separate CSV files. You can run your custom analysis with these or ask LLM for insights by directly feeding the CSV file(s)! 
 
 ## Backup InfluxDB Database
 
