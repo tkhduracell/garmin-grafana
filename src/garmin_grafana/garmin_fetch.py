@@ -922,8 +922,9 @@ def get_vo2_max(date_str):
     max_metrics = garmin_obj.get_max_metrics(date_str)
     try:
         if max_metrics:
-            vo2_max_value = max_metrics[0].get("generic", {}).get("vo2MaxPreciseValue")
-            if vo2_max_value:
+            vo2_max_value = max_metrics[0].get("generic", {}).get("vo2MaxPreciseValue", None)
+            vo2_max_value_cycling = max_metrics[0].get("cycling", {}).get("vo2MaxPreciseValue", None)
+            if vo2_max_value or vo2_max_value_cycling:
                 points_list.append({
                     "measurement":  "VO2_Max",
                     "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 for daily record
@@ -931,7 +932,7 @@ def get_vo2_max(date_str):
                         "Device": GARMIN_DEVICENAME,
                         "Database_Name": INFLUXDB_DATABASE
                     },
-                    "fields": {"VO2_max_value" : vo2_max_value}
+                    "fields": {"VO2_max_value" : vo2_max_value, "VO2_max_value_cycling" : vo2_max_value_cycling}
                 })
                 logging.info(f"Success : Fetching VO2-max for date {date_str}")
         return points_list
