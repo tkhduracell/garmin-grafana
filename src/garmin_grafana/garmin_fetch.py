@@ -298,7 +298,7 @@ def get_sleep_data(date_str):
             "highestRespirationValue": sleep_json.get("highestRespirationValue"),
             "awakeCount": sleep_json.get("awakeCount"),
             "avgSleepStress": sleep_json.get("avgSleepStress"),
-            "sleepScore": sleep_json.get("sleepScores", {}).get("overall", {}).get("value"),
+            "sleepScore": ((sleep_json.get("sleepScores") or {}).get("overall") or {}).get("value"),
             "restlessMomentsCount": all_sleep_data.get("restlessMomentsCount"),
             "avgOvernightHrv": all_sleep_data.get("avgOvernightHrv"),
             "bodyBatteryChange": all_sleep_data.get("bodyBatteryChange"),
@@ -601,7 +601,7 @@ def get_activity_summary(date_str):
         if activity.get('hasPolyline') or ALWAYS_PROCESS_FIT_FILES: # will process FIT files lacking GPS data if ALWAYS_PROCESS_FIT_FILES is set to True
             if not activity.get('hasPolyline'):
                 logging.warning(f"Activity ID {activity.get('activityId')} got no GPS data - yet, activity FIT file data will be processed as ALWAYS_PROCESS_FIT_FILES is on")
-            activity_with_gps_id_dict[activity.get('activityId')] = activity.get('activityType',{}).get('typeKey', "Unknown")
+            activity_with_gps_id_dict[activity.get('activityId')] = (activity.get('activityType') or {}).get('typeKey', "Unknown")
         if "startTimeGMT" in activity: # "startTimeGMT" should be available for all activities (fix #13)
             points_list.append({
                 "measurement":  "ActivitySummary",
@@ -610,13 +610,13 @@ def get_activity_summary(date_str):
                     "Device": GARMIN_DEVICENAME,
                     "Database_Name": INFLUXDB_DATABASE,
                     "ActivityID": activity.get('activityId'),
-                    "ActivitySelector": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).strftime('%Y%m%dT%H%M%SUTC-') + activity.get('activityType',{}).get('typeKey', "Unknown")
+                    "ActivitySelector": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).strftime('%Y%m%dT%H%M%SUTC-') + (activity.get('activityType') or {}).get('typeKey', "Unknown")
                 },
                 "fields": {
                     "Activity_ID": activity.get('activityId'),
                     'Device_ID': activity.get('deviceId'),
                     'activityName': activity.get('activityName'),
-                    'activityType': activity.get('activityType',{}).get('typeKey',None),
+                    'activityType': (activity.get('activityType') or {}).get('typeKey',None),
                     'distance': activity.get('distance'),
                     'elapsedDuration': activity.get('elapsedDuration'),
                     'movingDuration': activity.get('movingDuration'),
@@ -642,7 +642,7 @@ def get_activity_summary(date_str):
                     "Device": GARMIN_DEVICENAME,
                     "Database_Name": INFLUXDB_DATABASE,
                     "ActivityID": activity.get('activityId'),
-                    "ActivitySelector": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).strftime('%Y%m%dT%H%M%SUTC-') + activity.get('activityType',{}).get('typeKey', "Unknown")
+                    "ActivitySelector": datetime.strptime(activity["startTimeGMT"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=pytz.UTC).strftime('%Y%m%dT%H%M%SUTC-') + (activity.get('activityType') or {}).get('typeKey', "Unknown")
                 },
                 "fields": {
                     "Activity_ID": activity.get('activityId'),
