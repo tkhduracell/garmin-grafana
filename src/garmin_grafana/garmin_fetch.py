@@ -922,8 +922,8 @@ def get_vo2_max(date_str):
     max_metrics = garmin_obj.get_max_metrics(date_str)
     try:
         if max_metrics:
-            vo2_max_value = max_metrics[0].get("generic", {}).get("vo2MaxPreciseValue", None)
-            vo2_max_value_cycling = max_metrics[0].get("cycling", {}).get("vo2MaxPreciseValue", None)
+            vo2_max_value = (max_metrics[0].get("generic") or {}).get("vo2MaxPreciseValue", None)
+            vo2_max_value_cycling = (max_metrics[0].get("cycling") or {}).get("vo2MaxPreciseValue", None)
             if vo2_max_value or vo2_max_value_cycling:
                 points_list.append({
                     "measurement":  "VO2_Max",
