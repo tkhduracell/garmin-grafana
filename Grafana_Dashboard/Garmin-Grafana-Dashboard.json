@@ -950,7 +950,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "measurement": "DailyStats",
           "orderByTime": "ASC",
           "policy": "default",
@@ -970,7 +983,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Today RHR",
@@ -1052,7 +1066,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "measurement": "DailyStats",
           "orderByTime": "ASC",
           "policy": "default",
@@ -1072,7 +1099,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Today's Steps",
@@ -1345,7 +1373,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "measurement": "DailyStats",
           "orderByTime": "ASC",
           "policy": "default",
@@ -1365,7 +1406,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Today SpO2",
@@ -1482,7 +1524,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "timeFrom": "24h",
@@ -1564,7 +1607,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "measurement": "SleepSummary",
           "orderByTime": "ASC",
           "policy": "default",
@@ -1584,7 +1640,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "timeFrom": "24h",
@@ -1863,7 +1920,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "measurement": "DailyStats",
           "orderByTime": "ASC",
           "policy": "default",
@@ -1883,7 +1953,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "High Stress Duration",
@@ -2040,7 +2111,7 @@
             }
           },
           "mappings": [],
-          "unit": "s"
+          "unit": "dthms"
         },
         "overrides": [
           {
@@ -2146,7 +2217,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "SleepSummary",
           "orderByTime": "ASC",
@@ -2169,7 +2253,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Light",
@@ -2581,7 +2666,7 @@
           "mappings": [],
           "max": 180,
           "min": 0,
-          "unit": "s"
+          "unit": "dthms"
         },
         "overrides": [
           {
@@ -2686,7 +2771,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "DailyStats",
           "orderByTime": "ASC",
@@ -2707,7 +2805,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Intense Activity",
@@ -2983,7 +3082,8 @@
               "viz": false
             }
           },
-          "mappings": []
+          "mappings": [],
+          "unit": "dthms"
         },
         "overrides": []
       },
@@ -3023,7 +3123,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "measurement": "ActivitySummary",
           "orderByTime": "ASC",
           "policy": "default",
@@ -3036,10 +3149,15 @@
                   "hrTimeInZone_1"
                 ],
                 "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Zone 2",
@@ -11568,7 +11686,7 @@
               },
               {
                 "id": "unit",
-                "value": "s"
+                "value": "dthms"
               }
             ]
           },
@@ -11600,7 +11718,7 @@
               },
               {
                 "id": "unit",
-                "value": "s"
+                "value": "dthms"
               }
             ]
           },
@@ -11701,6 +11819,10 @@
                     "type": "value"
                   }
                 ]
+              },
+              {
+                "id": "unit",
+                "value": "dthms"
               }
             ]
           },
@@ -13166,6 +13288,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 185,
+  "version": 188,
   "weekStart": ""
 }
