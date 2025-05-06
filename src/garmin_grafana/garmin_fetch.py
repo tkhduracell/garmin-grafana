@@ -869,7 +869,7 @@ def get_training_readiness(date_str):
 # Contribution from PR #17 by @arturgoms 
 def get_hillscore(date_str):
     points_list = []
-    hill_all = garmin_obj.get_hill_score(date_str, date_str)
+    hill_all = garmin_obj.get_hill_score(date_str)
     if hill_all:
         for hill in hill_all.get("hillScoreDTOList",[]):
             data_fields = {
@@ -941,7 +941,7 @@ def get_vo2_max(date_str):
 
 def get_endurance_score(date_str):
     points_list = []
-    endurance_dict = garmin_obj.get_endurance_score(date_str, date_str)
+    endurance_dict = garmin_obj.get_endurance_score(date_str)
     available_dates_dict = endurance_dict.get("groupMap",{})
     if available_dates_dict:
         for date_key in available_dates_dict:
