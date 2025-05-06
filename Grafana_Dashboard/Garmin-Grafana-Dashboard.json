@@ -5913,7 +5913,7 @@
             "properties": [
               {
                 "id": "unit",
-                "value": "velocitykms"
+                "value": "velocitykmh"
               },
               {
                 "id": "color",
@@ -6089,16 +6089,16 @@
           "select": [
             [
               {
-                "type": "field",
                 "params": [
                   "maxSpeed"
-                ]
+                ],
+                "type": "field"
               },
               {
-                "type": "math",
                 "params": [
-                  " * 3.6"
-                ]
+                  "* 3.6"
+                ],
+                "type": "math"
               }
             ]
           ],
@@ -13294,6 +13294,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 188,
+  "version": 190,
   "weekStart": ""
 }
