@@ -869,27 +869,27 @@ def get_training_readiness(date_str):
 # Contribution from PR #17 by @arturgoms 
 def get_hillscore(date_str):
     points_list = []
-    hill_all = garmin_obj.get_hill_score(date_str)
-    if hill_all:
-        for hill in hill_all.get("hillScoreDTOList",[]):
-            data_fields = {
-                "strengthScore": hill.get("strengthScore"),
-                "enduranceScore": hill.get("enduranceScore"),
-                "hillScoreClassificationId": hill.get("hillScoreClassificationId"),
-                "overallScore": hill.get("overallScore"),
-                "hillScoreFeedbackPhraseId": hill.get("hillScoreFeedbackPhraseId")
-            }
-            if not all(value is None for value in data_fields.values()):
-                points_list.append({
-                    "measurement":  "HillScore",
-                    "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 for daily record
-                    "tags": {
-                        "Device": GARMIN_DEVICENAME,
-                        "Database_Name": INFLUXDB_DATABASE
-                    },
-                    "fields": data_fields
-                })
-                logging.info(f"Success : Fetching Hill Score for date {date_str}")
+    hill = garmin_obj.get_hill_score(date_str)
+    if hill:
+        data_fields = {
+            "strengthScore": hill.get("strengthScore"),
+            "enduranceScore": hill.get("enduranceScore"),
+            "hillScoreClassificationId": hill.get("hillScoreClassificationId"),
+            "overallScore": hill.get("overallScore"),
+            "hillScoreFeedbackPhraseId": hill.get("hillScoreFeedbackPhraseId"),
+            "vo2MaxPreciseValue": hill.get("vo2MaxPreciseValue")
+        }
+        if not all(value is None for value in data_fields.values()):
+            points_list.append({
+                "measurement":  "HillScore",
+                "time": datetime.strptime(date_str,"%Y-%m-%d").replace(hour=0, tzinfo=pytz.UTC).isoformat(), # Use GMT 00:00 for daily record
+                "tags": {
+                    "Device": GARMIN_DEVICENAME,
+                    "Database_Name": INFLUXDB_DATABASE
+                },
+                "fields": data_fields
+            })
+            logging.info(f"Success : Fetching Hill Score for date {date_str}")
     return points_list
 
 # Contribution from PR #17 by @arturgoms 
@@ -942,25 +942,20 @@ def get_vo2_max(date_str):
 def get_endurance_score(date_str):
     points_list = []
     endurance_dict = garmin_obj.get_endurance_score(date_str)
-    available_dates_dict = endurance_dict.get("groupMap",{})
-    if available_dates_dict:
-        for date_key in available_dates_dict:
-            EnduranceScoreAvg = available_dates_dict[date_key].get("groupAverage", None)
-            EnduranceScoreMax = available_dates_dict[date_key].get("groupMax", None)
-            if EnduranceScoreAvg or EnduranceScoreMax:
-                points_list.append({
-                    "measurement":  "EnduranceScore",
-                    "time": pytz.timezone("UTC").localize(datetime.strptime(date_key,"%Y-%m-%d")).isoformat(), # Use GMT 00:00 is timestamp is not available
-                    "tags": {
-                        "Device": GARMIN_DEVICENAME,
-                        "Database_Name": INFLUXDB_DATABASE
-                    },
-                    "fields": {
-                        "EnduranceScoreAvg": EnduranceScoreAvg,
-                        "EnduranceScoreMax": EnduranceScoreMax
-                        }
-                })
-                logging.info(f"Success : Fetching Endurance Score for date {date_str}")
+    if endurance_dict:
+        if endurance_dict.get("overallScore"):
+            points_list.append({
+                "measurement":  "EnduranceScore",
+                "time": pytz.timezone("UTC").localize(datetime.strptime(date_str,"%Y-%m-%d")).isoformat(), # Use GMT 00:00 is timestamp is not available
+                "tags": {
+                    "Device": GARMIN_DEVICENAME,
+                    "Database_Name": INFLUXDB_DATABASE
+                },
+                "fields": {
+                    "EnduranceScore": endurance_dict.get("overallScore")
+                    }
+            })
+            logging.info(f"Success : Fetching Endurance Score for date {date_str}")
     return points_list
 
 def get_blood_pressure(date_str):
