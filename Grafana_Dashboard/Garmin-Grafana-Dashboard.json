@@ -2262,7 +2262,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "SleepSummary",
           "orderByTime": "ASC",
@@ -2285,7 +2298,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "REM",
@@ -2293,7 +2307,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "SleepSummary",
           "orderByTime": "ASC",
@@ -2316,7 +2343,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Awake",
@@ -2324,7 +2352,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "SleepSummary",
           "orderByTime": "ASC",
@@ -2347,7 +2388,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "timeFrom": "24h",
@@ -2814,7 +2856,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "DailyStats",
           "orderByTime": "ASC",
@@ -2825,25 +2880,45 @@
             [
               {
                 "params": [
-                  "highlyActiveSeconds"
+                  "vigorousIntensityMinutes"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
                 "type": "last"
+              },
+              {
+                "params": [
+                  "* 60"
+                ],
+                "type": "math"
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
-          "alias": "Fair Activity",
+          "alias": "Moderate Activity",
           "datasource": {
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "DailyStats",
           "orderByTime": "ASC",
@@ -2854,17 +2929,24 @@
             [
               {
                 "params": [
-                  "activeSeconds"
+                  "moderateIntensityMinutes"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
                 "type": "last"
+              },
+              {
+                "params": [
+                  "* 60"
+                ],
+                "type": "math"
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Sleeping",
@@ -2872,7 +2954,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "DailyStats",
           "orderByTime": "ASC",
@@ -2893,7 +2988,8 @@
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "timeFrom": "24h",
@@ -3126,7 +3222,7 @@
           "groupBy": [
             {
               "params": [
-                "$interval"
+                "1d"
               ],
               "type": "time"
             },
@@ -3165,7 +3261,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "ActivitySummary",
           "orderByTime": "ASC",
@@ -3179,10 +3288,15 @@
                   "hrTimeInZone_2"
                 ],
                 "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Zone 3",
@@ -3190,7 +3304,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "ActivitySummary",
           "orderByTime": "ASC",
@@ -3204,10 +3331,15 @@
                   "hrTimeInZone_3"
                 ],
                 "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Zone 4",
@@ -3215,7 +3347,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "ActivitySummary",
           "orderByTime": "ASC",
@@ -3229,10 +3374,15 @@
                   "hrTimeInZone_4"
                 ],
                 "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         },
         {
           "alias": "Zone 5",
@@ -3240,7 +3390,20 @@
             "type": "influxdb",
             "uid": "${DS_GARMIN_STATS}"
           },
-          "groupBy": [],
+          "groupBy": [
+            {
+              "params": [
+                "1d"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
           "hide": false,
           "measurement": "ActivitySummary",
           "orderByTime": "ASC",
@@ -3254,10 +3417,15 @@
                   "hrTimeInZone_5"
                 ],
                 "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
               }
             ]
           ],
-          "tags": []
+          "tags": [],
+          "tz": "$TimeZone"
         }
       ],
       "title": "Activity HR Zones (mean)",
@@ -13294,6 +13462,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 190,
+  "version": 191,
   "weekStart": ""
 }
