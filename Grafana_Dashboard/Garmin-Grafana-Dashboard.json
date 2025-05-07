@@ -8363,8 +8363,8 @@
         ]
       },
       "gridPos": {
-        "h": 9,
-        "w": 12,
+        "h": 10,
+        "w": 8,
         "x": 0,
         "y": 170
       },
@@ -8690,9 +8690,9 @@
         ]
       },
       "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
+        "h": 10,
+        "w": 8,
+        "x": 8,
         "y": 170
       },
       "id": 64,
@@ -8761,6 +8761,219 @@
       ],
       "title": "VO2 Max",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_GARMIN_STATS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-red",
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "decimals": 1,
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 170
+      },
+      "id": 69,
+      "options": {
+        "basemap": {
+          "config": {
+            "server": "world-imagery",
+            "showLabels": true,
+            "theme": "auto"
+          },
+          "name": "Layer 0",
+          "opacity": 1,
+          "tooltip": true,
+          "type": "esri-xyz"
+        },
+        "controls": {
+          "mouseWheelZoom": true,
+          "showAttribution": false,
+          "showDebug": false,
+          "showMeasure": false,
+          "showScale": true,
+          "showZoom": true
+        },
+        "layers": [
+          {
+            "config": {
+              "showLegend": false,
+              "style": {
+                "color": {
+                  "fixed": "dark-green"
+                },
+                "opacity": 0,
+                "rotation": {
+                  "fixed": 0,
+                  "max": 360,
+                  "min": -360,
+                  "mode": "mod"
+                },
+                "size": {
+                  "fixed": 5,
+                  "max": 15,
+                  "min": 2
+                },
+                "symbol": {
+                  "fixed": "img/icons/marker/circle.svg",
+                  "mode": "fixed"
+                },
+                "symbolAlign": {
+                  "horizontal": "center",
+                  "vertical": "center"
+                },
+                "textConfig": {
+                  "fontSize": 12,
+                  "offsetX": 0,
+                  "offsetY": 0,
+                  "textAlign": "center",
+                  "textBaseline": "middle"
+                }
+              }
+            },
+            "location": {
+              "mode": "auto"
+            },
+            "name": "marker",
+            "tooltip": false,
+            "type": "markers"
+          },
+          {
+            "config": {
+              "blur": 10,
+              "radius": 1,
+              "weight": {
+                "fixed": 1,
+                "max": 1,
+                "min": 0
+              }
+            },
+            "filterData": {
+              "id": "byRefId",
+              "options": "joinByField-I-J"
+            },
+            "location": {
+              "mode": "auto"
+            },
+            "name": "Heatmap",
+            "opacity": 0.8,
+            "tooltip": true,
+            "type": "heatmap"
+          }
+        ],
+        "tooltip": {
+          "mode": "details"
+        },
+        "view": {
+          "allLayers": true,
+          "id": "fit",
+          "lastOnly": false,
+          "lat": 47.473641,
+          "layer": "Layer 1",
+          "lon": 19.054979,
+          "padding": 3,
+          "shared": false,
+          "zoom": 16
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "alias": "lat",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ActivityGPS",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"Latitude\",\"Longitude\" FROM \"ActivityGPS\" WHERE \"ActivitySelector\"::tag = \"20250413T084245UTC-Other-Lap3\" AND $timeFilter",
+          "rawQuery": false,
+          "refId": "I",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "Latitude"
+                ],
+                "type": "field"
+              }
+            ]
+          ]
+        },
+        {
+          "alias": "lon",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ActivityGPS",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"Latitude\",\"Longitude\" FROM \"ActivityGPS\" WHERE \"ActivitySelector\"::tag = \"20250413T084245UTC-Other-Lap3\" AND $timeFilter",
+          "rawQuery": false,
+          "refId": "J",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "Longitude"
+                ],
+                "type": "field"
+              }
+            ]
+          ]
+        }
+      ],
+      "title": "Heatmap for GPS Activity (within selected time)",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "Time",
+            "mode": "outer"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "geomap"
     },
     {
       "datasource": {
@@ -8884,7 +9097,7 @@
         "h": 11,
         "w": 9,
         "x": 0,
-        "y": 179
+        "y": 180
       },
       "id": 13,
       "options": {
@@ -9198,7 +9411,7 @@
         "h": 11,
         "w": 7,
         "x": 9,
-        "y": 179
+        "y": 180
       },
       "id": 23,
       "options": {
@@ -9459,7 +9672,7 @@
         "h": 11,
         "w": 8,
         "x": 16,
-        "y": 179
+        "y": 180
       },
       "id": 12,
       "options": {
@@ -9700,7 +9913,7 @@
         "h": 11,
         "w": 9,
         "x": 0,
-        "y": 190
+        "y": 191
       },
       "id": 17,
       "options": {
@@ -9988,7 +10201,7 @@
         "h": 11,
         "w": 8,
         "x": 9,
-        "y": 190
+        "y": 191
       },
       "id": 19,
       "options": {
@@ -10201,7 +10414,7 @@
         "h": 11,
         "w": 7,
         "x": 17,
-        "y": 190
+        "y": 191
       },
       "id": 4,
       "options": {
@@ -10554,7 +10767,7 @@
         "h": 14,
         "w": 10,
         "x": 0,
-        "y": 201
+        "y": 202
       },
       "id": 18,
       "options": {
@@ -10892,7 +11105,7 @@
         "h": 6,
         "w": 7,
         "x": 10,
-        "y": 201
+        "y": 202
       },
       "id": 22,
       "options": {
@@ -11188,7 +11401,7 @@
         "h": 7,
         "w": 7,
         "x": 17,
-        "y": 201
+        "y": 202
       },
       "id": 37,
       "options": {
@@ -11445,7 +11658,7 @@
         "h": 8,
         "w": 7,
         "x": 10,
-        "y": 207
+        "y": 208
       },
       "id": 34,
       "options": {
@@ -11596,7 +11809,7 @@
         "h": 7,
         "w": 7,
         "x": 17,
-        "y": 208
+        "y": 209
       },
       "id": 58,
       "options": {
@@ -12008,7 +12221,7 @@
         "h": 11,
         "w": 24,
         "x": 0,
-        "y": 215
+        "y": 216
       },
       "id": 66,
       "options": {
@@ -12593,7 +12806,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 226
+        "y": 227
       },
       "id": 67,
       "options": {
@@ -12853,7 +13066,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 234
+        "y": 235
       },
       "id": 65,
       "options": {
@@ -12994,7 +13207,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 242
+        "y": 243
       },
       "id": 20,
       "options": {
@@ -13120,7 +13333,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 242
+        "y": 243
       },
       "id": 27,
       "options": {
@@ -13297,7 +13510,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 252
+        "y": 253
       },
       "id": 60,
       "options": {
@@ -13422,6 +13635,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 194,
+  "version": 198,
   "weekStart": ""
 }
