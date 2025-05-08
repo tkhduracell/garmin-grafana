@@ -58,6 +58,7 @@ FETCH_SELECTION = os.getenv("FETCH_SELECTION", "daily_avg,sleep,steps,heartrate,
 KEEP_FIT_FILES = True if os.getenv("KEEP_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
 FIT_FILE_STORAGE_LOCATION = os.getenv("FIT_FILE_STORAGE_LOCATION", os.path.join(os.path.expanduser("~"), "fit_filestore"))
 ALWAYS_PROCESS_FIT_FILES = True if os.getenv("ALWAYS_PROCESS_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, will process all FIT files for all activities including indoor ones lacking GPS data
+REQUEST_INTRADAY_DATA_REFRESH = True if os.getenv("REQUEST_INTRADAY_DATA_REFRESH") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, This requests data refresh for the intraday data (older than 6 months) - see issue #77. Pauses the script for 24 hours when the daily limit is reached.
 FORCE_REPROCESS_ACTIVITIES = False if os.getenv("FORCE_REPROCESS_ACTIVITIES") in ['False','false','FALSE','f','F','no','No','NO','0'] else True # optional, will enable re-processing of fit files when set to true, may skip activities if set to false (issue #30)
 USER_TIMEZONE = os.getenv("USER_TIMEZONE", "") # optional, fetches timezone info from last activity automatically if left blank
 PARSED_ACTIVITY_ID_LIST = []
@@ -1007,6 +1008,27 @@ def get_hydration(date_str):
 
 # %%
 def daily_fetch_write(date_str):
+    if REQUEST_INTRADAY_DATA_REFRESH and (datetime.strptime(date_str, "%Y-%m-%d") <= (datetime.today() - timedelta(days=180))):
+        data_refresh_response = garmin_obj.connectapi(f"wellness-service/wellness/epoch/request/{date_str}", method="POST").get("status", "Unknown")
+        logging.info(f"Intraday data refresh request status: {data_refresh_response}")
+        if data_refresh_response == "SUBMITTED":
+            logging.info(f"Waiting 10 seconds for refresh request to process...")
+            time.sleep(10)
+        elif data_refresh_response == "COMPLETE":
+            logging.info(f"Data for date {date_str} is already available")
+        elif data_refresh_response == "NO_FILES_FOUND":
+            logging.info(f"No Data is available for date {date_str} to refresh")
+            return None
+        elif data_refresh_response == "DENIED":
+            logging.info(f"Daily refresh limit reached. Pausing script for 24 hours to ensure Intraday data fetching. Disable REQUEST_INTRADAY_DATA_REFRESH to avoid this!")
+            time.sleep(86500)
+            data_refresh_response = garmin_obj.connectapi(f"wellness-service/wellness/epoch/request/{date_str}", method="POST").get("status", "Unknown")
+            logging.info(f"Intraday data refresh request status: {data_refresh_response}")
+            logging.info(f"Waiting 10 seconds...")
+            time.sleep(10)
+        else:
+            logging.info(f"Refresh response is unknown!")
+            time.sleep(5)
     if 'daily_avg' in FETCH_SELECTION:
         write_points_to_influxdb(get_daily_stats(date_str))
     if 'sleep' in FETCH_SELECTION:
