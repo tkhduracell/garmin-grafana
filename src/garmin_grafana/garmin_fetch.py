@@ -59,6 +59,7 @@ KEEP_FIT_FILES = True if os.getenv("KEEP_FIT_FILES") in ['True', 'true', 'TRUE',
 FIT_FILE_STORAGE_LOCATION = os.getenv("FIT_FILE_STORAGE_LOCATION", os.path.join(os.path.expanduser("~"), "fit_filestore"))
 ALWAYS_PROCESS_FIT_FILES = True if os.getenv("ALWAYS_PROCESS_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, will process all FIT files for all activities including indoor ones lacking GPS data
 REQUEST_INTRADAY_DATA_REFRESH = True if os.getenv("REQUEST_INTRADAY_DATA_REFRESH") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, This requests data refresh for the intraday data (older than 6 months) - see issue #77. Pauses the script for 24 hours when the daily limit is reached.
+TAG_MEASUREMENTS_WITH_USER_EMAIL = True if os.getenv("TAG_MEASUREMENTS_WITH_USER_EMAIL") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # Adds an additional "User_ID" tag in each measurement for multi user database support - see #96
 FORCE_REPROCESS_ACTIVITIES = False if os.getenv("FORCE_REPROCESS_ACTIVITIES") in ['False','false','FALSE','f','F','no','No','NO','0'] else True # optional, will enable re-processing of fit files when set to true, may skip activities if set to false (issue #30)
 USER_TIMEZONE = os.getenv("USER_TIMEZONE", "") # optional, fetches timezone info from last activity automatically if left blank
 PARSED_ACTIVITY_ID_LIST = []
@@ -166,6 +167,9 @@ def garmin_login():
 def write_points_to_influxdb(points):
     try:
         if len(points) != 0:
+            if TAG_MEASUREMENTS_WITH_USER_EMAIL:
+                for item in points:
+                    item['tags'].update({'User_ID': garmin_obj.garth.profile.get('userName','Unknown')})
             if INFLUXDB_VERSION == '1':
                 influxdbclient.write_points(points)
             else:
