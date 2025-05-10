@@ -22,6 +22,7 @@ A docker container to fetch data from Garmin servers and store the data in a loc
   - How to [update to newer versions](#update-to-new-versions) of this project?
   - How to [export data as CSV files](#export-data-to-csv-files) for AI insights?
   - How to [backup the InfluxDB Database?](#backup-influxdb-database)
+  - How to use [multiple accounts](#multi-user-instance-setup)? - if you want to set up a dashboard for your spouse
   - [Troubleshooting](#troubleshooting) Guide
   - [Need Help?](#need-help)
 - Project suppliment
@@ -189,6 +190,10 @@ influxdb:
 
 There is a Grafana panel in the dashboard (given with this project) which displays this data when available. If you do not have this setup, you should remove that panel from the dashboard, as battery data collection is not possible from the watch otherwise.
 
+## Multi user instance setup
+
+If this is working well for you, maybe you want to set this up for your family/spouse. For that, you should not duplicate the full compose stack (you can, but then you will have two instances or Grafana and Influxdb containers running on the same host machine, which is not a smart idea). You should be able to do this by following [this guide](https://github.com/arpanghosh8453/garmin-grafana/issues/96#issuecomment-2868627808). There is no automatic setup script for this - you need to have a little understanding of docker and follow the given instructions. 
+
 ## Update to new versions
 
 Updating with docker is super simple. Just go to the folder where the `compose.yml` is and run `docker compose pull` and then `docker compose down && docker compose up -d`. Please verify if everything is running correctly by checking the logs with `docker compose logs --follow`
@@ -222,7 +227,7 @@ Updating with docker is super simple. Just go to the folder where the `compose.y
 
 ## Export Data to CSV files
 
-This project provides additional utilities to export the data as CSV for external analysis or AI integration. After the export, you can use the CSV files to feed into ChatGPT (If you are not in EU, your data will be used for training) or any locally hosted LLM chat interface with [Openweb-UI](https://github.com/open-webui/open-webui) to get insights from your long term health data. If you turn on chat history, you may be able to get more insightful recommendations over time.
+This project provides additional utilities to export the data as CSV for external analysis or AI integration. After the export, you can use the CSV files to feed into ChatGPT (If you are not in EU, your data will be used for training) or any locally hosted LLM chat interface with [Openweb-UI](https://github.com/open-webui/open-webui) or [anythingllm](https://anythingllm.com/) (Which natively supports RAG based document ingestion and available as Windows application) to get insights from your long term health data. If you turn on chat history, you may be able to get more insightful recommendations over time.
 
 There are two ways to export the data into CSV files.
 
