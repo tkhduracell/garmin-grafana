@@ -721,10 +721,10 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                             }
                             points_list.append(point)
                     for length_record in all_lengths_list:
-                        if length_record.get('timestamp'):
+                        if length_record.get('start_time') or length_record.get('timestamp'):
                             point = {
                                 "measurement": "ActivityLength",
-                                "time": length_record['timestamp'].replace(tzinfo=pytz.UTC).isoformat(), 
+                                "time": length_record['start_time'].replace(tzinfo=pytz.UTC).isoformat() or length_record['timestamp'].replace(tzinfo=pytz.UTC).isoformat(), 
                                 "tags": {
                                     "Device": GARMIN_DEVICENAME,
                                     "Database_Name": INFLUXDB_DATABASE,
@@ -745,10 +745,10 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                             }
                             points_list.append(point)
                     for lap_record in all_laps_list:
-                        if lap_record.get('timestamp'):
+                        if lap_record.get('start_time') or lap_record.get('timestamp'):
                             point = {
                                 "measurement": "ActivityLap",
-                                "time": lap_record['timestamp'].replace(tzinfo=pytz.UTC).isoformat(), 
+                                "time": lap_record['start_time'].replace(tzinfo=pytz.UTC).isoformat() or lap_record['timestamp'].replace(tzinfo=pytz.UTC).isoformat(), 
                                 "tags": {
                                     "Device": GARMIN_DEVICENAME,
                                     "Database_Name": INFLUXDB_DATABASE,
