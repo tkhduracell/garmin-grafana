@@ -166,15 +166,18 @@ def garmin_login():
 
 # %%
 def write_points_to_influxdb(points):
+    write_chunk_size = 20000
     try:
         if len(points) != 0:
             if TAG_MEASUREMENTS_WITH_USER_EMAIL:
                 for item in points:
                     item['tags'].update({'User_ID': garmin_obj.garth.profile.get('userName','Unknown')})
-            if INFLUXDB_VERSION == '1':
-                influxdbclient.write_points(points)
-            else:
-                influxdbclient.write(record=points)
+            # Write in chunks - Issue reported for large activities data containing >20000 points - Error 413 : payload too large
+            for i in range(0, len(points), write_chunk_size):
+                if INFLUXDB_VERSION == '1':
+                    influxdbclient.write_points(points[i:i + write_chunk_size])
+                else:
+                    influxdbclient.write(record=points[i:i + write_chunk_size])
             logging.info("Success : updated influxDB database with new points")
     except (InfluxDBClientError, InfluxDBError) as err:
         logging.error("Write failed : Unable to connect with database! " + str(err))
