@@ -17,6 +17,7 @@ A docker container to fetch data from Garmin servers and store the data in a loc
 - **Installation**
   - EASY : [Automated installation](#automatic-install-with-helper-script-recommended-for-less-techy-people) with helper script
   - ADVANCED : [Manual step by step installation](#manual-install-with-docker-recommended-if-you-understand-linux-concepts) guide
+  - SYNOLOGY : [Installation Guide](https://github.com/arpanghosh8453/garmin-grafana/discussions/107#discussion-8326104)
 - **How to**
   - How to [pull historic (old) data](#historical-data-fetching-bulk-update) (bulk update)?
   - How to [update to newer versions](#update-to-new-versions) of this project?
