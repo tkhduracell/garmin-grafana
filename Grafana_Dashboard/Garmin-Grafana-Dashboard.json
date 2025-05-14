@@ -5011,6 +5011,18 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "time:hh:mm a"
+              }
+            ]
           }
         ]
       },
@@ -5064,7 +5076,7 @@
           "measurement": "ActivityGPS",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"HeartRate\" FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/)",
+          "query": "SELECT (1000/(\"Cadence\"* 60)) FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/) AND $timeFilter",
           "rawQuery": false,
           "refId": "A",
           "resultFormat": "time_series",
@@ -5075,6 +5087,12 @@
                   "Cadence"
                 ],
                 "type": "field"
+              },
+              {
+                "params": [
+                  "* 2"
+                ],
+                "type": "math"
               }
             ]
           ],
@@ -5137,7 +5155,7 @@
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": false,
+            "insertNulls": 3600000,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -5206,6 +5224,18 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duration"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dthms"
+              }
+            ]
           }
         ]
       },
@@ -5227,7 +5257,8 @@
           "hideZeros": false,
           "mode": "single",
           "sort": "none"
-        }
+        },
+        "xField": "Duration"
       },
       "pluginVersion": "12.0.0",
       "targets": [
@@ -5335,6 +5366,39 @@
               "value": "/^$ActivityGPS$/"
             }
           ]
+        },
+        {
+          "alias": "Duration",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ActivityGPS",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"HeartRate\" FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/)",
+          "rawQuery": false,
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "DurationSeconds"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "ActivitySelector::tag",
+              "operator": "=~",
+              "value": "/^$ActivityGPS$/"
+            }
+          ]
         }
       ],
       "title": "Distance vs HR",
@@ -5342,6 +5406,19 @@
         {
           "id": "joinByField",
           "options": {}
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Time",
+                "Heart Rate",
+                "Pace",
+                "Duration"
+              ]
+            }
+          }
         }
       ],
       "transparent": true,
@@ -5629,6 +5706,18 @@
                 "value": "time: hh:mm a"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duration"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dtdurations"
+              }
+            ]
           }
         ]
       },
@@ -5705,6 +5794,39 @@
               "value": "/^$ActivityGPS$/"
             }
           ]
+        },
+        {
+          "alias": "Duration",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_GARMIN_STATS}"
+          },
+          "groupBy": [],
+          "hide": false,
+          "measurement": "ActivityGPS",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT \"HeartRate\" FROM \"ActivityGPS\" WHERE (\"ActivitySelector\"::tag =~ /^$ActivityGPS$/)",
+          "rawQuery": false,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "DurationSeconds"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "ActivitySelector::tag",
+              "operator": "=~",
+              "value": "/^$ActivityGPS$/"
+            }
+          ]
         }
       ],
       "title": "GPS Track pace",
@@ -5717,13 +5839,24 @@
             "reduce": {
               "reducer": "sum"
             },
-            "replaceFields": true,
+            "replaceFields": false,
             "window": {
               "field": "Speed",
               "reducer": "mean",
               "windowAlignment": "centered",
               "windowSize": 20,
               "windowSizeMode": "fixed"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Time",
+                "Speed (Km/Hour)"
+              ]
             }
           }
         }
@@ -13869,6 +14002,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 202,
+  "version": 206,
   "weekStart": ""
 }
