@@ -715,6 +715,7 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                                     "Longitude": int(parsed_record['position_long']) * ( 180 / 2**31 ) if parsed_record.get('position_long') else None,
                                     "Altitude": parsed_record.get('enhanced_altitude', None) or parsed_record.get('altitude', None),
                                     "Distance": parsed_record.get('distance', None),
+                                    "DurationSeconds": (parsed_record['timestamp'].replace(tzinfo=pytz.UTC) - activity_start_time).total_seconds(),
                                     "HeartRate": float(parsed_record.get('heart_rate', None)) if parsed_record.get('heart_rate', None) else None,
                                     "Speed": parsed_record.get('enhanced_speed', None) or parsed_record.get('speed', None),
                                     "Cadence": parsed_record.get('cadence', None),
@@ -838,6 +839,7 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
                                 "Longitude": lon,
                                 "Altitude": alt,
                                 "Distance": dist,
+                                "DurationSeconds": (time_obj - activity_start_time).total_seconds(),
                                 "HeartRate": hr,
                                 "Speed": speed,
                                 "lap": lap_index
