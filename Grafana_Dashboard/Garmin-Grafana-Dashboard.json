@@ -13767,7 +13767,6 @@
         "definition": "SHOW TAG VALUES FROM \"ActivityGPS\" WITH KEY = \"ActivitySelector\" WHERE $timeFilter",
         "description": "List of Activities dropdown",
         "label": "Activity with GPS",
-        "multi": true,
         "name": "ActivityGPS",
         "options": [],
         "query": {
@@ -14052,6 +14051,6 @@
   "timezone": "browser",
   "title": "Garmin Stats",
   "uid": "feiibsx498gsgb",
-  "version": 213,
+  "version": 214,
   "weekStart": ""
 }
