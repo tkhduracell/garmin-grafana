@@ -117,7 +117,7 @@ Join our community to collaborate and seek assistance:
 
 ## License
 
-This project is licensed under the [BSD-3-Clause License](LICENSE). By contributing, you agree that your contributions will be licensed under this license. You will be attributed for your contribution.
+This project is licensed under the [BSD-3-Clause License](../LICENSE). By contributing, you agree that your contributions will be licensed under this license. You will be attributed for your contribution.
 
 ---
 
