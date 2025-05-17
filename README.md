@@ -29,6 +29,7 @@ A docker container to fetch data from Garmin servers and store the data in a loc
 - Project suppliment
   - [Credits](#credits)
   - [Dependencies](#dependencies)
+  - [Contribution Guideline](#contribution-guideline)
   - [Limitations](#limitations)
 - [Support this project](#love-this-project)
 - [Star History](#star-history)
@@ -290,6 +291,10 @@ This project is made possible by **generous community contribution** towards the
 
 - [python-garminconnect](https://github.com/cyberjunky/python-garminconnect) by [cyberjunky](https://github.com/cyberjunky) : Garmin Web API wrapper
 - [garth](https://github.com/matin/garth) by [matin](https://github.com/matin) : Used for Garmin SSO Authentication
+
+## Contribution Guideline
+
+Please find the contribution guidelines [here](.github/CONTRIBUTING.md)
 
 ## Limitations
 
