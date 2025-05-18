@@ -55,6 +55,7 @@ INFLUXDB_ENDPOINT_IS_HTTP = False if os.getenv("INFLUXDB_ENDPOINT_IS_HTTP") in [
 GARMIN_DEVICENAME_AUTOMATIC = False if GARMIN_DEVICENAME != "Unknown" else True # optional
 UPDATE_INTERVAL_SECONDS = int(os.getenv("UPDATE_INTERVAL_SECONDS", 300)) # optional
 FETCH_SELECTION = os.getenv("FETCH_SELECTION", "daily_avg,sleep,steps,heartrate,stress,breathing,hrv,vo2,activity,race_prediction,body_composition") # additional available values are lactate_threshold,training_status,training_readiness,hill_score,endurance_score,blood_pressure,hydration which you can add to the list seperated by , without any space
+LACTATE_THRESHOLD_SPORTS = os.getenv("LACTATE_THRESHOLD_SPORTS", "RUNNING").upper().split(",") # Garmin currently implements RUNNING, but has provisions for CYCLING, and SWIMMING
 KEEP_FIT_FILES = True if os.getenv("KEEP_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional
 FIT_FILE_STORAGE_LOCATION = os.getenv("FIT_FILE_STORAGE_LOCATION", os.path.join(os.path.expanduser("~"), "fit_filestore"))
 ALWAYS_PROCESS_FIT_FILES = True if os.getenv("ALWAYS_PROCESS_FIT_FILES") in ['True', 'true', 'TRUE','t', 'T', 'yes', 'Yes', 'YES', '1'] else False # optional, will process all FIT files for all activities including indoor ones lacking GPS data
@@ -890,30 +891,28 @@ def fetch_activity_GPS(activityIDdict): # Uses FIT file by default, falls back t
 
 def get_lactate_threshold(date_str):
     points_list = []
+    endpoints = {}
     
-    endpoints = {
-        "HeartRateThreshold": f"/biometric-service/stats/lactateThresholdHeartRate/range/{date_str}/{date_str}?aggregation=daily",
-        "SpeedThreshold": f"/biometric-service/stats/lactateThresholdSpeed/range/{date_str}/{date_str}?aggregation=daily",
-    }
+    for ltsport in LACTATE_THRESHOLD_SPORTS:
+        endpoints[f"SpeedThreshold_{sport}"] = f"/biometric-service/stats/lactateThresholdSpeed/range/{date_str}/{date_str}?aggregation=daily&sport={ltsport}"
+        endpoints[f"HeartRateThreshold_{sport}"] = f"/biometric-service/stats/lactateThresholdHeartRate/range/{date_str}/{date_str}?aggregation=daily&sport={ltsport}"
 
     for label, endpoint in endpoints.items():
         lt_list_all = garmin_obj.connectapi(endpoint)
         if lt_list_all:
             for lt_dict in lt_list_all:
                 value = lt_dict.get("value")
-                sport_series = lt_dict.get("series") or "Unknown"
                 if value is not None:
                     points_list.append({
                         "measurement": "LactateThreshold",
                         "time": datetime.fromtimestamp(datetime.strptime(date_str, "%Y-%m-%d").timestamp(), tz=pytz.timezone("UTC")).isoformat(),
                         "tags": {
                             "Device": GARMIN_DEVICENAME,
-                            "Database_Name": INFLUXDB_DATABASE,
-                            "Sport" : sport_series
+                            "Database_Name": INFLUXDB_DATABASE
                         },
                         "fields": {f"{label}": value}
                     })
-                    logging.info(f"Success : Fetching Lactate {label} for date {date_str}")
+                    logging.info(f"Success : Fetching {label} for date {date_str}")
 
     return points_list
     
