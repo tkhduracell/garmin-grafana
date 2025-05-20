@@ -3,9 +3,10 @@ import base64, requests, time, pytz, logging, os, sys, dotenv, io, zipfile
 from fitparse import FitFile, FitParseError
 from datetime import datetime, timedelta
 from influxdb import InfluxDBClient
-from influxdb.exceptions import InfluxDBV1Error as InfluxDBV1Error
+from influxdb.exceptions import InfluxDBClientError as InfluxDBV1Error
 from influxdb_client import InfluxDBClient as InfluxDBClient2
 from influxdb_client.client.exceptions import InfluxDBError as InfluxDBV2Error
+from influxdb_client.client.write_api import SYNCHRONOUS
 from influxdb_client_3 import InfluxDBClient3, InfluxDBError as InfluxDBV3Error
 
 import xml.etree.ElementTree as ET
@@ -127,7 +128,8 @@ try:
     if INFLUXDB_VERSION == '1':
         influxdbclient_v1.write_points([demo_point])
     elif INFLUXDB_VERSION == '2':
-        influxdbclient_v2.write_api().write([demo_point])
+        with influxdbclient_v2.write_api(write_options=SYNCHRONOUS) as api:
+            api.write([demo_point])
     else:
         influxdbclient_v3.write(record=[demo_point])
 except (InfluxDBV1Error, InfluxDBV2Error, InfluxDBV3Error) as err:
@@ -199,9 +201,9 @@ def write_points_to_influxdb(points):
                     influxdbclient_v1.write_points(batch)
                 elif INFLUXDB_VERSION == '2':
                     for point in batch:
-                        point['tags'].remove('Database_Name') # This is the bucket name in V2
-                    influxdbclient_v2.write_api()\
-                        .write(bucket=INFLUXDB_DATABASE, record=batch)
+                        del point['tags']['Database_Name'] # This is the bucket name in V2
+                    with influxdbclient_v2.write_api(write_options=SYNCHRONOUS) as api:
+                        api.write(bucket=INFLUXDB_DATABASE, record=batch)
                 else:
                     influxdbclient_v3.write(record=batch)
             logging.info("Success : updated influxDB database with new points")
