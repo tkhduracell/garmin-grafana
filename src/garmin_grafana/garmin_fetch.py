@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from influxdb import InfluxDBClient
 from influxdb.exceptions import InfluxDBClientError as InfluxDBV1Error
 from influxdb_client import InfluxDBClient as InfluxDBClient2
+from influxdb_client.client.flux_table import FluxTable
 from influxdb_client.client.exceptions import InfluxDBError as InfluxDBV2Error
 from influxdb_client.client.write_api import SYNCHRONOUS
 from influxdb_client_3 import InfluxDBClient3, InfluxDBError as InfluxDBV3Error
@@ -1268,17 +1269,20 @@ else:
             last_influxdb_sync_time_UTC = datetime.strptime(list(
                 influxdbclient_v1.query(f"SELECT * FROM HeartRateIntraday ORDER BY time DESC LIMIT 1").get_points()
             )[0]['time'],"%Y-%m-%dT%H:%M:%SZ")
+            last_influxdb_sync_time_UTC = pytz.utc.localize(last_influxdb_sync_time_UTC)
         elif INFLUXDB_VERSION == "2":
-            last_influxdb_sync_time_UTC = influxdbclient_v2.query_api()\
-                .query(query=f"from(bucket: \"{INFLUXDB_DATABASE}\") |> range(start: -1d) |> last() |> yield(name: \"last\")")\
-                [0]['_time']
+            result: FluxTable = influxdbclient_v2.query_api()\
+                .query(query=f"from(bucket: \"{INFLUXDB_DATABASE}\") |> range(start: -1d) |> last() |> yield(name: \"last\")")[0]
+            last_influxdb_sync_time_UTC: datetime = result.records[0].get_time()
         else:
             last_influxdb_sync_time_UTC = influxdbclient_v3.query(query="SELECT * FROM HeartRateIntraday ORDER BY time DESC LIMIT 1", language="influxql").to_pylist()[0]['time']
-        last_influxdb_sync_time_UTC = pytz.utc.localize(last_influxdb_sync_time_UTC)
+            last_influxdb_sync_time_UTC = pytz.utc.localize(last_influxdb_sync_time_UTC)
+        print(f"Last sync time in InfluxDB: {last_influxdb_sync_time_UTC}")
     except Exception as err:
-        logging.error(err)
+        logging.exception("Unable to fetch last sync time from InfluxDB")
         logging.warning("No previously synced data found in local InfluxDB database, defaulting to 7 day initial fetching. Use specific start date ENV variable to bulk update past data")
         last_influxdb_sync_time_UTC = (datetime.today() - timedelta(days=7)).astimezone(pytz.timezone("UTC"))
+        exit(1)
     try:
         if USER_TIMEZONE: # If provided by user, using that. 
             local_timediff = datetime.now(tz=pytz.timezone(USER_TIMEZONE)).utcoffset()
