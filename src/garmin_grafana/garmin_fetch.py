@@ -95,6 +95,7 @@ try:
             url=f"http://{INFLUXDB_HOST}:{INFLUXDB_PORT}",
             token=INFLUXDB_V2_ACCESS_TOKEN,
             org=INFLUXDB_V2_ORG,
+            timeout=60_000
             )
         else:
             influxdbclient_v3 = InfluxDBClient3(
@@ -1269,7 +1270,7 @@ else:
             )[0]['time'],"%Y-%m-%dT%H:%M:%SZ")
         elif INFLUXDB_VERSION == "2":
             last_influxdb_sync_time_UTC = influxdbclient_v2.query_api()\
-                .query(query="from(bucket: \"HeartRateIntraday\") |> range(start: -1d) |> last() |> yield(name: \"last\")")\
+                .query(query=f"from(bucket: \"{INFLUXDB_DATABASE}\") |> range(start: -1d) |> last() |> yield(name: \"last\")")\
                 [0]['_time']
         else:
             last_influxdb_sync_time_UTC = influxdbclient_v3.query(query="SELECT * FROM HeartRateIntraday ORDER BY time DESC LIMIT 1", language="influxql").to_pylist()[0]['time']
