@@ -346,6 +346,17 @@ def get_sleep_data(date_str):
                         "SleepStageSeconds": int((datetime.strptime(entry["endGMT"], "%Y-%m-%dT%H:%M:%S.%f") - datetime.strptime(entry["startGMT"], "%Y-%m-%dT%H:%M:%S.%f")).total_seconds())
                     }
                 })
+        # Add additional terminal data point as awake (see issue #127)
+        if entry.get("endGMT"):
+            points_list.append({
+                "measurement":  "SleepIntraday",
+                "time": pytz.timezone("UTC").localize(datetime.strptime(entry["endGMT"], "%Y-%m-%dT%H:%M:%S.%f")).isoformat(),
+                "tags": {
+                    "Device": GARMIN_DEVICENAME,
+                    "Database_Name": INFLUXDB_DATABASE
+                },
+                "fields": {"SleepStageLevel": 3} # Recording sleep end time as awake
+            })
     sleep_restlessness_intraday = all_sleep_data.get("sleepRestlessMoments")
     if sleep_restlessness_intraday:
         for entry in sleep_restlessness_intraday:
