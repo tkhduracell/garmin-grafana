@@ -355,7 +355,7 @@ def get_sleep_data(date_str):
                     "Device": GARMIN_DEVICENAME,
                     "Database_Name": INFLUXDB_DATABASE
                 },
-                "fields": {"SleepStageLevel": 3.0} # Recording sleep end time as awake
+                "fields": {"SleepStageLevel": entry.get("activityLevel")} # Duplicating last entry for visualization in Grafana
             })
     sleep_restlessness_intraday = all_sleep_data.get("sleepRestlessMoments")
     if sleep_restlessness_intraday:
