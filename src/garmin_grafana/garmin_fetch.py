@@ -346,7 +346,7 @@ def get_sleep_data(date_str):
                         "SleepStageSeconds": int((datetime.strptime(entry["endGMT"], "%Y-%m-%dT%H:%M:%S.%f") - datetime.strptime(entry["startGMT"], "%Y-%m-%dT%H:%M:%S.%f")).total_seconds())
                     }
                 })
-        # Add additional terminal data point as awake (see issue #127)
+        # Add additional duplicate terminal data point (see issue #127)
         if entry.get("endGMT"):
             points_list.append({
                 "measurement":  "SleepIntraday",
