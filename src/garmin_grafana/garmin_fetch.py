@@ -18,7 +18,7 @@ from garminconnect import (
     GarminConnectConnectionError,
     GarminConnectTooManyRequestsError,
 )
-garmin_obj = None
+garmin_obj: Garmin = None # type: ignore
 banner_text = """
 
 *****  █▀▀ ▄▀█ █▀█ █▀▄▀█ █ █▄ █    █▀▀ █▀█ ▄▀█ █▀▀ ▄▀█ █▄ █ ▄▀█  *****
@@ -1354,16 +1354,16 @@ else:
             last_influxdb_sync_time_UTC = pytz.utc.localize(last_influxdb_sync_time_UTC)
         print(f"Last sync time in InfluxDB: {last_influxdb_sync_time_UTC}")
     except Exception as err:
-        logging.exception("Unable to fetch last sync time from InfluxDB")
         logging.warning("No previously synced data found in local InfluxDB database, defaulting to 7 day initial fetching. Use specific start date ENV variable to bulk update past data")
         last_influxdb_sync_time_UTC = (datetime.today() - timedelta(days=7)).astimezone(pytz.timezone("UTC"))
-        exit(1)
     try:
+        local_timediff: timedelta
         if USER_TIMEZONE: # If provided by user, using that. 
             local_timediff = datetime.now(tz=pytz.timezone(USER_TIMEZONE)).utcoffset()
         else: # otherwise try to set automatically
             last_activity_dict = garmin_obj.get_last_activity() # (very unlineky event that this will be empty given Garmin's userbase, everyone should have at least one activity)
             local_timediff = datetime.strptime(last_activity_dict['startTimeLocal'], '%Y-%m-%d %H:%M:%S') - datetime.strptime(last_activity_dict['startTimeGMT'], '%Y-%m-%d %H:%M:%S')
+        
         if local_timediff >= timedelta(0):
             logging.info("Using user's local timezone as UTC+" + str(local_timediff))
         else:
